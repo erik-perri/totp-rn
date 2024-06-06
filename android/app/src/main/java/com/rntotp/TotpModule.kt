@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReactMethod
 import java.nio.ByteBuffer
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+import kotlin.math.pow
 
 class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
@@ -33,7 +34,7 @@ class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         ((hash[offset + 2].toInt() and 0xff) shl 8) or
         (hash[offset + 3].toInt() and 0xff)
 
-    val modulo = Math.pow(10.0, codeSize.toDouble()).toInt()
+    val modulo = 10.0.pow(codeSize.toDouble()).toInt()
     val otp = binary % modulo
 
     return String.format("%0${codeSize}d", otp)
