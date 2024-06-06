@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-var-requires: "off" */
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
 /**
