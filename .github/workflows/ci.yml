@@ -31,6 +31,14 @@ jobs:
         with:
           distribution: 'oracle'
           java-version: '17'
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/android/.gradle/caches
+            ~/android/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - run: npm ci
-      - run: chmod +x gradlew && ./gradlew test
+      - run: chmod +x gradlew && ./gradlew test && ./gradlew --stop
         working-directory: ./android
