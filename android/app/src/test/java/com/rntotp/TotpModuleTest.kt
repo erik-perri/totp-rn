@@ -14,6 +14,7 @@ data class TestCase(
     val algorithm: String,
     val timeStep: Long,
     val codeSize: Int,
+    val initialTime: Long,
     val currentTime: Long
 )
 
@@ -21,7 +22,6 @@ data class TestCase(
 class TotpModuleTest {
   @Test
   fun testGenerateProducesExpectedResults() {
-    val totp = TotpModule(ReactApplicationContext(mock<Context>()))
     val testCases = arrayOf(
         TestCase(
             expected = "94287082",
@@ -29,6 +29,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA1",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 59,
         ),
         TestCase(
@@ -37,6 +38,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA256",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 59,
         ),
         TestCase(
@@ -45,6 +47,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA512",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 59,
         ),
 
@@ -54,6 +57,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA1",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 1111111109,
         ),
         TestCase(
@@ -62,6 +66,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA256",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 1111111109,
         ),
         TestCase(
@@ -70,6 +75,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA512",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 1111111109,
         ),
 
@@ -79,6 +85,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA1",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 1111111111,
         ),
         TestCase(
@@ -87,6 +94,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA256",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 1111111111,
         ),
         TestCase(
@@ -95,6 +103,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA512",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 1111111111,
         ),
 
@@ -104,6 +113,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA1",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 1234567890,
         ),
         TestCase(
@@ -112,6 +122,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA256",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 1234567890,
         ),
         TestCase(
@@ -120,6 +131,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA512",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 1234567890,
         ),
 
@@ -129,6 +141,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA1",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 2000000000,
         ),
         TestCase(
@@ -137,6 +150,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA256",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 2000000000,
         ),
         TestCase(
@@ -145,6 +159,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA512",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 2000000000,
         ),
 
@@ -154,6 +169,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA1",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 20000000000,
         ),
         TestCase(
@@ -162,6 +178,7 @@ class TotpModuleTest {
             algorithm = "HmacSHA256",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 20000000000,
         ),
         TestCase(
@@ -170,10 +187,12 @@ class TotpModuleTest {
             algorithm = "HmacSHA512",
             timeStep = 30,
             codeSize = 8,
+            initialTime = 0,
             currentTime = 20000000000,
         ),
-
     )
+
+    val totp = TotpModule(ReactApplicationContext(mock<Context>()))
 
     for (testCase in testCases) {
       assertEquals(
@@ -183,6 +202,7 @@ class TotpModuleTest {
               testCase.algorithm,
               testCase.timeStep,
               testCase.codeSize,
+              testCase.initialTime,
               testCase.currentTime
           )
       )

@@ -4,6 +4,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import java.nio.ByteBuffer
+import java.sql.Time
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import kotlin.math.pow
@@ -18,10 +19,11 @@ class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
       algorithm: String,
       timeStep: Long,
       codeSize: Int,
+      initialTime: Long,
       currentTime: Long,
   ): String {
     val key = secret.toByteArray()
-    val time = currentTime / timeStep
+    val time = (currentTime - initialTime) / timeStep
     val timeBytes = ByteBuffer.allocate(Long.SIZE_BYTES).putLong(time).array()
 
     val mac = Mac.getInstance(algorithm)
@@ -37,7 +39,7 @@ class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
     val modulo = 10.0.pow(codeSize.toDouble()).toInt()
     val otp = binary % modulo
 
-    return String.format("%0${codeSize}d", otp)
+    return "%0${codeSize}d".format(otp)
   }
 
 }
