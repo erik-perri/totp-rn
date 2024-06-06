@@ -1,11 +1,19 @@
 import React from 'react';
-import {SafeAreaView, Text} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import AuthenticatorListScreen from './components/AuthenticatorList/AuthenticatorListScreen';
+import {StatusBar} from 'react-native';
 
 function App(): React.JSX.Element {
   return (
-    <SafeAreaView>
-      <Text>...</Text>
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <StatusBar
+        animated
+        backgroundColor="transparent"
+        translucent
+        barStyle="dark-content"
+      />
+      <AuthenticatorListScreen />
+    </SafeAreaProvider>
   );
 }
 
