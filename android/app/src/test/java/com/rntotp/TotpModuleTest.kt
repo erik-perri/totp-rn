@@ -8,54 +8,184 @@ import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
 
+data class TestCase(
+    val expected: String,
+    val secret: String,
+    val algorithm: String,
+    val timeStep: Long,
+    val codeSize: Int,
+    val currentTime: Long
+)
+
 @RunWith(MockitoJUnitRunner::class)
 class TotpModuleTest {
   @Test
-  fun generate() {
+  fun testGenerateProducesExpectedResults() {
     val totp = TotpModule(ReactApplicationContext(mock<Context>()))
-
-    assertEquals(
-        "089951",
-        totp.generate(
-            "ON2G64BANRXW623JNZTQ",
-            "HmacSHA1",
-            30,
-            6,
-            1546302000,
+    val testCases = arrayOf(
+        TestCase(
+            expected = "94287082",
+            secret = "12345678901234567890",
+            algorithm = "HmacSHA1",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 59,
         ),
+        TestCase(
+            expected = "46119246",
+            secret = "12345678901234567890123456789012",
+            algorithm = "HmacSHA256",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 59,
+        ),
+        TestCase(
+            expected = "90693936",
+            secret = "1234567890123456789012345678901234567890123456789012345678901234",
+            algorithm = "HmacSHA512",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 59,
+        ),
+
+        TestCase(
+            expected = "07081804",
+            secret = "12345678901234567890",
+            algorithm = "HmacSHA1",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 1111111109,
+        ),
+        TestCase(
+            expected = "68084774",
+            secret = "12345678901234567890123456789012",
+            algorithm = "HmacSHA256",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 1111111109,
+        ),
+        TestCase(
+            expected = "25091201",
+            secret = "1234567890123456789012345678901234567890123456789012345678901234",
+            algorithm = "HmacSHA512",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 1111111109,
+        ),
+
+        TestCase(
+            expected = "14050471",
+            secret = "12345678901234567890",
+            algorithm = "HmacSHA1",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 1111111111,
+        ),
+        TestCase(
+            expected = "67062674",
+            secret = "12345678901234567890123456789012",
+            algorithm = "HmacSHA256",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 1111111111,
+        ),
+        TestCase(
+            expected = "99943326",
+            secret = "1234567890123456789012345678901234567890123456789012345678901234",
+            algorithm = "HmacSHA512",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 1111111111,
+        ),
+
+        TestCase(
+            expected = "89005924",
+            secret = "12345678901234567890",
+            algorithm = "HmacSHA1",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 1234567890,
+        ),
+        TestCase(
+            expected = "91819424",
+            secret = "12345678901234567890123456789012",
+            algorithm = "HmacSHA256",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 1234567890,
+        ),
+        TestCase(
+            expected = "93441116",
+            secret = "1234567890123456789012345678901234567890123456789012345678901234",
+            algorithm = "HmacSHA512",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 1234567890,
+        ),
+
+        TestCase(
+            expected = "69279037",
+            secret = "12345678901234567890",
+            algorithm = "HmacSHA1",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 2000000000,
+        ),
+        TestCase(
+            expected = "90698825",
+            secret = "12345678901234567890123456789012",
+            algorithm = "HmacSHA256",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 2000000000,
+        ),
+        TestCase(
+            expected = "38618901",
+            secret = "1234567890123456789012345678901234567890123456789012345678901234",
+            algorithm = "HmacSHA512",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 2000000000,
+        ),
+
+        TestCase(
+            expected = "65353130",
+            secret = "12345678901234567890",
+            algorithm = "HmacSHA1",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 20000000000,
+        ),
+        TestCase(
+            expected = "77737706",
+            secret = "12345678901234567890123456789012",
+            algorithm = "HmacSHA256",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 20000000000,
+        ),
+        TestCase(
+            expected = "47863826",
+            secret = "1234567890123456789012345678901234567890123456789012345678901234",
+            algorithm = "HmacSHA512",
+            timeStep = 30,
+            codeSize = 8,
+            currentTime = 20000000000,
+        ),
+
     )
 
-    assertEquals(
-        "034311",
-        totp.generate(
-            "ON2G64BANRXW623JNZTQ",
-            "HmacSHA1",
-            60,
-            6,
-            1546302000,
-        ),
-    )
-
-    assertEquals(
-        "888153900",
-        totp.generate(
-            "NEQHGYLJMQQHG5DPOA",
-            "HmacSHA1",
-            30,
-            9,
-            1546302000,
-        ),
-    )
-
-    assertEquals(
-        "107983685",
-        totp.generate(
-            "NEQHGYLJMQQHG5DPOA",
-            "HmacSHA1",
-            60,
-            9,
-            1546302000,
-        ),
-    )
+    for (testCase in testCases) {
+      assertEquals(
+          testCase.expected,
+          totp.generate(
+              testCase.secret,
+              testCase.algorithm,
+              testCase.timeStep,
+              testCase.codeSize,
+              testCase.currentTime
+          )
+      )
+    }
   }
 }
