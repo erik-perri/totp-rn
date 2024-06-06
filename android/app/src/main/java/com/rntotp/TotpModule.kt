@@ -3,7 +3,6 @@ package com.rntotp
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import org.apache.commons.codec.binary.Base32
 import java.nio.ByteBuffer
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -20,7 +19,7 @@ class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
       codeSize: Int,
       currentTime: Long,
   ): String {
-    val key = Base32().decode(secret)
+    val key = secret.toByteArray()
     val time = currentTime / timeStep
     val timeBytes = ByteBuffer.allocate(Long.SIZE_BYTES).putLong(time).array()
 
