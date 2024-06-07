@@ -39,15 +39,15 @@ const headerStyles = StyleSheet.create({
     display: 'flex',
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
-    padding: 10,
+    padding: 8,
   },
 });
 
 function buttonStyleGenerator({pressed}: PressableStateCallbackType) {
   return {
     backgroundColor: pressed ? '#f3f4f6' : 'white',
-    borderRadius: 5,
-    padding: 10,
+    borderRadius: 4,
+    padding: 8,
   };
 }
 
