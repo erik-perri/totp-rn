@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 
+import useAuthenticatorDeleteMutation from '../../hooks/useAuthenticatorDeleteMutation';
 import {Authenticator} from '../../parsers/authenticatorParser';
 import {useCurrentTime} from '../../stores/useCurrentTimeStore';
 import generateTotp from '../../utilities/generateTotp';
@@ -25,6 +26,8 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
   authenticator,
 }) => {
   const currentTime = useCurrentTime();
+  const {mutateAsync: deleteAuthenticator} = useAuthenticatorDeleteMutation();
+
   const timeRemaining = useMemo(() => {
     return getNextIncrement(currentTime, authenticator.timeStep);
   }, [authenticator, currentTime]);
@@ -51,8 +54,15 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
     Clipboard.setString(totp);
   }
 
+  async function handleRemove() {
+    await deleteAuthenticator(authenticator.id);
+  }
+
   return (
-    <Pressable style={rowStyleGenerator} onPress={handleCopy}>
+    <Pressable
+      style={rowStyleGenerator}
+      onPress={handleCopy}
+      onLongPress={() => void handleRemove()}>
       <View style={rowStyles.icon}>
         <AuthenticatorIcon issuer={authenticator.issuer} />
       </View>
