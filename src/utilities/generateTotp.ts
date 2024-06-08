@@ -1,16 +1,20 @@
 /* eslint-disable no-bitwise */
 import crypto from 'crypto';
 
+import TotpAlgorithm from '../enums/TotpAlgorithm';
+
 export default function generateTotp(
   secret: string,
-  algorithm: string,
-  timeStep: number,
-  codeSize: number,
-  initialTime: number,
-  currentTime: number,
+  algorithm: TotpAlgorithm,
+  timeStepInSeconds: number,
+  codeSizeInDigits: number,
+  initialTimeInSeconds: number,
+  currentTimeInSeconds: number,
 ): string {
   const key = Buffer.from(secret, 'utf8');
-  const time = Math.floor((currentTime - initialTime) / timeStep);
+  const time = Math.floor(
+    (currentTimeInSeconds - initialTimeInSeconds) / timeStepInSeconds,
+  );
   const timeBytes = Buffer.allocUnsafe(8);
   timeBytes.writeBigInt64BE(BigInt(time));
 
@@ -25,8 +29,8 @@ export default function generateTotp(
     ((hash[offset + 2] & 0xff) << 8) |
     (hash[offset + 3] & 0xff);
 
-  const modulo = Math.pow(10, codeSize);
+  const modulo = Math.pow(10, codeSizeInDigits);
   const otp = binary % modulo;
 
-  return otp.toString().padStart(codeSize, '0');
+  return otp.toString().padStart(codeSizeInDigits, '0');
 }
