@@ -1,10 +1,10 @@
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useMemo} from 'react';
 import {Authenticator} from '../../parsers/authenticatorParser';
 import generateTotp from '../../utilities/generateTotp';
 import {StyleSheet, Text, View} from 'react-native';
+import {useCurrentTime} from '../../stores/useCurrentTimeStore';
 
-function getNextIncrement(timeStep: number): number {
-  const currentTime = Math.floor(Date.now() / 1000);
+function getNextIncrement(currentTime: number, timeStep: number): number {
   return timeStep - (currentTime % timeStep);
 }
 
@@ -15,17 +15,10 @@ type AuthenticatorRowProps = {
 const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
   authenticator,
 }) => {
-  const [timeRemaining, setTimeRemaining] = React.useState<number>(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeRemaining(getNextIncrement(authenticator.timeStep));
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [authenticator.timeStep]);
+  const currentTime = useCurrentTime();
+  const timeRemaining = useMemo(() => {
+    return getNextIncrement(currentTime, authenticator.timeStep);
+  }, [authenticator, currentTime]);
 
   const totp = generateTotp(
     authenticator.secret,
@@ -33,7 +26,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
     authenticator.timeStep,
     authenticator.codeSize,
     authenticator.initialTime,
-    Date.now() / 1000,
+    currentTime,
   );
 
   const [partA, partB] = [
