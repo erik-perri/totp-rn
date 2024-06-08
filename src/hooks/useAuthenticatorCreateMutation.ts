@@ -6,7 +6,7 @@ import useAuthenticatorListQuery, {
   updateAuthenticatorListData,
 } from './useAuthenticatorListQuery';
 
-export default function useAuthenticatorAddMutation() {
+export default function useAuthenticatorCreateMutation() {
   const queryClient = useQueryClient();
   const {data} = useAuthenticatorListQuery();
 

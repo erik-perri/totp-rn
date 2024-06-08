@@ -2,7 +2,7 @@ import React, {FunctionComponent} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
 import TotpAlgorithm from '../../enums/TotpAlgorithm';
-import useAuthenticatorAddMutation from '../../hooks/useAuthenticatorAddMutation';
+import useAuthenticatorCreateMutation from '../../hooks/useAuthenticatorCreateMutation';
 import AuthenticatorList from './AuthenticatorList';
 import AuthenticatorListHeader from './AuthenticatorListHeader';
 
@@ -67,7 +67,7 @@ const mockAuthenticators = [
 ];
 
 const AuthenticatorListScreen: FunctionComponent = () => {
-  const {mutateAsync: addAuthenticator} = useAuthenticatorAddMutation();
+  const {mutateAsync: addAuthenticator} = useAuthenticatorCreateMutation();
 
   const handleNewAuthenticator = async () => {
     const newAuthenticator =

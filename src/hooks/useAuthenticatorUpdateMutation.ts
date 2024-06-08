@@ -9,7 +9,7 @@ import useAuthenticatorListQuery, {
 type UpdatingAuthenticator = Pick<Authenticator, 'id'> &
   Partial<Omit<Authenticator, 'id'>>;
 
-export default function useAuthenticatorAddMutation() {
+export default function useAuthenticatorUpdateMutation() {
   const queryClient = useQueryClient();
   const {data} = useAuthenticatorListQuery();
 
