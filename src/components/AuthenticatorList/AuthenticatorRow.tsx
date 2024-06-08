@@ -12,6 +12,7 @@ import useAuthenticatorDeleteMutation from '../../hooks/useAuthenticatorDeleteMu
 import {Authenticator} from '../../parsers/authenticatorParser';
 import {useCurrentTime} from '../../stores/useCurrentTimeStore';
 import generateTotp from '../../utilities/generateTotp';
+import CountdownBar from '../CountdownBar';
 import AuthenticatorIcon from './AuthenticatorIcon';
 
 function getNextIncrement(
@@ -35,8 +36,8 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
   const currentTime = useCurrentTime();
   const {mutateAsync: deleteAuthenticator} = useAuthenticatorDeleteMutation();
 
-  const timeRemaining = useMemo(() => {
-    return getNextIncrement(currentTime, authenticator.timeStep);
+  const totpChangeTime = useMemo(() => {
+    return currentTime + getNextIncrement(currentTime, authenticator.timeStep);
   }, [authenticator, currentTime]);
 
   const totp = useMemo(
@@ -77,7 +78,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
         <View style={rowStyles.name}>
           <Text style={rowStyles.issuer}>{authenticator.issuer}</Text>
           {authenticator.username && (
-            <Text style={rowStyles.username}>{authenticator.username}</Text>
+            <Text style={rowStyles.username}>({authenticator.username})</Text>
           )}
         </View>
         <View style={rowStyles.codeContainer}>
@@ -88,15 +89,21 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
           ))}
         </View>
       </View>
-      <Text style={rowStyles.remaining}>{timeRemaining}</Text>
+      <View style={rowStyles.progress}>
+        <CountdownBar
+          duration={authenticator.timeStep * 1000}
+          endTime={totpChangeTime}
+        />
+      </View>
     </Pressable>
   );
 };
 
 const rowStyles = StyleSheet.create({
   code: {
+    color: '#111827',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 'semibold',
   },
   codeContainer: {
     flexDirection: 'row',
@@ -106,29 +113,32 @@ const rowStyles = StyleSheet.create({
   },
   icon: {
     alignSelf: 'flex-start',
-    paddingTop: 8,
+    paddingTop: 4,
   },
   info: {
-    color: '#000000',
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
     gap: 2,
   },
   issuer: {
-    flexGrow: 1,
-    fontSize: 20,
+    color: '#111827',
+    fontSize: 16,
     fontWeight: 'semibold',
   },
   name: {
+    alignItems: 'baseline',
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'flex-start',
   },
-  remaining: {
-    color: '#9ca3af',
-    flexShrink: 1,
-    minWidth: 20,
-    textAlign: 'right',
+  progress: {
+    bottom: 0,
+    height: 2,
+    left: 0,
+    position: 'absolute',
+    right: 0,
   },
   root: {
     alignItems: 'center',
@@ -138,10 +148,13 @@ const rowStyles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     justifyContent: 'space-between',
+    overflow: 'hidden',
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   username: {
+    color: '#9ca3af',
+    flexGrow: 1,
     fontSize: 12,
   },
 });
