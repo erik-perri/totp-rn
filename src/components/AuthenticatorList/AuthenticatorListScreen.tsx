@@ -11,20 +11,80 @@ const AuthenticatorListScreen: FunctionComponent = () => {
   const queryClient = useQueryClient();
 
   const handleNewAuthenticator = async () => {
+    const mockAuthenticators: Authenticator[] = [
+      {
+        algorithm: TotpAlgorithm.Sha1,
+        codeSize: 6,
+        icon: 'test',
+        id: '1',
+        initialTime: 0,
+        issuer: 'Google',
+        secret: 'TESTING',
+        timeStep: 30,
+        username: 'TESTING Sha1 30',
+      },
+      {
+        algorithm: TotpAlgorithm.Sha1,
+        codeSize: 6,
+        icon: 'test',
+        id: '2',
+        initialTime: 0,
+        issuer: 'Microsoft',
+        secret: 'TESTING',
+        timeStep: 60,
+        username: 'TESTING Sha1 60',
+      },
+      {
+        algorithm: TotpAlgorithm.Sha256,
+        codeSize: 6,
+        icon: 'test',
+        id: '3',
+        initialTime: 0,
+        issuer: 'Github',
+        secret: 'TESTING',
+        timeStep: 30,
+        username: 'TESTING Sha256 30',
+      },
+      {
+        algorithm: TotpAlgorithm.Sha256,
+        codeSize: 6,
+        icon: 'test',
+        id: '4',
+        initialTime: 0,
+        issuer: 'NPM',
+        secret: 'TESTING',
+        timeStep: 60,
+        username: 'TESTING Sha256 60',
+      },
+      {
+        algorithm: TotpAlgorithm.Sha512,
+        codeSize: 6,
+        icon: 'test',
+        id: '5',
+        initialTime: 0,
+        issuer: 'Paypal',
+        secret: 'TESTING',
+        timeStep: 30,
+        username: 'TESTING Sha512 30',
+      },
+      {
+        algorithm: TotpAlgorithm.Sha512,
+        codeSize: 6,
+        icon: 'test',
+        id: '6',
+        initialTime: 0,
+        issuer: 'Testing',
+        secret: 'TESTING',
+        timeStep: 60,
+        username: 'TESTING Sha512 60',
+      },
+    ];
+
+    mockAuthenticators.sort(() => Math.random() - 0.5);
+
     await AsyncStorage.setItem(
       'authenticators',
-      JSON.stringify([
-        {
-          algorithm: TotpAlgorithm.Sha1,
-          codeSize: 6,
-          icon: 'microsoft',
-          id: '1',
-          initialTime: 0,
-          name: 'Microsoft',
-          secret: 'TESTING',
-          timeStep: 30,
-        },
-      ] satisfies Authenticator[]),
+      JSON.stringify(mockAuthenticators),
     );
 
     await queryClient.invalidateQueries({

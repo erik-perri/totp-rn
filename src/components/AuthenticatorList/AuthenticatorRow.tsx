@@ -3,6 +3,7 @@ import {Authenticator} from '../../parsers/authenticatorParser';
 import generateTotp from '../../utilities/generateTotp';
 import {StyleSheet, Text, View} from 'react-native';
 import {useCurrentTime} from '../../stores/useCurrentTimeStore';
+import AuthenticatorIcon from './AuthenticatorIcon';
 
 function getNextIncrement(currentTime: number, timeStep: number): number {
   return timeStep - (currentTime % timeStep);
@@ -36,44 +37,78 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
 
   return (
     <View style={rowStyles.root}>
-      <Text style={rowStyles.name}>{authenticator.name}</Text>
-      <Text style={rowStyles.code}>
-        {totp.length % 2 === 0 ? (
-          <Fragment>
-            <Text>{partA}</Text>
-            <Text> </Text>
-            <Text>{partB}</Text>
-          </Fragment>
-        ) : (
-          <Text>{totp}</Text>
-        )}
-      </Text>
+      <View style={rowStyles.icon}>
+        <AuthenticatorIcon issuer={authenticator.issuer} />
+      </View>
+      <View style={rowStyles.info}>
+        <View style={rowStyles.name}>
+          <Text style={rowStyles.issuer}>{authenticator.issuer}</Text>
+          {authenticator.username && (
+            <Text style={rowStyles.username}>{authenticator.username}</Text>
+          )}
+        </View>
+        <Text style={rowStyles.code}>
+          {totp.length % 2 === 0 ? (
+            <Fragment>
+              <Text>{partA}</Text>
+              <Text> </Text>
+              <Text>{partB}</Text>
+            </Fragment>
+          ) : (
+            <Text>{totp}</Text>
+          )}
+        </Text>
+      </View>
       <Text style={rowStyles.remaining}>{timeRemaining}</Text>
     </View>
   );
 };
 
 const rowStyles = StyleSheet.create({
-  root: {
-    alignItems: 'center',
-    borderColor: '#9ca3af',
-    borderRadius: 4,
-    borderWidth: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 8,
-  },
-  name: {
-    fontSize: 20,
-    fontWeight: 'semibold',
-  },
   code: {
+    flexShrink: 1,
     fontSize: 20,
     fontWeight: 'bold',
   },
+  icon: {
+    alignSelf: 'flex-start',
+    paddingTop: 8,
+  },
+  info: {
+    color: '#000000',
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    gap: 2,
+  },
+  issuer: {
+    flexGrow: 1,
+    fontSize: 20,
+    fontWeight: 'semibold',
+  },
+  name: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
   remaining: {
     color: '#9ca3af',
+    flexShrink: 1,
+    minWidth: 20,
+    textAlign: 'right',
+  },
+  root: {
+    alignItems: 'center',
+    backgroundColor: '#f3f4f6',
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  username: {
+    fontSize: 12,
   },
 });
 
