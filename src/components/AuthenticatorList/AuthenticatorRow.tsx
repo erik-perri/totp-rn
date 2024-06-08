@@ -1,5 +1,5 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, {Fragment, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {
   Pressable,
   PressableStateCallbackType,

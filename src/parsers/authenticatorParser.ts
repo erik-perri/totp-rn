@@ -5,7 +5,6 @@ import TotpAlgorithm from '../enums/TotpAlgorithm';
 export const authenticatorParser = object({
   algorithm: nativeEnum(TotpAlgorithm),
   codeSize: number(),
-  icon: string(),
   id: string(),
   initialTime: number(),
   issuer: string(),

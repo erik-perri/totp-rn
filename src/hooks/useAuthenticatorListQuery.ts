@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useQuery} from '@tanstack/react-query';
+import {QueryClient, useQuery} from '@tanstack/react-query';
 import {array} from 'zod';
 
 import {
@@ -7,9 +7,18 @@ import {
   authenticatorParser,
 } from '../parsers/authenticatorParser';
 
+const authenticatorListQueryKey = ['authenticators'] as const;
+
+export function updateAuthenticatorListData(
+  queryClient: QueryClient,
+  newData: Authenticator[],
+) {
+  queryClient.setQueryData(authenticatorListQueryKey, newData);
+}
+
 export default function useAuthenticatorListQuery() {
   return useQuery({
-    queryKey: ['authenticators'],
+    queryKey: authenticatorListQueryKey,
     queryFn: async (): Promise<Authenticator[]> => {
       const serialized = await AsyncStorage.getItem('authenticators');
 
