@@ -1,5 +1,12 @@
+import Clipboard from '@react-native-clipboard/clipboard';
 import React, {Fragment, useMemo} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  Pressable,
+  PressableStateCallbackType,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import {Authenticator} from '../../parsers/authenticatorParser';
 import {useCurrentTime} from '../../stores/useCurrentTimeStore';
@@ -22,22 +29,30 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
     return getNextIncrement(currentTime, authenticator.timeStep);
   }, [authenticator, currentTime]);
 
-  const totp = generateTotp(
-    authenticator.secret,
-    authenticator.algorithm,
-    authenticator.timeStep,
-    authenticator.codeSize,
-    authenticator.initialTime,
-    currentTime,
+  const totp = useMemo(
+    () =>
+      generateTotp(
+        authenticator.secret,
+        authenticator.algorithm,
+        authenticator.timeStep,
+        authenticator.codeSize,
+        authenticator.initialTime,
+        currentTime,
+      ),
+    [authenticator, currentTime],
   );
 
-  const [partA, partB] = [
-    totp.slice(0, totp.length / 2),
-    totp.slice(totp.length / 2),
-  ];
+  const totpParts =
+    totp.length % 2 === 0
+      ? [totp.slice(0, totp.length / 2), totp.slice(totp.length / 2)]
+      : [totp];
+
+  function handleCopy() {
+    Clipboard.setString(totp);
+  }
 
   return (
-    <View style={rowStyles.root}>
+    <Pressable style={rowStyleGenerator} onPress={handleCopy}>
       <View style={rowStyles.icon}>
         <AuthenticatorIcon issuer={authenticator.issuer} />
       </View>
@@ -48,28 +63,29 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
             <Text style={rowStyles.username}>{authenticator.username}</Text>
           )}
         </View>
-        <Text style={rowStyles.code}>
-          {totp.length % 2 === 0 ? (
-            <Fragment>
-              <Text>{partA}</Text>
-              <Text> </Text>
-              <Text>{partB}</Text>
-            </Fragment>
-          ) : (
-            <Text>{totp}</Text>
-          )}
-        </Text>
+        <View style={rowStyles.codeContainer}>
+          {totpParts.map((part, index) => (
+            <Text key={`${part}-${index.toString()}`} style={rowStyles.code}>
+              {part}
+            </Text>
+          ))}
+        </View>
       </View>
       <Text style={rowStyles.remaining}>{timeRemaining}</Text>
-    </View>
+    </Pressable>
   );
 };
 
 const rowStyles = StyleSheet.create({
   code: {
-    flexShrink: 1,
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  codeContainer: {
+    flexDirection: 'row',
+    display: 'flex',
+    flexShrink: 1,
+    gap: 4,
   },
   icon: {
     alignSelf: 'flex-start',
@@ -112,5 +128,12 @@ const rowStyles = StyleSheet.create({
     fontSize: 12,
   },
 });
+
+function rowStyleGenerator({pressed}: PressableStateCallbackType) {
+  return {
+    ...rowStyles.root,
+    backgroundColor: pressed ? '#e5e7eb' : '#f3f4f6',
+  };
+}
 
 export default AuthenticatorRow;
