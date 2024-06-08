@@ -14,8 +14,15 @@ import {useCurrentTime} from '../../stores/useCurrentTimeStore';
 import generateTotp from '../../utilities/generateTotp';
 import AuthenticatorIcon from './AuthenticatorIcon';
 
-function getNextIncrement(currentTime: number, timeStep: number): number {
-  return timeStep - (currentTime % timeStep);
+function getNextIncrement(
+  currentTimeInMilliseconds: number,
+  timeStepInSeconds: number,
+) {
+  const timeStepInMilliseconds = timeStepInSeconds * 1000;
+  return (
+    timeStepInMilliseconds -
+    (currentTimeInMilliseconds % timeStepInMilliseconds)
+  );
 }
 
 type AuthenticatorRowProps = {
@@ -40,7 +47,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
         authenticator.timeStep,
         authenticator.codeSize,
         authenticator.initialTime,
-        currentTime,
+        Math.floor(currentTime / 1000),
       ),
     [authenticator, currentTime],
   );

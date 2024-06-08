@@ -11,9 +11,9 @@ type CurrentTimeStore = {
  * detect out of sync clocks and apply an offset to the time.
  */
 const useCurrentTimeStore = create<CurrentTimeStore>(set => ({
-  currentTime: Math.floor(Date.now() / 1000),
+  currentTime: Date.now(),
   updateCurrentTime: () => {
-    set({currentTime: Math.floor(Date.now() / 1000)});
+    set({currentTime: Date.now()});
   },
 }));
 
