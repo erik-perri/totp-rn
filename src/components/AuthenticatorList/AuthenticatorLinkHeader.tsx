@@ -33,11 +33,11 @@ const AuthenticatorLinkHeader: FunctionComponent<HeaderProps> = ({
 
 const headerStyles = StyleSheet.create({
   root: {
-    backgroundColor: 'white',
+    alignItems: 'flex-end',
+    backgroundColor: '#f9fafb',
     borderBottomColor: '#9ca3af',
     borderBottomWidth: 1,
     display: 'flex',
-    alignItems: 'flex-end',
     justifyContent: 'flex-end',
     padding: 8,
   },
@@ -45,8 +45,8 @@ const headerStyles = StyleSheet.create({
 
 function buttonStyleGenerator({pressed}: PressableStateCallbackType) {
   return {
-    backgroundColor: pressed ? '#f3f4f6' : 'white',
-    borderRadius: 4,
+    backgroundColor: pressed ? '#f3f4f6' : 'transparent',
+    borderRadius: 8,
     padding: 8,
   };
 }

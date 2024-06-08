@@ -43,13 +43,13 @@ const AuthenticatorListScreen: FunctionComponent = () => {
 };
 
 const screenStyles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
   list: {
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#ffffff',
     flexGrow: 1,
+  },
+  root: {
+    backgroundColor: '#f9fafb',
+    flex: 1,
   },
 });
 

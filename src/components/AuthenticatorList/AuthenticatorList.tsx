@@ -47,10 +47,6 @@ const AuthenticatorList: FunctionComponent = () => {
 };
 
 const listStyles = StyleSheet.create({
-  root: {
-    gap: 8,
-    padding: 16,
-  },
   empty: {
     alignItems: 'center',
     color: '#9ca3af',
@@ -58,6 +54,10 @@ const listStyles = StyleSheet.create({
     flex: 1,
     fontSize: 24,
     justifyContent: 'center',
+  },
+  emptyText: {
+    color: '#9ca3af',
+    fontSize: 18,
   },
   errorText: {
     color: '#991b1b',
@@ -67,9 +67,9 @@ const listStyles = StyleSheet.create({
     color: 'black',
     fontSize: 24,
   },
-  emptyText: {
-    color: '#9ca3af',
-    fontSize: 18,
+  root: {
+    gap: 12,
+    padding: 16,
   },
 });
 

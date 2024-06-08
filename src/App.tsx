@@ -22,8 +22,8 @@ function App(): React.JSX.Element {
         <StatusBar
           animated
           backgroundColor="transparent"
-          translucent
           barStyle="dark-content"
+          translucent
         />
         <AuthenticatorListScreen />
       </QueryClientProvider>
