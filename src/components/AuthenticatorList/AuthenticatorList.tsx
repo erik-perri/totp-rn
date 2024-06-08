@@ -1,8 +1,13 @@
+import {FlashList} from '@shopify/flash-list';
 import React, {FunctionComponent} from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 
 import useAuthenticatorListQuery from '../../hooks/useAuthenticatorListQuery';
 import AuthenticatorRow from './AuthenticatorRow';
+
+const ListSeparator: FunctionComponent = () => (
+  <View style={listStyles.separator} />
+);
 
 const AuthenticatorList: FunctionComponent = () => {
   const {data, error} = useAuthenticatorListQuery();
@@ -34,16 +39,14 @@ const AuthenticatorList: FunctionComponent = () => {
   }
 
   return (
-    <View style={listStyles.root}>
-      {data.map(authenticator => {
-        return (
-          <AuthenticatorRow
-            key={authenticator.id}
-            authenticator={authenticator}
-          />
-        );
-      })}
-    </View>
+    <FlashList
+      ItemSeparatorComponent={ListSeparator}
+      contentContainerStyle={listStyles.root}
+      data={data}
+      estimatedItemSize={90}
+      getItemType={() => 'authenticator'}
+      renderItem={({item}) => <AuthenticatorRow authenticator={item} />}
+    />
   );
 };
 
@@ -69,8 +72,10 @@ const listStyles = StyleSheet.create({
     fontSize: 24,
   },
   root: {
-    gap: 12,
-    padding: 16,
+    padding: 12,
+  },
+  separator: {
+    height: 12,
   },
 });
 
