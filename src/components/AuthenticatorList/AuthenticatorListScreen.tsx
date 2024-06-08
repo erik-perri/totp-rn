@@ -82,18 +82,12 @@ const AuthenticatorListScreen: FunctionComponent = () => {
   return (
     <View style={screenStyles.root}>
       <AuthenticatorListHeader onNewAuthenticator={handleNewAuthenticator} />
-      <ScrollView contentContainerStyle={screenStyles.list}>
-        <AuthenticatorList />
-      </ScrollView>
+      <AuthenticatorList />
     </View>
   );
 };
 
 const screenStyles = StyleSheet.create({
-  list: {
-    backgroundColor: '#ffffff',
-    flexGrow: 1,
-  },
   root: {
     backgroundColor: '#f9fafb',
     flex: 1,
