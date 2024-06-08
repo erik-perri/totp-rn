@@ -6,6 +6,7 @@ const ignoredPackages = [
 
 module.exports = {
   preset: 'react-native',
+  setupFiles: ['./__mocks__/jest.setup.ts'],
   transformIgnorePatterns: [
     'node_modules/(?!' + ignoredPackages.join('|') + ')',
   ],

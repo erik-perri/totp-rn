@@ -1,11 +1,13 @@
 import 'react-native';
 
-import {it} from '@jest/globals';
+import {expect, it} from '@jest/globals';
+import {render} from '@testing-library/react-native';
 import React from 'react';
-import renderer from 'react-test-renderer';
 
 import App from '../src/App';
 
-it('renders correctly', () => {
-  renderer.create(<App />);
+it('renders correctly', async () => {
+  const {findByText} = render(<App />);
+
+  expect(await findByText('No authenticators found.')).toBeTruthy();
 });
