@@ -1,6 +1,7 @@
 import {describe, expect, it} from '@jest/globals';
-import generateTotp from '../../src/utilities/generateTotp';
+
 import TotpAlgorithm from '../../src/enums/TotpAlgorithm';
+import generateTotp from '../../src/utilities/generateTotp';
 
 describe('generateTotp', () => {
   it.each([

@@ -1,5 +1,3 @@
-import {Authenticator} from '../../parsers/authenticatorParser';
-import React, {FunctionComponent, useMemo} from 'react';
 import {
   faCloudflare,
   faDropbox,
@@ -13,6 +11,9 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import React, {FunctionComponent, useMemo} from 'react';
+
+import {Authenticator} from '../../parsers/authenticatorParser';
 
 type AuthenticatorIconProps = {
   issuer: Authenticator['issuer'];

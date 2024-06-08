@@ -12,7 +12,7 @@ module.exports = {
       extends: ['plugin:@typescript-eslint/disable-type-checked'],
     },
   ],
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'simple-import-sort'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: true,
@@ -20,5 +20,7 @@ module.exports = {
   },
   rules: {
     'no-void': 0,
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
   },
 };

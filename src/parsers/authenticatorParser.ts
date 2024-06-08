@@ -1,4 +1,5 @@
 import {nativeEnum, number, object, optional, output, string} from 'zod';
+
 import TotpAlgorithm from '../enums/TotpAlgorithm';
 
 export const authenticatorParser = object({

@@ -1,11 +1,12 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useQueryClient} from '@tanstack/react-query';
 import React, {FunctionComponent} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
+
+import TotpAlgorithm from '../../enums/TotpAlgorithm';
+import {Authenticator} from '../../parsers/authenticatorParser';
 import AuthenticatorLinkHeader from './AuthenticatorLinkHeader';
 import AuthenticatorList from './AuthenticatorList';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Authenticator} from '../../parsers/authenticatorParser';
-import TotpAlgorithm from '../../enums/TotpAlgorithm';
-import {useQueryClient} from '@tanstack/react-query';
 
 const AuthenticatorListScreen: FunctionComponent = () => {
   const queryClient = useQueryClient();

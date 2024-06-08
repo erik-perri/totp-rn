@@ -1,5 +1,6 @@
 import React, {FunctionComponent} from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+
 import useAuthenticatorListQuery from '../../hooks/useAuthenticatorListQuery';
 import AuthenticatorRow from './AuthenticatorRow';
 

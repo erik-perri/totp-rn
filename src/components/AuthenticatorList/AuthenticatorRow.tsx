@@ -1,8 +1,9 @@
 import React, {Fragment, useMemo} from 'react';
-import {Authenticator} from '../../parsers/authenticatorParser';
-import generateTotp from '../../utilities/generateTotp';
 import {StyleSheet, Text, View} from 'react-native';
+
+import {Authenticator} from '../../parsers/authenticatorParser';
 import {useCurrentTime} from '../../stores/useCurrentTimeStore';
+import generateTotp from '../../utilities/generateTotp';
 import AuthenticatorIcon from './AuthenticatorIcon';
 
 function getNextIncrement(currentTime: number, timeStep: number): number {

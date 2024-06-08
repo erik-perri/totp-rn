@@ -1,10 +1,11 @@
-import {useQuery} from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useQuery} from '@tanstack/react-query';
+import {array} from 'zod';
+
 import {
   Authenticator,
   authenticatorParser,
 } from '../parsers/authenticatorParser';
-import {array} from 'zod';
 
 export default function useAuthenticatorListQuery() {
   return useQuery({

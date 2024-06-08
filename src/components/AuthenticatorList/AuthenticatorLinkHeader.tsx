@@ -1,3 +1,5 @@
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {FunctionComponent} from 'react';
 import {
   Pressable,
@@ -5,8 +7,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type HeaderProps = {
