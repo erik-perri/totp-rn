@@ -13,7 +13,7 @@ type HeaderProps = {
   onNewAuthenticator: () => Promise<void>;
 };
 
-const AuthenticatorLinkHeader: FunctionComponent<HeaderProps> = ({
+const AuthenticatorListHeader: FunctionComponent<HeaderProps> = ({
   onNewAuthenticator,
 }) => {
   const {top} = useSafeAreaInsets();
@@ -51,4 +51,4 @@ function buttonStyleGenerator({pressed}: PressableStateCallbackType) {
   };
 }
 
-export default AuthenticatorLinkHeader;
+export default AuthenticatorListHeader;

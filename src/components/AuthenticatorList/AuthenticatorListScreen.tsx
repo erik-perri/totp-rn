@@ -5,8 +5,8 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 
 import TotpAlgorithm from '../../enums/TotpAlgorithm';
 import {Authenticator} from '../../parsers/authenticatorParser';
-import AuthenticatorLinkHeader from './AuthenticatorLinkHeader';
 import AuthenticatorList from './AuthenticatorList';
+import AuthenticatorListHeader from './AuthenticatorListHeader';
 
 const AuthenticatorListScreen: FunctionComponent = () => {
   const queryClient = useQueryClient();
@@ -95,7 +95,7 @@ const AuthenticatorListScreen: FunctionComponent = () => {
 
   return (
     <View style={screenStyles.root}>
-      <AuthenticatorLinkHeader onNewAuthenticator={handleNewAuthenticator} />
+      <AuthenticatorListHeader onNewAuthenticator={handleNewAuthenticator} />
       <ScrollView contentContainerStyle={screenStyles.list}>
         <AuthenticatorList />
       </ScrollView>
