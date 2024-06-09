@@ -1,9 +1,10 @@
+import {NavigationContainer} from '@react-navigation/native';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import React from 'react';
 import {StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-import AuthenticatorListScreen from './components/AuthenticatorList/AuthenticatorListScreen';
+import MainStack from './components/MainStack';
 import useCurrentTimeUpdater from './hooks/useCurrentTimeUpdater';
 
 const queryClient = new QueryClient({
@@ -26,7 +27,9 @@ function App(): React.JSX.Element {
           barStyle="dark-content"
           translucent
         />
-        <AuthenticatorListScreen />
+        <NavigationContainer>
+          <MainStack />
+        </NavigationContainer>
       </QueryClientProvider>
     </SafeAreaProvider>
   );

@@ -9,13 +9,13 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-type HeaderProps = {
+type AuthenticatorListHeaderProps = {
   onNewAuthenticator: () => Promise<void>;
 };
 
-const AuthenticatorListHeader: FunctionComponent<HeaderProps> = ({
-  onNewAuthenticator,
-}) => {
+const AuthenticatorListHeader: FunctionComponent<
+  AuthenticatorListHeaderProps
+> = ({onNewAuthenticator}) => {
   const {top} = useSafeAreaInsets();
   return (
     <View style={[headerStyles.root, {marginTop: top}]}>
