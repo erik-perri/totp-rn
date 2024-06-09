@@ -52,6 +52,7 @@ const CountdownBar: FunctionComponent<CountdownBarProps> = ({
 const styles = StyleSheet.create({
   bar: {
     backgroundColor: '#9ca3af',
+    borderRadius: 4,
     height: '100%',
   },
 });

@@ -14,6 +14,7 @@ import {useCurrentTime} from '../../stores/useCurrentTimeStore';
 import generateTotp from '../../utilities/generateTotp';
 import CountdownBar from '../CountdownBar';
 import AuthenticatorIcon from './AuthenticatorIcon';
+import TotpCode from './TotpCode';
 
 function getNextIncrement(
   currentTimeInMilliseconds: number,
@@ -53,10 +54,18 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
     [authenticator, currentTime],
   );
 
-  const totpParts =
-    totp.length % 2 === 0
-      ? [totp.slice(0, totp.length / 2), totp.slice(totp.length / 2)]
-      : [totp];
+  /*const nextTotp = useMemo(
+    () =>
+      generateTotp(
+        authenticator.secret,
+        authenticator.algorithm,
+        authenticator.timeStep,
+        authenticator.codeSize,
+        authenticator.initialTime,
+        Math.floor((currentTime + authenticator.timeStep * 1000) / 1000),
+      ),
+    [authenticator, currentTime],
+  );*/
 
   function handleCopy() {
     Clipboard.setString(totp);
@@ -82,18 +91,28 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
           )}
         </View>
         <View style={rowStyles.codeContainer}>
-          {totpParts.map((part, index) => (
-            <Text key={`${part}-${index.toString()}`} style={rowStyles.code}>
-              {part}
-            </Text>
-          ))}
+          <View style={rowStyles.codePreviewContainer}>
+            <View>
+              <TotpCode
+                code={totp}
+                containerStyle={rowStyles.codePartsContainer}
+                textStyle={rowStyles.code}
+              />
+              <View style={rowStyles.codeProgress}>
+                <CountdownBar
+                  duration={authenticator.timeStep * 1000}
+                  endTime={totpChangeTime}
+                />
+              </View>
+            </View>
+            {/*<Text>&mdash;</Text>
+            <TotpCode
+              code={nextTotp}
+              containerStyle={rowStyles.codePartsContainer}
+              textStyle={rowStyles.codePreview}
+            />*/}
+          </View>
         </View>
-      </View>
-      <View style={rowStyles.progress}>
-        <CountdownBar
-          duration={authenticator.timeStep * 1000}
-          endTime={totpChangeTime}
-        />
       </View>
     </Pressable>
   );
@@ -106,13 +125,32 @@ const rowStyles = StyleSheet.create({
     fontWeight: 'semibold',
   },
   codeContainer: {
+    alignSelf: 'flex-start',
+    flexDirection: 'column',
+    display: 'flex',
+  },
+  codePartsContainer: {
     flexDirection: 'row',
     display: 'flex',
     flexShrink: 1,
     gap: 4,
   },
+  codePreview: {
+    color: '#9ca3af',
+    fontSize: 20,
+    fontWeight: 'semibold',
+  },
+  codePreviewContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 8,
+    display: 'flex',
+  },
+  codeProgress: {
+    height: 4,
+    borderRadius: 4,
+  },
   icon: {
-    alignSelf: 'flex-start',
     paddingTop: 4,
   },
   info: {
@@ -133,27 +171,20 @@ const rowStyles = StyleSheet.create({
     gap: 8,
     justifyContent: 'flex-start',
   },
-  progress: {
-    bottom: 0,
-    height: 2,
-    left: 0,
-    position: 'absolute',
-    right: 0,
-  },
   root: {
     alignItems: 'center',
     backgroundColor: '#f3f4f6',
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',
-    gap: 8,
+    gap: 12,
     justifyContent: 'space-between',
     overflow: 'hidden',
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
   username: {
-    color: '#9ca3af',
+    color: '#4b5563',
     flexGrow: 1,
     fontSize: 12,
   },

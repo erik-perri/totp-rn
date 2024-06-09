@@ -47,7 +47,7 @@ const AuthenticatorIcon: FunctionComponent<AuthenticatorIconProps> = ({
     return faUser;
   }, [issuer]);
 
-  return <FontAwesomeIcon color="#111827" icon={icon} />;
+  return <FontAwesomeIcon color="#111827" icon={icon} size={32} />;
 };
 
 export default AuthenticatorIcon;
