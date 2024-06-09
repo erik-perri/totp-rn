@@ -10,7 +10,7 @@ import {
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 type AuthenticatorListHeaderProps = {
-  onNewAuthenticator: () => Promise<void>;
+  onNewAuthenticator: () => void;
 };
 
 const AuthenticatorListHeader: FunctionComponent<
@@ -22,7 +22,7 @@ const AuthenticatorListHeader: FunctionComponent<
       <Pressable
         accessibilityHint="Add new authenticator"
         onPress={() => {
-          void onNewAuthenticator();
+          onNewAuthenticator();
         }}
         style={buttonStyleGenerator}>
         <FontAwesomeIcon icon={faPlus} />

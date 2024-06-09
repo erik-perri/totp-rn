@@ -1,88 +1,56 @@
-import React, {FunctionComponent} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {faQrcode} from '@fortawesome/free-solid-svg-icons';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import React, {FunctionComponent, useCallback, useState} from 'react';
+import {Alert, StyleSheet, View} from 'react-native';
+import {useCameraPermission} from 'react-native-vision-camera';
 
-import TotpAlgorithm from '../../enums/TotpAlgorithm';
-import useAuthenticatorCreateMutation from '../../hooks/useAuthenticatorCreateMutation';
+import {MainStackParamList} from '../MainStack';
+import MenuPopup from '../MenuPopup';
+import MenuPopupItem from '../MenuPopupItem';
 import AuthenticatorList from './AuthenticatorList';
 import AuthenticatorListHeader from './AuthenticatorListHeader';
 
-const mockAuthenticators = [
-  {
-    algorithm: TotpAlgorithm.Sha1,
-    codeSize: 6,
-    initialTime: 0,
-    issuer: 'Google',
-    secret: 'TESTING',
-    timeStep: 30,
-    username: 'TESTING Sha1 30',
-  },
-  {
-    algorithm: TotpAlgorithm.Sha1,
-    codeSize: 6,
-    initialTime: 0,
-    issuer: 'Microsoft',
-    secret: 'TESTING',
-    timeStep: 60,
-    username: 'TESTING Sha1 60',
-  },
-  {
-    algorithm: TotpAlgorithm.Sha256,
-    codeSize: 6,
-    initialTime: 0,
-    issuer: 'Github',
-    secret: 'TESTING',
-    timeStep: 30,
-    username: 'TESTING Sha256 30',
-  },
-  {
-    algorithm: TotpAlgorithm.Sha256,
-    codeSize: 6,
-    id: '4',
-    initialTime: 0,
-    issuer: 'NPM',
-    secret: 'TESTING',
-    timeStep: 60,
-    username: 'TESTING Sha256 60',
-  },
-  {
-    algorithm: TotpAlgorithm.Sha512,
-    codeSize: 6,
-    id: '5',
-    initialTime: 0,
-    issuer: 'Paypal',
-    secret: 'TESTING',
-    timeStep: 30,
-    username: 'TESTING Sha512 30',
-  },
-  {
-    algorithm: TotpAlgorithm.Sha512,
-    codeSize: 6,
-    id: '6',
-    initialTime: 0,
-    issuer: 'Testing',
-    secret: 'TESTING',
-    timeStep: 60,
-    username: 'TESTING Sha512 60',
-  },
-];
+const AuthenticatorListScreen: FunctionComponent<
+  NativeStackScreenProps<MainStackParamList, 'AuthenticatorList'>
+> = ({navigation}) => {
+  const [isSelectingAddType, setIsSelectingAddType] = useState(false);
+  const {hasPermission, requestPermission} = useCameraPermission();
 
-const AuthenticatorListScreen: FunctionComponent = () => {
-  const {mutateAsync: addAuthenticator} = useAuthenticatorCreateMutation();
+  const handleScanQrCode = useCallback(async () => {
+    if (!hasPermission) {
+      const receivedPermission = await requestPermission();
+      if (!receivedPermission) {
+        Alert.alert(
+          'Permission denied',
+          'You need to grant camera permission to add authenticators with QR codes.',
+        );
+        return;
+      }
+    }
 
-  const handleNewAuthenticator = async () => {
-    const newAuthenticator =
-      mockAuthenticators[Math.floor(Math.random() * mockAuthenticators.length)];
-
-    await addAuthenticator({
-      ...newAuthenticator,
-      id: Math.random().toString(36).substring(7),
-    });
-  };
+    setIsSelectingAddType(false);
+    navigation.navigate('QrCodeScanner');
+  }, [hasPermission, navigation, requestPermission]);
 
   return (
     <View style={screenStyles.root}>
-      <AuthenticatorListHeader onNewAuthenticator={handleNewAuthenticator} />
+      <AuthenticatorListHeader
+        onNewAuthenticator={() => {
+          setIsSelectingAddType(true);
+        }}
+      />
       <AuthenticatorList />
+      <MenuPopup
+        isOpen={isSelectingAddType}
+        onClose={() => {
+          setIsSelectingAddType(false);
+        }}>
+        <MenuPopupItem
+          icon={faQrcode}
+          label="Scan QR Code"
+          onPress={() => void handleScanQrCode()}
+        />
+      </MenuPopup>
     </View>
   );
 };
