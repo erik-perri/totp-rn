@@ -2,6 +2,7 @@
 import crypto from 'crypto';
 
 import TotpAlgorithm from '../enums/TotpAlgorithm';
+import decodeBase32 from './decodeBase32';
 
 export default function generateTotp(
   secret: string,
@@ -11,7 +12,11 @@ export default function generateTotp(
   initialTimeInSeconds: number,
   currentTimeInSeconds: number,
 ): string {
-  const key = Buffer.from(secret, 'utf8');
+  const key = decodeBase32(secret);
+  if (!key) {
+    throw new Error('Invalid secret');
+  }
+
   const time = Math.floor(
     (currentTimeInSeconds - initialTimeInSeconds) / timeStepInSeconds,
   );

@@ -9,7 +9,7 @@ describe('generateTotp', () => {
       'Sha1 94287082',
       {
         expected: '94287082',
-        secret: '12345678901234567890',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ',
         algorithm: TotpAlgorithm.Sha1,
         timeStep: 30,
         codeSize: 8,
@@ -21,7 +21,7 @@ describe('generateTotp', () => {
       'Sha256 46119246',
       {
         expected: '46119246',
-        secret: '12345678901234567890123456789012',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZA====',
         algorithm: TotpAlgorithm.Sha256,
         timeStep: 30,
         codeSize: 8,
@@ -34,7 +34,7 @@ describe('generateTotp', () => {
       {
         expected: '90693936',
         secret:
-          '1234567890123456789012345678901234567890123456789012345678901234',
+          'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNA=',
         algorithm: TotpAlgorithm.Sha512,
         timeStep: 30,
         codeSize: 8,
@@ -46,7 +46,7 @@ describe('generateTotp', () => {
       'Sha1 07081804',
       {
         expected: '07081804',
-        secret: '12345678901234567890',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ',
         algorithm: TotpAlgorithm.Sha1,
         timeStep: 30,
         codeSize: 8,
@@ -58,7 +58,7 @@ describe('generateTotp', () => {
       'Sha256 68084774',
       {
         expected: '68084774',
-        secret: '12345678901234567890123456789012',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZA====',
         algorithm: TotpAlgorithm.Sha256,
         timeStep: 30,
         codeSize: 8,
@@ -71,7 +71,7 @@ describe('generateTotp', () => {
       {
         expected: '25091201',
         secret:
-          '1234567890123456789012345678901234567890123456789012345678901234',
+          'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNA=',
         algorithm: TotpAlgorithm.Sha512,
         timeStep: 30,
         codeSize: 8,
@@ -83,7 +83,7 @@ describe('generateTotp', () => {
       'Sha1 14050471',
       {
         expected: '14050471',
-        secret: '12345678901234567890',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ',
         algorithm: TotpAlgorithm.Sha1,
         timeStep: 30,
         codeSize: 8,
@@ -95,7 +95,7 @@ describe('generateTotp', () => {
       'Sha256 67062674',
       {
         expected: '67062674',
-        secret: '12345678901234567890123456789012',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZA====',
         algorithm: TotpAlgorithm.Sha256,
         timeStep: 30,
         codeSize: 8,
@@ -108,7 +108,7 @@ describe('generateTotp', () => {
       {
         expected: '99943326',
         secret:
-          '1234567890123456789012345678901234567890123456789012345678901234',
+          'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNA=',
         algorithm: TotpAlgorithm.Sha512,
         timeStep: 30,
         codeSize: 8,
@@ -120,7 +120,7 @@ describe('generateTotp', () => {
       'Sha1 89005924',
       {
         expected: '89005924',
-        secret: '12345678901234567890',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ',
         algorithm: TotpAlgorithm.Sha1,
         timeStep: 30,
         codeSize: 8,
@@ -132,7 +132,7 @@ describe('generateTotp', () => {
       'Sha256 91819424',
       {
         expected: '91819424',
-        secret: '12345678901234567890123456789012',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZA====',
         algorithm: TotpAlgorithm.Sha256,
         timeStep: 30,
         codeSize: 8,
@@ -145,7 +145,7 @@ describe('generateTotp', () => {
       {
         expected: '93441116',
         secret:
-          '1234567890123456789012345678901234567890123456789012345678901234',
+          'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNA=',
         algorithm: TotpAlgorithm.Sha512,
         timeStep: 30,
         codeSize: 8,
@@ -157,7 +157,7 @@ describe('generateTotp', () => {
       'Sha1 69279037',
       {
         expected: '69279037',
-        secret: '12345678901234567890',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ',
         algorithm: TotpAlgorithm.Sha1,
         timeStep: 30,
         codeSize: 8,
@@ -169,7 +169,7 @@ describe('generateTotp', () => {
       'Sha256 90698825',
       {
         expected: '90698825',
-        secret: '12345678901234567890123456789012',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZA====',
         algorithm: TotpAlgorithm.Sha256,
         timeStep: 30,
         codeSize: 8,
@@ -182,7 +182,7 @@ describe('generateTotp', () => {
       {
         expected: '38618901',
         secret:
-          '1234567890123456789012345678901234567890123456789012345678901234',
+          'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNA=',
         algorithm: TotpAlgorithm.Sha512,
         timeStep: 30,
         codeSize: 8,
@@ -194,7 +194,7 @@ describe('generateTotp', () => {
       'Sha1 65353130',
       {
         expected: '65353130',
-        secret: '12345678901234567890',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ',
         algorithm: TotpAlgorithm.Sha1,
         timeStep: 30,
         codeSize: 8,
@@ -206,7 +206,7 @@ describe('generateTotp', () => {
       'Sha256 77737706',
       {
         expected: '77737706',
-        secret: '12345678901234567890123456789012',
+        secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZA====',
         algorithm: TotpAlgorithm.Sha256,
         timeStep: 30,
         codeSize: 8,
@@ -219,7 +219,7 @@ describe('generateTotp', () => {
       {
         expected: '47863826',
         secret:
-          '1234567890123456789012345678901234567890123456789012345678901234',
+          'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQGEZDGNA=',
         algorithm: TotpAlgorithm.Sha512,
         timeStep: 30,
         codeSize: 8,
