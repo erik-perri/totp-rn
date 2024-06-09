@@ -1,13 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 
-import {Authenticator} from '../parsers/authenticatorParser';
+import {
+  Authenticator,
+  AuthenticatorWithoutId,
+} from '../parsers/authenticatorParser';
 import useAuthenticatorListQuery, {
   updateAuthenticatorListData,
 } from './useAuthenticatorListQuery';
 
 type UpdatingAuthenticator = Pick<Authenticator, 'id'> &
-  Partial<Omit<Authenticator, 'id'>>;
+  Partial<AuthenticatorWithoutId>;
 
 export default function useAuthenticatorUpdateMutation() {
   const queryClient = useQueryClient();

@@ -14,3 +14,4 @@ export const authenticatorParser = object({
 });
 
 export type Authenticator = output<typeof authenticatorParser>;
+export type AuthenticatorWithoutId = Omit<Authenticator, 'id'>;
