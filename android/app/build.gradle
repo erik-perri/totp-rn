@@ -113,6 +113,9 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+
+    // Argon2 KDF
+    implementation "org.signal:argon2:13.1@aar"
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
