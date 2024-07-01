@@ -37,13 +37,14 @@ class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
     promise: Promise
   ) {
     try {
+      val cipher = Cipher.getInstance("AES/ECB/NoPadding")
+      val secretKey = SecretKeySpec(bytesFromArray(seed), "AES")
       var result = bytesFromArray(key)
       var iterations = rounds
 
+      cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+
       while (iterations-- > 0) {
-        val cipher = Cipher.getInstance("AES/ECB/NoPadding")
-        val secretKey = SecretKeySpec(bytesFromArray(seed), "AES")
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
         result = cipher.doFinal(result)
       }
 
