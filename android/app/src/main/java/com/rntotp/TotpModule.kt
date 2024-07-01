@@ -70,7 +70,7 @@ class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         ARGON2_VERSION_10 -> Version.V10
         ARGON2_VERSION_13 -> Version.V13
         else -> {
-          promise.reject("transform_error", "Invalid Argon2 version")
+          promise.reject("transform_error", "Invalid Argon2 version \"$version\"")
           return
         }
       }
@@ -79,7 +79,7 @@ class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         ARGON2_TYPE_2D -> Type.Argon2d
         ARGON2_TYPE_2ID -> Type.Argon2id
         else -> {
-          promise.reject("transform_error", "Invalid Argon2 type")
+          promise.reject("transform_error", "Invalid Argon2 type \"$type\"")
           return
         }
       }
@@ -106,7 +106,7 @@ class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
     const val ARGON2_VERSION_10 = 0x10
     const val ARGON2_VERSION_13 = 0x13
     const val ARGON2_TYPE_2D = 0
-    const val ARGON2_TYPE_2ID = 1
+    const val ARGON2_TYPE_2ID = 2
   }
 
   @Throws(Exception::class)
