@@ -6,9 +6,6 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableArray
-import com.facebook.react.bridge.ReadableType
-import com.facebook.react.bridge.WritableArray
-import com.facebook.react.bridge.WritableNativeArray
 import org.signal.argon2.Argon2
 import org.signal.argon2.MemoryCost
 import org.signal.argon2.Type
@@ -38,8 +35,8 @@ class KdbxModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
   ) {
     try {
       val cipher = Cipher.getInstance("AES/ECB/NoPadding")
-      val secretKey = SecretKeySpec(bytesFromArray(seed), "AES")
-      var result = bytesFromArray(key)
+      val secretKey = SecretKeySpec(seed.toByteArray(), "AES")
+      var result = key.toByteArray()
       var iterations = rounds
 
       cipher.init(Cipher.ENCRYPT_MODE, secretKey)
@@ -48,7 +45,7 @@ class KdbxModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         result = cipher.doFinal(result)
       }
 
-      promise.resolve(arrayFromBytes(result))
+      promise.resolve(result.toWritableArray())
     } catch (e: Exception) {
       promise.reject("transform_error", e)
     }
@@ -92,11 +89,11 @@ class KdbxModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         .build()
 
       val result = argon2.hash(
-        bytesFromArray(key),
-        bytesFromArray(salt)
+        key.toByteArray(),
+        salt.toByteArray()
       )
 
-      promise.resolve(arrayFromBytes(result.hash))
+      promise.resolve(result.hash.toWritableArray())
     } catch (e: Exception) {
       promise.reject("transform_error", e)
     }
@@ -107,37 +104,6 @@ class KdbxModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
     const val ARGON2_VERSION_13 = 0x13
     const val ARGON2_TYPE_2D = 0
     const val ARGON2_TYPE_2ID = 2
-  }
-
-  @Throws(Exception::class)
-  private fun bytesFromArray(array: ReadableArray): ByteArray {
-    val size = array.size()
-    val result = ByteArray(size)
-
-    if (size < 1) {
-      return result
-    }
-
-    for (i in 0 until size) {
-      val type = array.getType(i)
-      if (type != ReadableType.Number) {
-        throw Exception("Invalid byte array")
-      }
-
-      result[i] = array.getInt(i).toByte()
-    }
-
-    return result
-  }
-
-  private fun arrayFromBytes(bytes: ByteArray?): WritableArray {
-    val result = WritableNativeArray()
-
-    bytes?.forEach { b ->
-      result.pushInt(b.toInt())
-    }
-
-    return result
   }
 
 }
