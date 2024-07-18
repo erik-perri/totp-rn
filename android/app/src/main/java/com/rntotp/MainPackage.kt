@@ -7,7 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ReactShadowNode
 import com.facebook.react.uimanager.ViewManager
 
-class TotpPackage : ReactPackage {
+class MainPackage : ReactPackage {
 
   override fun createViewManagers(
     reactContext: ReactApplicationContext
@@ -15,6 +15,8 @@ class TotpPackage : ReactPackage {
 
   override fun createNativeModules(
     reactContext: ReactApplicationContext
-  ): MutableList<NativeModule> = listOf(TotpModule(reactContext)).toMutableList()
+  ): MutableList<NativeModule> = listOf(
+    KdbxModule(reactContext),
+  ).toMutableList()
 
 }

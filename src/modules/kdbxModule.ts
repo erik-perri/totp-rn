@@ -1,6 +1,6 @@
 import {NativeModules} from 'react-native';
 
-import safeBigIntToNumber from './safeBigIntToNumber';
+import safeBigIntToNumber from '../utilities/safeBigIntToNumber';
 
 // TODO Replace with import
 type KdbxAesKdfParameters = {
@@ -18,8 +18,8 @@ type KdbxArgon2KdfParameters = {
   version: number;
 };
 
-const {TotpModule} = NativeModules as {
-  TotpModule: {
+const {KdbxModule} = NativeModules as {
+  KdbxModule: {
     getConstants: () => {
       ARGON2_TYPE_2D: number;
       ARGON2_TYPE_2ID: number;
@@ -49,7 +49,7 @@ export async function transformAes256KdfKey(
   key: Uint8Array,
   parameters: KdbxAesKdfParameters,
 ): Promise<Uint8Array> {
-  const transformed = await TotpModule.transformAes256KdfKey(
+  const transformed = await KdbxModule.transformAes256KdfKey(
     Array.from(key),
     safeBigIntToNumber(parameters.rounds),
     Array.from(parameters.seed),
@@ -62,7 +62,7 @@ export async function transformArgon2KdfKey(
   key: Uint8Array,
   parameters: KdbxArgon2KdfParameters,
 ): Promise<Uint8Array> {
-  const transformed = await TotpModule.transformArgon2KdfKey(
+  const transformed = await KdbxModule.transformArgon2KdfKey(
     Array.from(key),
     Array.from(parameters.seed),
     parameters.version,

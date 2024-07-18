@@ -16,9 +16,9 @@ import org.signal.argon2.Version
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
-class TotpModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class KdbxModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
-  override fun getName() = "TotpModule"
+  override fun getName() = "KdbxModule"
 
   override fun getConstants(): MutableMap<String, Any> =
     hashMapOf(
