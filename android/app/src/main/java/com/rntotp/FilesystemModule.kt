@@ -216,6 +216,7 @@ class FilesystemModule(reactContext: ReactApplicationContext) :
       null,
       null
     )
+
     cursor?.use {
       if (it.moveToFirst()) {
         val index = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)

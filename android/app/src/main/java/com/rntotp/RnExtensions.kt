@@ -23,7 +23,7 @@ fun Map<*, *>.toWritableMap(): WritableMap {
 
   for ((key, value) in this) {
     if (key !is String) {
-      throw Exception("Unsupported map key: ${key.toString()}")
+      throw Exception("Invalid writable map. Unsupported map key \"$key\"")
     }
 
     when (value) {
