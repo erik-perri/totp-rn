@@ -16,6 +16,7 @@ class MainPackage : ReactPackage {
   override fun createNativeModules(
     reactContext: ReactApplicationContext
   ): MutableList<NativeModule> = listOf(
+    FilesystemModule(reactContext),
     KdbxModule(reactContext),
   ).toMutableList()
 

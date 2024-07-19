@@ -18,6 +18,29 @@ fun ByteArray?.toWritableArray(): WritableArray {
 }
 
 @Throws(Exception::class)
+fun Map<*, *>.toWritableMap(): WritableMap {
+  val result = WritableNativeMap()
+
+  for ((key, value) in this) {
+    if (key !is String) {
+      throw Exception("Unsupported map key: ${key.toString()}")
+    }
+
+    when (value) {
+      null -> result.putNull(key)
+      is Boolean -> result.putBoolean(key, value)
+      is Double -> result.putDouble(key, value)
+      is Int -> result.putInt(key, value)
+      is Map<*, *> -> result.putMap(key, value.toWritableMap())
+      is String -> result.putString(key, value)
+      else -> throw Exception("Invalid writable map. Unknown value type for \"$value\"")
+    }
+  }
+
+  return result
+}
+
+@Throws(Exception::class)
 fun ReadableArray.toByteArray(): ByteArray {
   val size = this.size()
   val result = ByteArray(size)
