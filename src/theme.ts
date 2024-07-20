@@ -161,7 +161,7 @@ export const darkTheme = {
         },
         pressed: {
           background: colors.slate[400],
-          text: colors.slate[800],
+          text: colors.slate[50],
         },
       },
       ghost: {
@@ -174,8 +174,8 @@ export const darkTheme = {
           text: colors.slate[400],
         },
         pressed: {
-          background: colors.slate[400],
-          text: colors.slate[800],
+          background: colors.slate[600],
+          text: colors.slate[50],
         },
       },
     },
@@ -212,7 +212,7 @@ export const darkTheme = {
       pressed: {
         border: colors.slate[400],
         background: colors.slate[600],
-        text: colors.slate[800],
+        text: colors.slate[50],
       },
     },
     well: {
