@@ -7,6 +7,7 @@ import React, {
   useRef,
 } from 'react';
 import {StyleSheet, View} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 import PopupBackdrop from './PopupBackdrop';
 
@@ -48,7 +49,9 @@ const MenuPopup: FunctionComponent<MenuPopupProps> = ({
       ref={bottomSheetRef}
       onChange={handleSheetChanges}>
       <BottomSheetView>
-        <View style={styles.contentContainer}>{children}</View>
+        <SafeAreaView edges={['bottom']}>
+          <View style={styles.contentContainer}>{children}</View>
+        </SafeAreaView>
       </BottomSheetView>
     </BottomSheetModal>
   );
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 4,
-    paddingBottom: 16,
+    paddingBottom: 12,
   },
 });
 

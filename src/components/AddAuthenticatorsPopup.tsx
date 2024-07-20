@@ -15,6 +15,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {AuthenticatorWithoutId} from '../parsers/authenticatorParser';
 import AddAuthenticatorsPopupItem from './AddAuthenticatorsPopupItem';
@@ -87,38 +88,40 @@ const AddAuthenticatorsPopup: FunctionComponent<
       onChange={handleSheetChanges}
       ref={bottomSheetRef}>
       <BottomSheetView>
-        <View style={styles.contentContainer}>
-          {authenticators.map((authenticator, index) => (
-            <AddAuthenticatorsPopupItem
-              key={`${index.toString()}-${authenticator.issuer}`}
-              authenticator={authenticator}
-              canCheck={authenticators.length > 1}
-              isChecked={Boolean(enabledState[index])}
-              onPress={() => {
-                setEnabledState(state => {
-                  return {
-                    ...state,
-                    [index]: !state[index],
-                  };
-                });
-              }}
-            />
-          ))}
-        </View>
-        <View style={styles.buttonContainer}>
-          <Pressable
-            disabled={isSaving}
-            onPress={onCancel}
-            style={buttonStyleGenerator}>
-            <Text style={styles.buttonText}>Cancel</Text>
-          </Pressable>
-          <Pressable
-            disabled={isSaving || !hasEnabled}
-            onPress={() => void handleSave()}
-            style={buttonStyleGenerator}>
-            <Text style={styles.buttonText}>Save</Text>
-          </Pressable>
-        </View>
+        <SafeAreaView edges={['bottom']}>
+          <View style={styles.contentContainer}>
+            {authenticators.map((authenticator, index) => (
+              <AddAuthenticatorsPopupItem
+                key={`${index.toString()}-${authenticator.issuer}`}
+                authenticator={authenticator}
+                canCheck={authenticators.length > 1}
+                isChecked={Boolean(enabledState[index])}
+                onPress={() => {
+                  setEnabledState(state => {
+                    return {
+                      ...state,
+                      [index]: !state[index],
+                    };
+                  });
+                }}
+              />
+            ))}
+          </View>
+          <View style={styles.buttonContainer}>
+            <Pressable
+              disabled={isSaving}
+              onPress={onCancel}
+              style={buttonStyleGenerator}>
+              <Text style={styles.buttonText}>Cancel</Text>
+            </Pressable>
+            <Pressable
+              disabled={isSaving || !hasEnabled}
+              onPress={() => void handleSave()}
+              style={buttonStyleGenerator}>
+              <Text style={styles.buttonText}>Save</Text>
+            </Pressable>
+          </View>
+        </SafeAreaView>
       </BottomSheetView>
     </BottomSheetModal>
   );
