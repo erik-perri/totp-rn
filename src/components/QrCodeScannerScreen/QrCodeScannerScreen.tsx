@@ -1,9 +1,9 @@
-import {faSun} from '@fortawesome/free-regular-svg-icons';
+import {faLightbulb} from '@fortawesome/free-regular-svg-icons';
 import {
   faAngleLeft,
   faArrowsRotate,
   faBugs,
-  faSun as faSolidSun,
+  faLightbulb as faSolidLightbulb,
 } from '@fortawesome/free-solid-svg-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {FunctionComponent, useCallback, useMemo, useState} from 'react';
@@ -132,7 +132,7 @@ const QrCodeScannerScreen: FunctionComponent<
         />
         {device.hasTorch && (
           <CameraButton
-            icon={torch === 'on' ? faSolidSun : faSun}
+            icon={torch === 'on' ? faSolidLightbulb : faLightbulb}
             onPress={() => {
               setTorch(currentTorch => (currentTorch === 'on' ? 'off' : 'on'));
             }}
