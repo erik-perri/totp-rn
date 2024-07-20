@@ -2,6 +2,7 @@ import {faSun} from '@fortawesome/free-regular-svg-icons';
 import {
   faAngleLeft,
   faArrowsRotate,
+  faBugs,
   faSun as faSolidSun,
 } from '@fortawesome/free-solid-svg-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -17,6 +18,7 @@ import {
   useCodeScanner,
 } from 'react-native-vision-camera';
 
+import TotpAlgorithm from '../../enums/TotpAlgorithm';
 import useAuthenticatorsCreateMutation from '../../hooks/useAuthenticatorsCreateMutation';
 import {AuthenticatorWithoutId} from '../../parsers/authenticatorParser';
 import findAuthenticatorInCodes from '../../utilities/findAuthenticatorInCodes';
@@ -136,6 +138,20 @@ const QrCodeScannerScreen: FunctionComponent<
             }}
           />
         )}
+        {__DEV__ && (
+          <CameraButton
+            icon={faBugs}
+            onPress={() => {
+              const count = Math.floor(Math.random() * 3) + 1;
+
+              setPotentialAuthenticators(
+                Array.from({length: count}, () =>
+                  generateRandomAuthenticator(),
+                ),
+              );
+            }}
+          />
+        )}
       </View>
       <View style={styles.helpContainer}>
         <Text style={[styles.helpText, positionStyles.help]}>
@@ -158,6 +174,29 @@ const QrCodeScannerScreen: FunctionComponent<
     </View>
   );
 };
+
+function generateRandomAuthenticator(): AuthenticatorWithoutId {
+  const algorithm =
+    Math.random() < 0.9
+      ? TotpAlgorithm.Sha1
+      : Math.random() < 0.5
+      ? TotpAlgorithm.Sha256
+      : TotpAlgorithm.Sha512;
+
+  const codeSize = Math.random() < 0.8 ? 6 : 8;
+
+  const timeStep = Math.random() < 0.8 ? 30 : 60;
+
+  return {
+    algorithm,
+    codeSize,
+    initialTime: 0,
+    issuer: `Example ${algorithm.toUpperCase()} ${codeSize.toString()} ${timeStep.toString()}`,
+    secret: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ',
+    timeStep,
+    username: 'example',
+  };
+}
 
 const stylesheet = createStyleSheet(theme => ({
   buttonContainer: {
