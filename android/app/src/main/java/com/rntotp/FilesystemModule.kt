@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.provider.DocumentsContract
 import android.provider.OpenableColumns
 import androidx.core.net.toUri
 import com.facebook.react.bridge.BaseActivityEventListener
@@ -69,6 +70,18 @@ class FilesystemModule(reactContext: ReactApplicationContext) :
     documentPromise = promise
 
     activity.startActivityForResult(intent, EVENT_CODE_CREATE_DOCUMENT)
+  }
+
+  @ReactMethod
+  fun deleteDocumentFile(uri: String, promise: Promise) {
+    val contentUri = Uri.parse(uri)
+
+    try {
+      DocumentsContract.deleteDocument(contentResolver, contentUri)
+      promise.resolve(null)
+    } catch (e: Exception) {
+      promise.reject("file_delete", "Failed to delete file.", e)
+    }
   }
 
   @ReactMethod
