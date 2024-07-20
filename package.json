@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "check-code": "npm run lint && npm run test",
+    "check-code": "npm run lint && npm run check-types && npm run test",
+    "check-types": "tsc --noEmit",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
