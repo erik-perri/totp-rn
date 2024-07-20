@@ -1,53 +1,44 @@
 import React, {
-  Context,
   createContext,
   FunctionComponent,
   PropsWithChildren,
   useContext,
 } from 'react';
-import {Pressable} from 'react-native';
 
+import PressableShell from '../PressableShell';
 import ButtonBox from './ButtonBox';
 
-export type ButtonTheme = 'ghost' | 'solid';
+export type ButtonVariant = 'ghost' | 'solid';
 
 type ButtonProps = PropsWithChildren<{
   disabled?: boolean;
   onPress: () => Promise<void> | void;
-  theme: ButtonTheme;
+  variant: ButtonVariant;
 }>;
 
 const Button: FunctionComponent<ButtonProps> = ({
   children,
   disabled,
   onPress,
-  theme,
+  variant,
 }) => {
   return (
-    <Pressable disabled={disabled} onPress={() => void onPress()}>
-      {({pressed}) => (
-        <ButtonProvider.Provider value={{disabled, pressed, theme}}>
-          <ButtonBox>{children}</ButtonBox>
-        </ButtonProvider.Provider>
-      )}
-    </Pressable>
+    <PressableShell disabled={disabled} onPress={onPress}>
+      <ButtonProvider.Provider value={{variant}}>
+        <ButtonBox>{children}</ButtonBox>
+      </ButtonProvider.Provider>
+    </PressableShell>
   );
 };
 
-type ButtonContext = {
-  disabled: boolean | undefined;
-  pressed: boolean;
-  theme: ButtonTheme;
-};
-
-const ButtonProvider = createContext<ButtonContext>({
-  disabled: false,
-  pressed: false,
-  theme: 'solid',
+const ButtonProvider = createContext<{
+  variant: ButtonVariant;
+}>({
+  variant: 'solid',
 });
 
 export function useButtonContext() {
-  return useContext<ButtonContext>(ButtonProvider);
+  return useContext(ButtonProvider);
 }
 
 export default Button;

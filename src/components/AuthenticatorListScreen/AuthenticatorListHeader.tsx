@@ -19,7 +19,7 @@ const AuthenticatorListHeader: FunctionComponent<
 
   return (
     <View style={[styles.root, {marginTop: top}]}>
-      <Button onPress={onNewAuthenticator} theme="ghost">
+      <Button onPress={onNewAuthenticator} variant="ghost">
         <ButtonIcon icon={faPlus} />
       </Button>
     </View>

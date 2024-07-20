@@ -17,7 +17,7 @@ const MenuPopupItem: FunctionComponent<MenuPopupItemProps> = ({
   onPress,
 }) => {
   return (
-    <Button onPress={onPress} theme="ghost">
+    <Button onPress={onPress} variant="ghost">
       <ButtonIcon icon={icon} />
       <ButtonText>{label}</ButtonText>
     </Button>

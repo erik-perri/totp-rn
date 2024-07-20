@@ -83,12 +83,12 @@ const AddAuthenticatorsPopup: FunctionComponent<
         ))}
       </View>
       <View style={styles.buttonContainer}>
-        <Button onPress={onCancel} theme="ghost">
+        <Button onPress={onCancel} variant="ghost">
           <ButtonText>Cancel</ButtonText>
         </Button>
         <Button
           onPress={handleSave}
-          theme="solid"
+          variant="solid"
           disabled={isSaving || !hasEnabled}>
           <ButtonText>Save</ButtonText>
         </Button>
