@@ -1,12 +1,7 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, {useMemo} from 'react';
-import {
-  Pressable,
-  PressableStateCallbackType,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React, {Fragment, useMemo} from 'react';
+import {Alert, Pressable, Text, View} from 'react-native';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import useAuthenticatorDeleteMutation from '../../hooks/useAuthenticatorDeleteMutation';
 import {Authenticator} from '../../parsers/authenticatorParser';
@@ -36,6 +31,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
   authenticator,
   showNextCode,
 }) => {
+  const {styles} = useStyles(stylesheet);
   const currentTime = useCurrentTime();
   const {mutateAsync: deleteAuthenticator} = useAuthenticatorDeleteMutation();
 
@@ -94,82 +90,87 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
   }
 
   return (
-    <Pressable
-      style={rowStyleGenerator}
-      onPress={handleCopy}
-      onLongPress={handleRemove}>
-      <View style={rowStyles.icon}>
-        <AuthenticatorIcon issuer={authenticator.issuer} />
-      </View>
-      <View style={rowStyles.info}>
-        <View style={rowStyles.name}>
-          <Text style={rowStyles.issuer}>{authenticator.issuer}</Text>
-          {authenticator.username && (
-            <Text style={rowStyles.username}>({authenticator.username})</Text>
-          )}
-        </View>
-        <View style={rowStyles.codeContainer}>
-          <View style={rowStyles.codePreviewContainer}>
-            <View>
-              <TotpCode
-                code={totp}
-                containerStyle={rowStyles.codePartsContainer}
-                textStyle={rowStyles.code}
-              />
-              <View style={rowStyles.codeProgress}>
-                <CountdownBar
-                  duration={authenticator.timeStep * 1000}
-                  endTime={totpChangeTime}
-                />
+    <Pressable onPress={handleCopy} onLongPress={handleRemove}>
+      {({pressed}) => (
+        <View style={[styles.root, pressed && styles.rootPressed]}>
+          <View style={styles.icon}>
+            <AuthenticatorIcon issuer={authenticator.issuer} />
+          </View>
+          <View style={styles.info}>
+            <View style={styles.name}>
+              <Text style={styles.issuer}>{authenticator.issuer}</Text>
+              {authenticator.username && (
+                <Text style={styles.username}>({authenticator.username})</Text>
+              )}
+            </View>
+            <View style={styles.codeContainer}>
+              <View style={styles.codePreviewContainer}>
+                <View>
+                  <TotpCode
+                    code={totp}
+                    containerStyle={styles.codePartsContainer}
+                    textStyle={styles.code}
+                  />
+                  <View style={styles.codeProgress}>
+                    <CountdownBar
+                      duration={authenticator.timeStep * 1000}
+                      endTime={totpChangeTime}
+                    />
+                  </View>
+                </View>
+                {showNextCode && (
+                  <Fragment>
+                    <Text>&mdash;</Text>
+                    <TotpCode
+                      code={nextTotp}
+                      containerStyle={styles.codePartsContainer}
+                      textStyle={styles.codePreview}
+                    />
+                  </Fragment>
+                )}
               </View>
             </View>
-            <Text>&mdash;</Text>
-            <TotpCode
-              code={nextTotp}
-              containerStyle={rowStyles.codePartsContainer}
-              textStyle={rowStyles.codePreview}
-            />
           </View>
         </View>
-      </View>
+      )}
     </Pressable>
   );
 };
 
-const rowStyles = StyleSheet.create({
+const stylesheet = createStyleSheet(theme => ({
   code: {
-    color: '#111827',
-    fontSize: 20,
+    color: theme.colors.text,
+    fontSize: theme.fontSize.lg,
     fontWeight: 'semibold',
   },
   codeContainer: {
     alignSelf: 'flex-start',
-    flexDirection: 'column',
     display: 'flex',
+    flexDirection: 'column',
   },
   codePartsContainer: {
-    flexDirection: 'row',
     display: 'flex',
+    flexDirection: 'row',
     flexShrink: 1,
     gap: 4,
   },
   codePreview: {
-    color: '#9ca3af',
-    fontSize: 20,
+    color: theme.colors.textAlt,
+    fontSize: theme.fontSize.lg,
     fontWeight: 'semibold',
   },
   codePreviewContainer: {
     alignItems: 'center',
+    display: 'flex',
     flexDirection: 'row',
     gap: 8,
-    display: 'flex',
   },
   codeProgress: {
-    height: 4,
-    borderRadius: 4,
+    borderRadius: 9999,
+    height: 2,
   },
   icon: {
-    paddingTop: 4,
+    //
   },
   info: {
     display: 'flex',
@@ -178,8 +179,8 @@ const rowStyles = StyleSheet.create({
     gap: 2,
   },
   issuer: {
-    color: '#111827',
-    fontSize: 16,
+    color: theme.colors.text,
+    fontSize: theme.fontSize.base,
     fontWeight: 'semibold',
   },
   name: {
@@ -191,7 +192,7 @@ const rowStyles = StyleSheet.create({
   },
   root: {
     alignItems: 'center',
-    backgroundColor: '#f3f4f6',
+    backgroundColor: theme.colors.authenticatorRow.base.background,
     borderRadius: 8,
     display: 'flex',
     flexDirection: 'row',
@@ -201,18 +202,14 @@ const rowStyles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
-  username: {
-    color: '#4b5563',
-    flexGrow: 1,
-    fontSize: 12,
+  rootPressed: {
+    backgroundColor: theme.colors.authenticatorRow.pressed.background,
   },
-});
-
-function rowStyleGenerator({pressed}: PressableStateCallbackType) {
-  return {
-    ...rowStyles.root,
-    backgroundColor: pressed ? '#e5e7eb' : '#f3f4f6',
-  };
-}
+  username: {
+    color: theme.colors.textAlt,
+    flexGrow: 1,
+    fontSize: theme.fontSize.sm,
+  },
+}));
 
 export default AuthenticatorRow;

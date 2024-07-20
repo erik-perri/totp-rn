@@ -1,25 +1,18 @@
-import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
-import {
-  Pressable,
-  PressableStateCallbackType,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import {useWindowDimensions, View} from 'react-native';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import {AuthenticatorWithoutId} from '../parsers/authenticatorParser';
 import AddAuthenticatorsPopupItem from './AddAuthenticatorsPopupItem';
-import PopupBackdrop from './PopupBackdrop';
+import Button from './Button/Button';
+import ButtonText from './Button/ButtonText';
+import MenuPopup from './MenuPopup';
 
 type AddAuthenticatorsPopupProps = {
   authenticators: AuthenticatorWithoutId[];
@@ -31,7 +24,7 @@ type AddAuthenticatorsPopupProps = {
 const AddAuthenticatorsPopup: FunctionComponent<
   AddAuthenticatorsPopupProps
 > = ({authenticators, isOpen, onCancel, onSave}) => {
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const {styles} = useStyles(stylesheet);
   const dimensions = useWindowDimensions();
   const maxHeight = useMemo(() => dimensions.height * 0.5, [dimensions]);
 
@@ -40,15 +33,6 @@ const AddAuthenticatorsPopup: FunctionComponent<
   const hasEnabled = useMemo(() => {
     return Object.values(enabledState).some(Boolean);
   }, [enabledState]);
-
-  const handleSheetChanges = useCallback(
-    (index: number) => {
-      if (index === -1) {
-        onCancel();
-      }
-    },
-    [onCancel],
-  );
 
   const [isSaving, setIsSaving] = useState(false);
   const handleSave = useCallback(async () => {
@@ -72,62 +56,48 @@ const AddAuthenticatorsPopup: FunctionComponent<
           authenticators.map((_, index) => [index.toString(), true]),
         ),
       );
-      bottomSheetRef.current?.present();
-    } else {
-      bottomSheetRef.current?.close();
     }
   }, [authenticators, isOpen]);
 
   return (
-    <BottomSheetModal
-      backdropComponent={PopupBackdrop}
-      enableDynamicSizing
-      enablePanDownToClose
-      index={0}
+    <MenuPopup
       maxDynamicContentSize={maxHeight}
-      onChange={handleSheetChanges}
-      ref={bottomSheetRef}>
-      <BottomSheetView>
-        <SafeAreaView edges={['bottom']}>
-          <View style={styles.contentContainer}>
-            {authenticators.map((authenticator, index) => (
-              <AddAuthenticatorsPopupItem
-                key={`${index.toString()}-${authenticator.issuer}`}
-                authenticator={authenticator}
-                canCheck={authenticators.length > 1}
-                isChecked={Boolean(enabledState[index])}
-                onPress={() => {
-                  setEnabledState(state => {
-                    return {
-                      ...state,
-                      [index]: !state[index],
-                    };
-                  });
-                }}
-              />
-            ))}
-          </View>
-          <View style={styles.buttonContainer}>
-            <Pressable
-              disabled={isSaving}
-              onPress={onCancel}
-              style={buttonStyleGenerator}>
-              <Text style={styles.buttonText}>Cancel</Text>
-            </Pressable>
-            <Pressable
-              disabled={isSaving || !hasEnabled}
-              onPress={() => void handleSave()}
-              style={buttonStyleGenerator}>
-              <Text style={styles.buttonText}>Save</Text>
-            </Pressable>
-          </View>
-        </SafeAreaView>
-      </BottomSheetView>
-    </BottomSheetModal>
+      isOpen={isOpen}
+      onClose={onCancel}>
+      <View style={styles.contentContainer}>
+        {authenticators.map((authenticator, index) => (
+          <AddAuthenticatorsPopupItem
+            key={`${index.toString()}-${authenticator.issuer}`}
+            authenticator={authenticator}
+            canCheck={authenticators.length > 1}
+            isChecked={Boolean(enabledState[index])}
+            onPress={() => {
+              setEnabledState(state => {
+                return {
+                  ...state,
+                  [index]: !state[index],
+                };
+              });
+            }}
+          />
+        ))}
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button onPress={onCancel} theme="ghost">
+          <ButtonText>Cancel</ButtonText>
+        </Button>
+        <Button
+          onPress={handleSave}
+          theme="solid"
+          disabled={isSaving || !hasEnabled}>
+          <ButtonText>Save</ButtonText>
+        </Button>
+      </View>
+    </MenuPopup>
   );
 };
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(() => ({
   contentContainer: {
     alignItems: 'stretch',
     display: 'flex',
@@ -135,23 +105,13 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   buttonContainer: {
+    alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
     gap: 12,
+    justifyContent: 'space-between',
     padding: 12,
   },
-  buttonText: {
-    textAlign: 'center',
-  },
-});
-
-function buttonStyleGenerator({pressed}: PressableStateCallbackType) {
-  return {
-    backgroundColor: pressed ? '#d1d5db' : '#f3f4f6',
-    borderRadius: 8,
-    padding: 16,
-    flexGrow: 1,
-  };
-}
+}));
 
 export default AddAuthenticatorsPopup;

@@ -1,30 +1,35 @@
 import {FlashList} from '@shopify/flash-list';
-import React, {FunctionComponent} from 'react';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import React, {FunctionComponent, useCallback} from 'react';
+import {ActivityIndicator, Text, View} from 'react-native';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import useAuthenticatorListQuery from '../../hooks/useAuthenticatorListQuery';
+import AlertBox from '../AlertBox';
 import AuthenticatorRow from './AuthenticatorRow';
 
-const ListSeparator: FunctionComponent = () => (
-  <View style={listStyles.separator} />
-);
-
 const AuthenticatorList: FunctionComponent = () => {
+  const {styles} = useStyles(stylesheet);
   const {data, error} = useAuthenticatorListQuery();
+
+  const ListSeparator: FunctionComponent = useCallback(
+    () => <View style={styles.separator} />,
+    [styles.separator],
+  );
 
   if (error) {
     return (
-      <View style={listStyles.empty}>
-        <Text style={listStyles.errorText}>
-          Failed to load authenticators from storage.
-        </Text>
+      <View style={styles.empty}>
+        <AlertBox
+          message="Failed to load authenticators from storage."
+          theme="error"
+        />
       </View>
     );
   }
 
   if (!data) {
     return (
-      <View style={listStyles.empty}>
+      <View style={styles.empty}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -32,8 +37,8 @@ const AuthenticatorList: FunctionComponent = () => {
 
   if (!data.length) {
     return (
-      <View style={listStyles.empty}>
-        <Text style={listStyles.emptyText}>No authenticators found.</Text>
+      <View style={styles.empty}>
+        <Text style={styles.emptyText}>No authenticators found.</Text>
       </View>
     );
   }
@@ -41,7 +46,7 @@ const AuthenticatorList: FunctionComponent = () => {
   return (
     <FlashList
       ItemSeparatorComponent={ListSeparator}
-      contentContainerStyle={listStyles.root}
+      contentContainerStyle={styles.root}
       data={data}
       estimatedItemSize={90}
       getItemType={() => 'authenticator'}
@@ -50,26 +55,16 @@ const AuthenticatorList: FunctionComponent = () => {
   );
 };
 
-const listStyles = StyleSheet.create({
+const stylesheet = createStyleSheet(theme => ({
   empty: {
     alignItems: 'center',
-    color: '#9ca3af',
     display: 'flex',
     flex: 1,
-    fontSize: 24,
     justifyContent: 'center',
   },
   emptyText: {
-    color: '#9ca3af',
-    fontSize: 18,
-  },
-  errorText: {
-    color: '#991b1b',
-    fontSize: 18,
-  },
-  loadingText: {
-    color: 'black',
-    fontSize: 24,
+    color: theme.colors.textAlt,
+    fontSize: theme.fontSize.lg,
   },
   root: {
     padding: 12,
@@ -77,6 +72,6 @@ const listStyles = StyleSheet.create({
   separator: {
     height: 12,
   },
-});
+}));
 
 export default AuthenticatorList;

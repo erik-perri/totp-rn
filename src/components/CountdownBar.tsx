@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {View} from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -7,6 +7,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 type CountdownBarProps = {
   duration: number;
@@ -17,6 +18,7 @@ const CountdownBar: FunctionComponent<CountdownBarProps> = ({
   endTime,
   duration,
 }) => {
+  const {styles} = useStyles(stylesheet);
   const progress = useSharedValue(0);
   const [containerWidth, setContainerWidth] = useState(0);
 
@@ -49,12 +51,12 @@ const CountdownBar: FunctionComponent<CountdownBarProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(theme => ({
   bar: {
-    backgroundColor: '#9ca3af',
+    backgroundColor: theme.colors.countdownBar.background,
     borderRadius: 4,
     height: '100%',
   },
-});
+}));
 
 export default CountdownBar;

@@ -12,6 +12,7 @@ import {
 import {faUser} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {FunctionComponent, useMemo} from 'react';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import {Authenticator} from '../../parsers/authenticatorParser';
 
@@ -22,6 +23,8 @@ type AuthenticatorIconProps = {
 const AuthenticatorIcon: FunctionComponent<AuthenticatorIconProps> = ({
   issuer,
 }) => {
+  const {styles} = useStyles(stylesheet);
+
   const icon = useMemo(() => {
     switch (true) {
       case issuer.toLowerCase().includes('cloudflare'):
@@ -47,7 +50,13 @@ const AuthenticatorIcon: FunctionComponent<AuthenticatorIconProps> = ({
     return faUser;
   }, [issuer]);
 
-  return <FontAwesomeIcon color="#111827" icon={icon} size={32} />;
+  return <FontAwesomeIcon style={styles.icon} icon={icon} size={32} />;
 };
+
+const stylesheet = createStyleSheet(theme => ({
+  icon: {
+    color: theme.colors.text,
+  },
+}));
 
 export default AuthenticatorIcon;

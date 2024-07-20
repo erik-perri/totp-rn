@@ -1,8 +1,10 @@
+import './theme';
+
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {NavigationContainer} from '@react-navigation/native';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import React from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
@@ -18,6 +20,8 @@ const queryClient = new QueryClient({
 });
 
 function App(): React.JSX.Element {
+  const scheme = useColorScheme();
+
   useCurrentTimeUpdater();
 
   return (
@@ -26,7 +30,7 @@ function App(): React.JSX.Element {
         <StatusBar
           animated
           backgroundColor="transparent"
-          barStyle="dark-content"
+          barStyle={scheme === 'dark' ? 'light-content' : 'dark-content'}
           translucent
         />
         <GestureHandlerRootView>

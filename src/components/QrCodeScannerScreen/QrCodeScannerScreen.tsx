@@ -4,20 +4,11 @@ import {
   faArrowsRotate,
   faSun as faSolidSun,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  FontAwesomeIcon,
-  Props as FontAwesomeIconProps,
-} from '@fortawesome/react-native-fontawesome';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {FunctionComponent, useCallback, useMemo, useState} from 'react';
-import {
-  Pressable,
-  PressableStateCallbackType,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 import {
   Camera,
   CameraPosition,
@@ -31,14 +22,12 @@ import {AuthenticatorWithoutId} from '../../parsers/authenticatorParser';
 import findAuthenticatorInCodes from '../../utilities/findAuthenticatorInCodes';
 import AddAuthenticatorsPopup from '../AddAuthenticatorsPopup';
 import {MainStackParamList} from '../MainStack';
-
-const CameraIcon: FunctionComponent<FontAwesomeIconProps> = props => {
-  return <FontAwesomeIcon size={20} {...props} />;
-};
+import CameraButton from './CameraButton';
 
 const QrCodeScannerScreen: FunctionComponent<
   NativeStackScreenProps<MainStackParamList, 'QrCodeScanner'>
 > = ({navigation}) => {
+  const {styles} = useStyles(stylesheet);
   const [devicePosition, setDevicePosition] = useState<CameraPosition>('back');
   const [torch, setTorch] = useState<'off' | 'on'>('off');
 
@@ -123,32 +112,29 @@ const QrCodeScannerScreen: FunctionComponent<
   return (
     <View style={styles.root}>
       <View style={[styles.buttonContainer, positionStyles.left]}>
-        <Pressable
+        <CameraButton
+          icon={faAngleLeft}
           onPress={() => {
             navigation.goBack();
           }}
-          style={buttonStyleGenerator}>
-          <CameraIcon icon={faAngleLeft} />
-        </Pressable>
+        />
       </View>
       <View style={[styles.buttonContainer, positionStyles.right]}>
-        <Pressable
+        <CameraButton
+          icon={faArrowsRotate}
           onPress={() => {
             setDevicePosition(currentPosition =>
               currentPosition === 'back' ? 'front' : 'back',
             );
           }}
-          style={buttonStyleGenerator}>
-          <CameraIcon icon={faArrowsRotate} />
-        </Pressable>
+        />
         {device.hasTorch && (
-          <Pressable
+          <CameraButton
+            icon={torch === 'on' ? faSolidSun : faSun}
             onPress={() => {
               setTorch(currentTorch => (currentTorch === 'on' ? 'off' : 'on'));
             }}
-            style={buttonStyleGenerator}>
-            <CameraIcon icon={torch === 'on' ? faSolidSun : faSun} />
-          </Pressable>
+          />
         )}
       </View>
       <View style={styles.helpContainer}>
@@ -173,16 +159,7 @@ const QrCodeScannerScreen: FunctionComponent<
   );
 };
 
-const styles = StyleSheet.create({
-  buttonBack: {
-    backgroundColor: 'transparent',
-  },
-  buttonFlash: {
-    //
-  },
-  buttonSwitch: {
-    //
-  },
+const stylesheet = createStyleSheet(theme => ({
   buttonContainer: {
     alignItems: 'center',
     display: 'flex',
@@ -197,17 +174,19 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   errorHeading: {
-    fontSize: 20,
+    color: theme.colors.text,
+    fontSize: theme.fontSize.lg,
     fontWeight: 'bold',
   },
   errorText: {
-    fontSize: 14,
+    color: theme.colors.textAlt,
+    fontSize: theme.fontSize.sm,
     paddingHorizontal: 16,
     textAlign: 'center',
   },
   helpContainer: {
     alignItems: 'center',
-    backgroundColor: '#9ca3af44',
+    backgroundColor: theme.colors.cameraOverlay.button.base.background,
     bottom: 0,
     left: 0,
     padding: 12,
@@ -216,21 +195,16 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   helpText: {
-    fontSize: 16,
+    color: theme.colors.cameraOverlay.button.base.text,
+    fontSize: theme.fontSize.base,
     fontWeight: 'bold',
   },
   root: {
-    backgroundColor: '#f9fafb',
+    alignItems: 'center',
+    backgroundColor: theme.colors.background,
     flex: 1,
+    justifyContent: 'center',
   },
-});
-
-function buttonStyleGenerator({pressed}: PressableStateCallbackType) {
-  return {
-    borderRadius: 100,
-    padding: 8,
-    backgroundColor: pressed ? '#4b556344' : '#9ca3af44',
-  };
-}
+}));
 
 export default QrCodeScannerScreen;

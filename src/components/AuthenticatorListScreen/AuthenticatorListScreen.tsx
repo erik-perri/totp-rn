@@ -1,7 +1,8 @@
 import {faQrcode} from '@fortawesome/free-solid-svg-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {FunctionComponent, useCallback, useState} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
+import {Alert, View} from 'react-native';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 import {useCameraPermission} from 'react-native-vision-camera';
 
 import {MainStackParamList} from '../MainStack';
@@ -13,6 +14,7 @@ import AuthenticatorListHeader from './AuthenticatorListHeader';
 const AuthenticatorListScreen: FunctionComponent<
   NativeStackScreenProps<MainStackParamList, 'AuthenticatorList'>
 > = ({navigation}) => {
+  const {styles} = useStyles(stylesheet);
   const [isSelectingAddType, setIsSelectingAddType] = useState(false);
   const {hasPermission, requestPermission} = useCameraPermission();
 
@@ -33,7 +35,7 @@ const AuthenticatorListScreen: FunctionComponent<
   }, [hasPermission, navigation, requestPermission]);
 
   return (
-    <View style={screenStyles.root}>
+    <View style={styles.root}>
       <AuthenticatorListHeader
         onNewAuthenticator={() => {
           setIsSelectingAddType(true);
@@ -55,11 +57,11 @@ const AuthenticatorListScreen: FunctionComponent<
   );
 };
 
-const screenStyles = StyleSheet.create({
+const stylesheet = createStyleSheet(theme => ({
   root: {
-    backgroundColor: '#f9fafb',
+    backgroundColor: theme.colors.background,
     flex: 1,
   },
-});
+}));
 
 export default AuthenticatorListScreen;

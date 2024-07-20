@@ -1,13 +1,8 @@
 import {faSquare, faSquareCheck} from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {FunctionComponent} from 'react';
-import {
-  Pressable,
-  PressableStateCallbackType,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import {AuthenticatorWithoutId} from '../parsers/authenticatorParser';
 import AuthenticatorIcon from './AuthenticatorListScreen/AuthenticatorIcon';
@@ -22,41 +17,48 @@ type AddAuthenticatorsPopupItemProps = {
 const AddAuthenticatorsPopupItem: FunctionComponent<
   AddAuthenticatorsPopupItemProps
 > = ({authenticator, canCheck, isChecked, onPress}) => {
+  const {styles} = useStyles(stylesheet);
+
   return (
-    <Pressable
-      disabled={!canCheck}
-      style={itemStyleGenerator}
-      onPress={onPress}>
-      <View style={styles.icon}>
-        <AuthenticatorIcon issuer={authenticator.issuer} />
-      </View>
-      <View style={styles.info}>
-        <View style={styles.name}>
-          <Text style={styles.issuer}>{authenticator.issuer}</Text>
-          {authenticator.username && (
-            <Text style={styles.username}>({authenticator.username})</Text>
+    <Pressable disabled={!canCheck} onPress={onPress}>
+      {({pressed}) => (
+        <View style={[styles.root, pressed && styles.rootPressed]}>
+          <View style={styles.iconContainer}>
+            <AuthenticatorIcon issuer={authenticator.issuer} />
+          </View>
+          <View style={styles.info}>
+            <View style={styles.name}>
+              <Text style={styles.issuer}>{authenticator.issuer}</Text>
+              {authenticator.username && (
+                <Text style={styles.username}>({authenticator.username})</Text>
+              )}
+            </View>
+          </View>
+          {canCheck && (
+            <View style={styles.checkContainer}>
+              <FontAwesomeIcon
+                icon={isChecked ? faSquareCheck : faSquare}
+                size={20}
+                style={styles.icon}
+              />
+            </View>
           )}
-        </View>
-      </View>
-      {canCheck && (
-        <View style={styles.checkContainer}>
-          <FontAwesomeIcon
-            icon={isChecked ? faSquareCheck : faSquare}
-            size={20}
-          />
         </View>
       )}
     </Pressable>
   );
 };
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(theme => ({
   checkContainer: {
     //
   },
-  icon: {
+  iconContainer: {
     alignSelf: 'flex-start',
     paddingTop: 4,
+  },
+  icon: {
+    color: theme.colors.text,
   },
   info: {
     display: 'flex',
@@ -65,8 +67,8 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   issuer: {
-    color: '#111827',
-    fontSize: 16,
+    color: theme.colors.text,
+    fontSize: theme.fontSize.base,
     fontWeight: 'semibold',
   },
   name: {
@@ -84,18 +86,14 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     padding: 12,
   },
-  username: {
-    color: '#9ca3af',
-    flexGrow: 1,
-    fontSize: 12,
+  rootPressed: {
+    backgroundColor: theme.colors.authenticatorRow.pressed.background,
   },
-});
-
-function itemStyleGenerator({pressed}: PressableStateCallbackType) {
-  return {
-    ...styles.root,
-    backgroundColor: pressed ? '#f3f4f6' : 'transparent',
-  };
-}
+  username: {
+    color: theme.colors.textAlt,
+    flexGrow: 1,
+    fontSize: theme.fontSize.md,
+  },
+}));
 
 export default AddAuthenticatorsPopupItem;

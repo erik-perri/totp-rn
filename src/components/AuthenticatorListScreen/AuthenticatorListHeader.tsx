@@ -1,13 +1,11 @@
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {FunctionComponent} from 'react';
-import {
-  Pressable,
-  PressableStateCallbackType,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
+
+import Button from '../Button/Button';
+import ButtonIcon from '../Button/ButtonIcon';
 
 type AuthenticatorListHeaderProps = {
   onNewAuthenticator: () => void;
@@ -16,39 +14,28 @@ type AuthenticatorListHeaderProps = {
 const AuthenticatorListHeader: FunctionComponent<
   AuthenticatorListHeaderProps
 > = ({onNewAuthenticator}) => {
+  const {styles} = useStyles(stylesheet);
   const {top} = useSafeAreaInsets();
+
   return (
-    <View style={[headerStyles.root, {marginTop: top}]}>
-      <Pressable
-        accessibilityHint="Add new authenticator"
-        onPress={() => {
-          onNewAuthenticator();
-        }}
-        style={buttonStyleGenerator}>
-        <FontAwesomeIcon icon={faPlus} />
-      </Pressable>
+    <View style={[styles.root, {marginTop: top}]}>
+      <Button onPress={onNewAuthenticator} theme="ghost">
+        <ButtonIcon icon={faPlus} />
+      </Button>
     </View>
   );
 };
 
-const headerStyles = StyleSheet.create({
+const stylesheet = createStyleSheet(theme => ({
   root: {
     alignItems: 'flex-end',
-    backgroundColor: '#f9fafb',
-    borderBottomColor: '#9ca3af',
+    backgroundColor: theme.colors.header.background,
+    borderBottomColor: theme.colors.header.border,
     borderBottomWidth: 1,
     display: 'flex',
     justifyContent: 'flex-end',
     padding: 8,
   },
-});
-
-function buttonStyleGenerator({pressed}: PressableStateCallbackType) {
-  return {
-    backgroundColor: pressed ? '#f3f4f6' : 'transparent',
-    borderRadius: 8,
-    padding: 8,
-  };
-}
+}));
 
 export default AuthenticatorListHeader;
