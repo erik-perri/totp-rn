@@ -71,15 +71,31 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
     Clipboard.setString(totp);
   }
 
-  async function handleRemove() {
-    await deleteAuthenticator(authenticator.id);
+  function handleRemove() {
+    Alert.alert(
+      'Remove Authenticator',
+      `Are you sure you want to remove ${authenticator.issuer} from your authenticators?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: () => {
+            void deleteAuthenticator(authenticator.id);
+          },
+        },
+      ],
+    );
   }
 
   return (
     <Pressable
       style={rowStyleGenerator}
       onPress={handleCopy}
-      onLongPress={() => void handleRemove()}>
+      onLongPress={handleRemove}>
       <View style={rowStyles.icon}>
         <AuthenticatorIcon issuer={authenticator.issuer} />
       </View>
