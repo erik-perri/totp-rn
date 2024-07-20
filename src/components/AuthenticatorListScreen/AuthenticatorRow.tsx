@@ -29,10 +29,12 @@ function getNextIncrement(
 
 type AuthenticatorRowProps = {
   authenticator: Authenticator;
+  showNextCode?: boolean;
 };
 
 const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
   authenticator,
+  showNextCode,
 }) => {
   const currentTime = useCurrentTime();
   const {mutateAsync: deleteAuthenticator} = useAuthenticatorDeleteMutation();
@@ -54,7 +56,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
     [authenticator, currentTime],
   );
 
-  /*const nextTotp = useMemo(
+  const nextTotp = useMemo(
     () =>
       generateTotp(
         authenticator.secret,
@@ -65,7 +67,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
         Math.floor((currentTime + authenticator.timeStep * 1000) / 1000),
       ),
     [authenticator, currentTime],
-  );*/
+  );
 
   function handleCopy() {
     Clipboard.setString(totp);
@@ -121,12 +123,12 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
                 />
               </View>
             </View>
-            {/*<Text>&mdash;</Text>
+            <Text>&mdash;</Text>
             <TotpCode
               code={nextTotp}
               containerStyle={rowStyles.codePartsContainer}
               textStyle={rowStyles.codePreview}
-            />*/}
+            />
           </View>
         </View>
       </View>
