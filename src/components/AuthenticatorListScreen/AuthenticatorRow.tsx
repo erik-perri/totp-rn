@@ -7,20 +7,10 @@ import useAuthenticatorDeleteMutation from '../../hooks/useAuthenticatorDeleteMu
 import {Authenticator} from '../../parsers/authenticatorParser';
 import {useCurrentTime} from '../../stores/useCurrentTimeStore';
 import generateTotp from '../../utilities/generateTotp';
+import getNextTotpTime from '../../utilities/getNextTotpTime';
 import CountdownBar from '../CountdownBar';
 import AuthenticatorIcon from './AuthenticatorIcon';
 import TotpCode from './TotpCode';
-
-function getNextIncrement(
-  currentTimeInMilliseconds: number,
-  timeStepInSeconds: number,
-) {
-  const timeStepInMilliseconds = timeStepInSeconds * 1000;
-  return (
-    timeStepInMilliseconds -
-    (currentTimeInMilliseconds % timeStepInMilliseconds)
-  );
-}
 
 type AuthenticatorRowProps = {
   authenticator: Authenticator;
@@ -35,9 +25,10 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
   const currentTime = useCurrentTime();
   const {mutateAsync: deleteAuthenticator} = useAuthenticatorDeleteMutation();
 
-  const totpChangeTime = useMemo(() => {
-    return currentTime + getNextIncrement(currentTime, authenticator.timeStep);
-  }, [authenticator, currentTime]);
+  const totpChangeTime = useMemo(
+    () => getNextTotpTime(currentTime, authenticator.timeStep),
+    [authenticator, currentTime],
+  );
 
   const totp = useMemo(
     () =>
