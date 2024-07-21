@@ -11,8 +11,8 @@ import OnboardingActions from '../OnboardingActions';
 import OnboardingShell from '../OnboardingShell';
 import Paragraph from '../Paragraph';
 
-const OnboardingDatabaseScreen: FunctionComponent<
-  NativeStackScreenProps<MainStackParamList, 'OnboardingDatabase'>
+const OnboardingDatabaseCreateScreen: FunctionComponent<
+  NativeStackScreenProps<MainStackParamList, 'OnboardingDatabaseCreate'>
 > = ({navigation}) => {
   const {styles} = useStyles(stylesheet);
 
@@ -48,4 +48,4 @@ const stylesheet = createStyleSheet(() => ({
   },
 }));
 
-export default OnboardingDatabaseScreen;
+export default OnboardingDatabaseCreateScreen;

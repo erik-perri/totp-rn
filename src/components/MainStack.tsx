@@ -4,14 +4,14 @@ import React, {FunctionComponent, useMemo} from 'react';
 import useAppSettingsQuery from '../hooks/useAppSettingsQuery';
 import AuthenticatorListScreen from './AuthenticatorListScreen/AuthenticatorListScreen';
 import OnboardingBiometricsScreen from './OnboardingBiometricsScreen/OnboardingBiometricsScreen';
-import OnboardingDatabaseScreen from './OnboardingDatabaseScreen/OnboardingDatabaseScreen';
+import OnboardingDatabaseCreateScreen from './OnboardingDatabaseCreateScreen/OnboardingDatabaseCreateScreen';
 import OnboardingStorageScreen from './OnboardingStorageScreen/OnboardingStorageScreen';
 import QrCodeScannerScreen from './QrCodeScannerScreen/QrCodeScannerScreen';
 
 export type MainStackParamList = {
   AuthenticatorList: undefined;
   OnboardingBiometrics: undefined;
-  OnboardingDatabase: undefined;
+  OnboardingDatabaseCreate: undefined;
   OnboardingStorage: undefined;
   QrCodeScanner: undefined;
 };
@@ -24,7 +24,7 @@ const MainStack: FunctionComponent = () => {
 
   const initialRouteName: keyof MainStackParamList = useMemo(() => {
     if (appSettings === null) {
-      // return 'OnboardingDatabase';
+      // return 'OnboardingDatabaseCreate';
     }
 
     return 'AuthenticatorList';
@@ -55,8 +55,8 @@ const MainStack: FunctionComponent = () => {
         }}
       />
       <Stack.Screen
-        component={OnboardingDatabaseScreen}
-        name="OnboardingDatabase"
+        component={OnboardingDatabaseCreateScreen}
+        name="OnboardingDatabaseCreate"
         options={{
           title: 'Database Setup',
         }}
