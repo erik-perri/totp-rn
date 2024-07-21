@@ -72,7 +72,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
   function handleRemove() {
     Alert.alert(
       'Remove Authenticator',
-      `Are you sure you want to remove ${authenticator.issuer} from your authenticators?`,
+      `Are you sure you want to remove "${authenticator.issuer}" from your authenticators?`,
       [
         {
           text: 'Cancel',
