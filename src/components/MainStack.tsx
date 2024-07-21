@@ -1,19 +1,42 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useMemo} from 'react';
 
+import useAppSettingsQuery from '../hooks/useAppSettingsQuery';
 import AuthenticatorListScreen from './AuthenticatorListScreen/AuthenticatorListScreen';
+import OnboardingBiometricsScreen from './OnboardingBiometricsScreen/OnboardingBiometricsScreen';
+import OnboardingDatabaseScreen from './OnboardingDatabaseScreen/OnboardingDatabaseScreen';
+import OnboardingStorageScreen from './OnboardingStorageScreen/OnboardingStorageScreen';
 import QrCodeScannerScreen from './QrCodeScannerScreen/QrCodeScannerScreen';
 
 export type MainStackParamList = {
   AuthenticatorList: undefined;
+  OnboardingBiometrics: undefined;
+  OnboardingDatabase: undefined;
+  OnboardingStorage: undefined;
   QrCodeScanner: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
 const MainStack: FunctionComponent = () => {
+  const {data: appSettings, isPending: isAppSettingsPending} =
+    useAppSettingsQuery();
+
+  const initialRouteName: keyof MainStackParamList = useMemo(() => {
+    if (appSettings === null) {
+      // return 'OnboardingDatabase';
+    }
+
+    return 'AuthenticatorList';
+  }, [appSettings]);
+
+  if (isAppSettingsPending) {
+    return null;
+  }
+
   return (
     <Stack.Navigator
+      initialRouteName={initialRouteName}
       screenOptions={{
         headerShown: false,
       }}>
@@ -22,6 +45,27 @@ const MainStack: FunctionComponent = () => {
         name="AuthenticatorList"
         options={{
           title: 'Authenticator List',
+        }}
+      />
+      <Stack.Screen
+        component={OnboardingBiometricsScreen}
+        name="OnboardingBiometrics"
+        options={{
+          title: 'Enable Biometrics',
+        }}
+      />
+      <Stack.Screen
+        component={OnboardingDatabaseScreen}
+        name="OnboardingDatabase"
+        options={{
+          title: 'Database Setup',
+        }}
+      />
+      <Stack.Screen
+        component={OnboardingStorageScreen}
+        name="OnboardingStorage"
+        options={{
+          title: 'Storage Location',
         }}
       />
       <Stack.Screen
