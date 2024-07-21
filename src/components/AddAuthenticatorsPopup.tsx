@@ -8,6 +8,7 @@ import React, {
 import {useWindowDimensions, View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
+import useCheckDuplicateAuthenticator from '../hooks/useIsDuplicateAuthenticator';
 import {AuthenticatorWithoutId} from '../parsers/authenticatorParser';
 import AddAuthenticatorsPopupItem from './AddAuthenticatorsPopupItem';
 import Button from './Button/Button';
@@ -25,6 +26,7 @@ const AddAuthenticatorsPopup: FunctionComponent<
   AddAuthenticatorsPopupProps
 > = ({authenticators, isOpen, onCancel, onSave}) => {
   const {styles} = useStyles(stylesheet);
+  const checkDuplicate = useCheckDuplicateAuthenticator();
   const dimensions = useWindowDimensions();
   const maxHeight = useMemo(() => dimensions.height * 0.5, [dimensions]);
 
@@ -53,11 +55,14 @@ const AddAuthenticatorsPopup: FunctionComponent<
     if (isOpen) {
       setEnabledState(
         Object.fromEntries(
-          authenticators.map((_, index) => [index.toString(), true]),
+          authenticators.map((authenticator, index) => [
+            index.toString(),
+            !checkDuplicate(authenticator),
+          ]),
         ),
       );
     }
-  }, [authenticators, isOpen]);
+  }, [authenticators, checkDuplicate, isOpen]);
 
   return (
     <MenuPopup
@@ -65,22 +70,28 @@ const AddAuthenticatorsPopup: FunctionComponent<
       isOpen={isOpen}
       onClose={onCancel}>
       <View style={styles.contentContainer}>
-        {authenticators.map((authenticator, index) => (
-          <AddAuthenticatorsPopupItem
-            key={`${index.toString()}-${authenticator.issuer}`}
-            authenticator={authenticator}
-            canCheck={authenticators.length > 1}
-            isChecked={Boolean(enabledState[index])}
-            onPress={() => {
-              setEnabledState(state => {
-                return {
-                  ...state,
-                  [index]: !state[index],
-                };
-              });
-            }}
-          />
-        ))}
+        {authenticators.map((authenticator, index) => {
+          const isDuplicate = checkDuplicate(authenticator);
+          return (
+            <AddAuthenticatorsPopupItem
+              key={`${index.toString()}-${authenticator.issuer}`}
+              authenticator={authenticator}
+              error={
+                isDuplicate ? 'This authenticator already exists.' : undefined
+              }
+              canCheck={!isDuplicate && authenticators.length > 1}
+              isChecked={Boolean(enabledState[index])}
+              onPress={() => {
+                setEnabledState(state => {
+                  return {
+                    ...state,
+                    [index]: !state[index],
+                  };
+                });
+              }}
+            />
+          );
+        })}
       </View>
       <View style={styles.buttonContainer}>
         <Button onPress={onCancel} variant="ghost">

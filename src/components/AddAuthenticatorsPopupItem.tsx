@@ -1,4 +1,5 @@
 import {faSquare, faSquareCheck} from '@fortawesome/free-regular-svg-icons';
+import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {FunctionComponent} from 'react';
 import {Pressable, Text, View} from 'react-native';
@@ -9,6 +10,7 @@ import AuthenticatorIcon from './AuthenticatorListScreen/AuthenticatorIcon';
 
 type AddAuthenticatorsPopupItemProps = {
   authenticator: AuthenticatorWithoutId;
+  error?: string;
   canCheck: boolean;
   isChecked: boolean;
   onPress: () => void;
@@ -16,33 +18,45 @@ type AddAuthenticatorsPopupItemProps = {
 
 const AddAuthenticatorsPopupItem: FunctionComponent<
   AddAuthenticatorsPopupItemProps
-> = ({authenticator, canCheck, isChecked, onPress}) => {
+> = ({authenticator, error, canCheck, isChecked, onPress}) => {
   const {styles} = useStyles(stylesheet);
 
   return (
     <Pressable disabled={!canCheck} onPress={onPress}>
       {({pressed}) => (
         <View style={[styles.root, pressed && styles.rootPressed]}>
-          <View style={styles.iconContainer}>
-            <AuthenticatorIcon issuer={authenticator.issuer} />
-          </View>
-          <View style={styles.info}>
-            <View style={styles.name}>
-              <Text style={styles.issuer}>{authenticator.issuer}</Text>
-              {authenticator.username && (
-                <Text style={styles.username}>({authenticator.username})</Text>
-              )}
+          <View style={styles.row}>
+            <View style={styles.iconContainer}>
+              <AuthenticatorIcon issuer={authenticator.issuer} />
             </View>
-          </View>
-          {canCheck && (
-            <View style={styles.checkContainer}>
+            <View style={styles.info}>
+              <View style={styles.name}>
+                <Text style={styles.issuer}>{authenticator.issuer}</Text>
+                {authenticator.username && (
+                  <Text style={styles.username}>
+                    ({authenticator.username})
+                  </Text>
+                )}
+              </View>
+              {error && <Text style={styles.error}>{error}</Text>}
+            </View>
+            {error ? (
               <FontAwesomeIcon
-                icon={isChecked ? faSquareCheck : faSquare}
-                size={20}
-                style={styles.icon}
+                icon={faExclamationTriangle}
+                style={styles.errorIcon}
               />
-            </View>
-          )}
+            ) : (
+              canCheck && (
+                <View style={styles.checkContainer}>
+                  <FontAwesomeIcon
+                    icon={isChecked ? faSquareCheck : faSquare}
+                    size={20}
+                    style={styles.icon}
+                  />
+                </View>
+              )
+            )}
+          </View>
         </View>
       )}
     </Pressable>
@@ -53,6 +67,12 @@ const stylesheet = createStyleSheet(theme => ({
   checkContainer: {
     //
   },
+  error: {
+    color: theme.colors.alertBox.error.text,
+  },
+  errorIcon: {
+    color: theme.colors.alertBox.error.text,
+  },
   iconContainer: {
     alignSelf: 'flex-start',
     paddingTop: 4,
@@ -61,10 +81,9 @@ const stylesheet = createStyleSheet(theme => ({
     color: theme.colors.text,
   },
   info: {
-    display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
-    gap: 2,
+    gap: 1,
   },
   issuer: {
     color: theme.colors.text,
@@ -79,12 +98,13 @@ const stylesheet = createStyleSheet(theme => ({
     justifyContent: 'flex-start',
   },
   root: {
+    padding: 12,
+  },
+  row: {
     alignItems: 'center',
-    display: 'flex',
     flexDirection: 'row',
     gap: 8,
     overflow: 'hidden',
-    padding: 12,
   },
   rootPressed: {
     backgroundColor: theme.colors.authenticatorRow.pressed.background,
@@ -92,7 +112,7 @@ const stylesheet = createStyleSheet(theme => ({
   username: {
     color: theme.colors.textAlt,
     flexGrow: 1,
-    fontSize: theme.fontSize.md,
+    fontSize: theme.fontSize.sm,
   },
 }));
 

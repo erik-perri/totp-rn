@@ -21,6 +21,7 @@ import {
 import TotpAlgorithm from '../../enums/TotpAlgorithm';
 import useAuthenticatorsCreateMutation from '../../hooks/useAuthenticatorsCreateMutation';
 import {AuthenticatorWithoutId} from '../../parsers/authenticatorParser';
+import compareAuthenticator from '../../utilities/compareAuthenticator';
 import findAuthenticatorInCodes from '../../utilities/findAuthenticatorInCodes';
 import AddAuthenticatorsPopup from '../AddAuthenticatorsPopup';
 import {MainStackParamList} from '../MainStack';
@@ -60,6 +61,19 @@ const QrCodeScannerScreen: FunctionComponent<
   const [potentialAuthenticators, setPotentialAuthenticators] = useState<
     AuthenticatorWithoutId[]
   >([]);
+
+  const updatePotentialAuthenticators = useCallback(
+    (authenticators: AuthenticatorWithoutId[]) => {
+      const withoutDupes = authenticators.filter(
+        (a, index, self) =>
+          index === self.findIndex(b => compareAuthenticator(a, b)),
+      );
+
+      setPotentialAuthenticators(withoutDupes);
+    },
+    [],
+  );
+
   const [codeScanningEnabled, setCodeScanningEnabled] = useState(true);
   const codeScanner = useCodeScanner({
     codeTypes: ['qr'],
@@ -72,7 +86,7 @@ const QrCodeScannerScreen: FunctionComponent<
       const authenticators = findAuthenticatorInCodes(codes);
 
       if (authenticators.length) {
-        setPotentialAuthenticators(authenticators);
+        updatePotentialAuthenticators(authenticators);
       } else {
         setCodeScanningEnabled(true);
       }
@@ -144,7 +158,7 @@ const QrCodeScannerScreen: FunctionComponent<
             onPress={() => {
               const count = Math.floor(Math.random() * 3) + 1;
 
-              setPotentialAuthenticators(
+              updatePotentialAuthenticators(
                 Array.from({length: count}, () =>
                   generateRandomAuthenticator(),
                 ),
