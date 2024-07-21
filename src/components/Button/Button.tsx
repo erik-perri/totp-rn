@@ -24,21 +24,21 @@ const Button: FunctionComponent<ButtonProps> = ({
 }) => {
   return (
     <PressableShell disabled={disabled} onPress={onPress}>
-      <ButtonProvider.Provider value={{variant}}>
+      <ButtonContext.Provider value={{variant}}>
         <ButtonBox>{children}</ButtonBox>
-      </ButtonProvider.Provider>
+      </ButtonContext.Provider>
     </PressableShell>
   );
 };
 
-const ButtonProvider = createContext<{
+const ButtonContext = createContext<{
   variant: ButtonVariant;
 }>({
   variant: 'solid',
 });
 
 export function useButtonContext() {
-  return useContext(ButtonProvider);
+  return useContext(ButtonContext);
 }
 
 export default Button;

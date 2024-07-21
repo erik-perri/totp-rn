@@ -19,26 +19,24 @@ function PressableShell({
   return (
     <Pressable disabled={disabled} onPress={() => void onPress()}>
       {({pressed}) => (
-        <PressableProvider.Provider value={{disabled, pressed}}>
+        <PressableContext.Provider value={{disabled, pressed}}>
           {children}
-        </PressableProvider.Provider>
+        </PressableContext.Provider>
       )}
     </Pressable>
   );
 }
 
-type PressableContext = {
+const PressableContext = createContext<{
   disabled: boolean | undefined;
   pressed: boolean;
-};
-
-const PressableProvider = createContext<PressableContext>({
+}>({
   disabled: false,
   pressed: false,
 });
 
 export function usePressableContext() {
-  return useContext<PressableContext>(PressableProvider);
+  return useContext(PressableContext);
 }
 
 export default PressableShell;
