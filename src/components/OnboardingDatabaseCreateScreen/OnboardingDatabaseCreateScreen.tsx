@@ -21,6 +21,10 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
     navigation.navigate('OnboardingStorage');
   }
 
+  function onOpenDatabase() {
+    navigation.navigate('OnboardingDatabaseOpen');
+  }
+
   return (
     <OnboardingShell>
       <Heading>Database Setup</Heading>
@@ -32,6 +36,9 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
 
       <OnboardingActions>
         <View style={styles.buttonContainer}>
+          <Button onPress={onOpenDatabase} variant="ghost">
+            <ButtonText>Open Database</ButtonText>
+          </Button>
           <Button onPress={onCreateDatabase} variant="solid">
             <ButtonText>Create Database</ButtonText>
           </Button>
@@ -44,7 +51,7 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
 const stylesheet = createStyleSheet(() => ({
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
   },
 }));
 

@@ -5,6 +5,7 @@ import useAppSettingsQuery from '../hooks/useAppSettingsQuery';
 import AuthenticatorListScreen from './AuthenticatorListScreen/AuthenticatorListScreen';
 import OnboardingBiometricsScreen from './OnboardingBiometricsScreen/OnboardingBiometricsScreen';
 import OnboardingDatabaseCreateScreen from './OnboardingDatabaseCreateScreen/OnboardingDatabaseCreateScreen';
+import OnboardingDatabaseOpenScreen from './OnboardingDatabaseOpenScreen/OnboardingDatabaseOpenScreen';
 import OnboardingStorageScreen from './OnboardingStorageScreen/OnboardingStorageScreen';
 import QrCodeScannerScreen from './QrCodeScannerScreen/QrCodeScannerScreen';
 
@@ -12,6 +13,7 @@ export type MainStackParamList = {
   AuthenticatorList: undefined;
   OnboardingBiometrics: undefined;
   OnboardingDatabaseCreate: undefined;
+  OnboardingDatabaseOpen: undefined;
   OnboardingStorage: undefined;
   QrCodeScanner: undefined;
 };
@@ -59,6 +61,13 @@ const MainStack: FunctionComponent = () => {
         name="OnboardingDatabaseCreate"
         options={{
           title: 'Database Setup',
+        }}
+      />
+      <Stack.Screen
+        component={OnboardingDatabaseOpenScreen}
+        name="OnboardingDatabaseOpen"
+        options={{
+          title: 'Open Database',
         }}
       />
       <Stack.Screen

@@ -101,6 +101,10 @@ export const lightTheme = {
       background: colors.slate[50],
       border: colors.slate[300],
     },
+    input: {
+      border: colors.slate[300],
+      text: colors.slate[800],
+    },
     radio: {
       base: {
         border: colors.slate[200],
@@ -197,6 +201,10 @@ export const darkTheme = {
     header: {
       background: colors.slate[900],
       border: colors.slate[700],
+    },
+    input: {
+      border: colors.slate[300],
+      text: colors.slate[50],
     },
     radio: {
       base: {

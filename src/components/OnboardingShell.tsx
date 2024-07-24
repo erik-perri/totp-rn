@@ -1,5 +1,5 @@
 import React, {FunctionComponent, PropsWithChildren} from 'react';
-import {ScrollView, View} from 'react-native';
+import {KeyboardAvoidingView, ScrollView, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
@@ -9,9 +9,11 @@ const OnboardingShell: FunctionComponent<PropsWithChildren> = ({children}) => {
   return (
     <View style={styles.root}>
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView contentContainerStyle={styles.container}>
-          {children}
-        </ScrollView>
+        <KeyboardAvoidingView behavior="padding" style={styles.safeArea}>
+          <ScrollView contentContainerStyle={styles.container}>
+            {children}
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );
