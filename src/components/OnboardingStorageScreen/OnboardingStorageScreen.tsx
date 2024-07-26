@@ -3,7 +3,7 @@ import {
   faSdCard,
 } from '@fortawesome/free-solid-svg-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {FunctionComponent, useState} from 'react';
+import React, {FunctionComponent, useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
@@ -12,6 +12,7 @@ import ButtonText from '../Button/ButtonText';
 import Heading from '../Heading';
 import {MainStackParamList} from '../MainStack';
 import OnboardingActions from '../OnboardingActions';
+import OnboardingContent from '../OnboardingContent';
 import OnboardingShell from '../OnboardingShell';
 import Paragraph from '../Paragraph';
 import ParagraphGroup from '../ParagraphGroup';
@@ -28,48 +29,50 @@ const OnboardingStorageScreen: FunctionComponent<
     'internal' | 'external'
   >();
 
-  function onGoBack() {
+  const onGoBack = useCallback(() => {
     navigation.goBack();
-  }
+  }, [navigation]);
 
-  function onSaveDatabase() {
+  const onSaveDatabase = useCallback(() => {
     // TODO If internal, save database to internal storage
     //      If external, display document picker and save to selected file
     //      Forward transformed key and master password on
     navigation.navigate('OnboardingBiometrics');
-  }
+  }, [navigation]);
 
   return (
     <OnboardingShell>
-      <Heading>Storage Location</Heading>
+      <OnboardingContent>
+        <Heading>Storage Location</Heading>
 
-      <ParagraphGroup>
-        <Paragraph>
-          Storing internally will keep your database stored inside the app's
-          data directory. Your database will be lost if the app is uninstalled
-          and you have not exported it beforehand.
-        </Paragraph>
-        <Paragraph>
-          Storing externally will allow you to store your database using your
-          device's document storage. This can be used to store in a cloud
-          service installed, or in your device's external storage. Your database
-          will only be lost if you delete it or lose access to the storage
-          location.
-        </Paragraph>
-      </ParagraphGroup>
+        <ParagraphGroup>
+          <Paragraph>
+            Storing internally will keep your database stored inside the app's
+            data directory. Your database will be lost if the app is uninstalled
+            and you have not exported it beforehand.
+          </Paragraph>
+          <Paragraph>
+            Storing externally will allow you to store your database using your
+            device's document storage. This can be used to store in a cloud
+            service installed, or in your device's external storage. Your
+            database will only be lost if you delete it or lose access to the
+            storage location.
+          </Paragraph>
+        </ParagraphGroup>
 
-      <View style={styles.radioContainer}>
-        <RadioGroup onChange={setStorageLocation} value={storageLocation}>
-          <Radio value="internal">
-            <RadioIcon icon={faMobileScreenButton} />
-            <RadioText>Internal Storage</RadioText>
-          </Radio>
-          <Radio value="external">
-            <RadioIcon icon={faSdCard} />
-            <RadioText>External Storage</RadioText>
-          </Radio>
-        </RadioGroup>
-      </View>
+        <View style={styles.radioContainer}>
+          <RadioGroup onChange={setStorageLocation} value={storageLocation}>
+            <Radio value="internal">
+              <RadioIcon icon={faMobileScreenButton} />
+              <RadioText>Internal Storage</RadioText>
+            </Radio>
+            <Radio value="external">
+              <RadioIcon icon={faSdCard} />
+              <RadioText>External Storage</RadioText>
+            </Radio>
+          </RadioGroup>
+        </View>
+      </OnboardingContent>
 
       <OnboardingActions>
         <View style={styles.buttonContainer}>

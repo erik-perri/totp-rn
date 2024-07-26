@@ -12,6 +12,7 @@ import FormTextInput from '../FormTextInput';
 import Heading from '../Heading';
 import {MainStackParamList} from '../MainStack';
 import OnboardingActions from '../OnboardingActions';
+import OnboardingContent from '../OnboardingContent';
 import OnboardingShell from '../OnboardingShell';
 import Paragraph from '../Paragraph';
 
@@ -25,42 +26,16 @@ const OnboardingDatabaseOpenScreen: FunctionComponent<
   const [masterPassword, setMasterPassword] = useState('');
   const [masterPasswordError, setMasterPasswordError] = useState<string>();
 
-  const onBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
-  const onUnlockDatabase = useCallback(() => {
-    setMasterPasswordError(undefined);
-
-    if (!file) {
-      return;
-    }
-
-    try {
-      // const bytes = await readFile(file.uri);
-      // TODO Read KDBX database, forward it and master password on
-      navigation.navigate('OnboardingBiometrics');
-    } catch (error) {
-      if (error instanceof Error) {
-        setMasterPasswordError(`Unable to unlock database. ${error.message}.`);
-      } else {
-        setMasterPasswordError('Unable to unlock database.');
-      }
-    }
-  }, [file, navigation]);
-
   const isSubmitDisabled = useMemo(
     () => !file || fileError !== undefined || masterPassword.length === 0,
     [file, fileError, masterPassword],
   );
 
-  const onStartChange = useCallback(() => {
-    setFile(undefined);
-    setFileError(undefined);
-    setMasterPasswordError(undefined);
-  }, []);
+  const onBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
-  const handleFileChange = useCallback((value: NativeFile) => {
+  const onChangeFile = useCallback((value: NativeFile) => {
     setFile(value);
 
     try {
@@ -79,28 +54,57 @@ const OnboardingDatabaseOpenScreen: FunctionComponent<
     }
   }, []);
 
+  const onStartChange = useCallback(() => {
+    setFile(undefined);
+    setFileError(undefined);
+    setMasterPasswordError(undefined);
+  }, []);
+
+  const onUnlockDatabase = useCallback(() => {
+    setMasterPasswordError(undefined);
+
+    if (isSubmitDisabled || !file) {
+      return;
+    }
+
+    try {
+      // const bytes = await readFile(file.uri);
+      // TODO Read KDBX database, forward it and master password on
+      navigation.navigate('OnboardingBiometrics');
+    } catch (error) {
+      if (error instanceof Error) {
+        setMasterPasswordError(`Unable to unlock database. ${error.message}.`);
+      } else {
+        setMasterPasswordError('Unable to unlock database.');
+      }
+    }
+  }, [file, isSubmitDisabled, navigation]);
+
   return (
     <OnboardingShell>
-      <Heading>Open Database</Heading>
+      <OnboardingContent>
+        <Heading>Open Database</Heading>
 
-      <Paragraph>Open a previously created database.</Paragraph>
+        <Paragraph>Open a previously created database.</Paragraph>
 
-      <FormGroup label="Database File" error={fileError}>
-        <FormFileSelect
-          mimeType={'application/*'}
-          onChangeFile={handleFileChange}
-          onStartChange={onStartChange}
-          value={file}
-        />
-      </FormGroup>
+        <FormGroup label="Database File" error={fileError}>
+          <FormFileSelect
+            mimeType={'application/*'}
+            onChangeFile={onChangeFile}
+            onStartChange={onStartChange}
+            value={file}
+          />
+        </FormGroup>
 
-      <FormGroup label="Master Password" error={masterPasswordError}>
-        <FormTextInput
-          onChangeText={setMasterPassword}
-          secureTextEntry
-          value={masterPassword}
-        />
-      </FormGroup>
+        <FormGroup label="Master Password" error={masterPasswordError}>
+          <FormTextInput
+            onChangeText={setMasterPassword}
+            onSubmitEditing={onUnlockDatabase}
+            secureTextEntry
+            value={masterPassword}
+          />
+        </FormGroup>
+      </OnboardingContent>
 
       <OnboardingActions>
         <View style={styles.buttonContainer}>

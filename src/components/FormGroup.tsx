@@ -63,10 +63,12 @@ const FormGroup: FunctionComponent<FormGroupProps> = ({
 
 const stylesheet = createStyleSheet(theme => ({
   root: {
+    flexGrow: 1,
     gap: 4,
   },
   inputContainer: {
-    //
+    flexDirection: 'row',
+    gap: 8,
   },
   labelContainer: {
     //

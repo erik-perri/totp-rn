@@ -21,7 +21,7 @@ const OnboardingShell: FunctionComponent<PropsWithChildren> = ({children}) => {
 
 const stylesheet = createStyleSheet(theme => ({
   container: {
-    flex: 1,
+    flexGrow: 1,
     gap: 24,
     padding: 16,
   },

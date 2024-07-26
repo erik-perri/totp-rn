@@ -122,6 +122,16 @@ export const lightTheme = {
         text: colors.slate[800],
       },
     },
+    selectBox: {
+      base: {
+        border: colors.slate[300],
+        background: colors.slate[50],
+      },
+      pressed: {
+        border: colors.slate[500],
+        background: colors.slate[100],
+      },
+    },
     well: {
       border: colors.slate[200],
       background: colors.slate[50],
@@ -221,6 +231,16 @@ export const darkTheme = {
         border: colors.slate[400],
         background: colors.slate[600],
         text: colors.slate[50],
+      },
+    },
+    selectBox: {
+      base: {
+        border: colors.slate[300],
+        background: colors.slate[900],
+      },
+      pressed: {
+        border: colors.slate[300],
+        background: colors.slate[800],
       },
     },
     well: {

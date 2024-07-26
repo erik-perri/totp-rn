@@ -38,9 +38,12 @@ const stylesheet = createStyleSheet(theme => ({
     alignItems: 'center',
     flexDirection: 'row',
     gap: 8,
+    borderWidth: 1,
     justifyContent: 'flex-start',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingBottom: 12,
+    paddingEnd: 12,
+    paddingStart: 12,
+    paddingTop: 12,
   },
   containerPressed: {
     //
@@ -50,21 +53,27 @@ const stylesheet = createStyleSheet(theme => ({
   },
   solidContainer: {
     backgroundColor: theme.colors.button.solid.enabled.background,
+    borderColor: theme.colors.button.solid.enabled.background,
   },
   solidContainerDisabled: {
     backgroundColor: theme.colors.button.solid.disabled.background,
+    borderColor: theme.colors.button.solid.disabled.background,
   },
   solidContainerPressed: {
     backgroundColor: theme.colors.button.solid.pressed.background,
+    borderColor: theme.colors.button.solid.pressed.background,
   },
   ghostContainer: {
     backgroundColor: theme.colors.button.ghost.enabled.background,
+    borderColor: theme.colors.button.ghost.enabled.background,
   },
   ghostContainerDisabled: {
     backgroundColor: theme.colors.button.ghost.disabled.background,
+    borderColor: theme.colors.button.ghost.disabled.background,
   },
   ghostContainerPressed: {
     backgroundColor: theme.colors.button.ghost.pressed.background,
+    borderColor: theme.colors.button.ghost.pressed.background,
   },
 }));
 

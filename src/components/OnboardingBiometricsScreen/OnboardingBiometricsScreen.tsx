@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {FunctionComponent} from 'react';
+import React, {FunctionComponent, useCallback} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
@@ -10,6 +10,7 @@ import ButtonText from '../Button/ButtonText';
 import Heading from '../Heading';
 import {MainStackParamList} from '../MainStack';
 import OnboardingActions from '../OnboardingActions';
+import OnboardingContent from '../OnboardingContent';
 import OnboardingShell from '../OnboardingShell';
 import Paragraph from '../Paragraph';
 import ParagraphGroup from '../ParagraphGroup';
@@ -28,52 +29,54 @@ const OnboardingBiometricsScreen: FunctionComponent<
   const enrolled = useBiometricsIsEnrolled();
   const {styles} = useStyles(stylesheet);
 
-  function onGoBack() {
+  const onGoBack = useCallback(() => {
     navigation.goBack();
-  }
+  }, [navigation]);
 
-  function onSkipBiometrics() {
+  const onSkipBiometrics = useCallback(() => {
     navigation.navigate('AuthenticatorList');
-  }
+  }, [navigation]);
 
-  function onEnableBiometrics() {
+  const onEnableBiometrics = useCallback(() => {
     // TODO Save master password and transformed key into secure storage
     navigation.navigate('AuthenticatorList');
-  }
+  }, [navigation]);
 
   return (
     <OnboardingShell>
-      <Heading>Enable Biometrics</Heading>
+      <OnboardingContent>
+        <Heading>Enable Biometrics</Heading>
 
-      <ParagraphGroup>
-        <Paragraph>
-          If enabled, the database master password will be stored and your
-          biometrics will be used to unlock.
-        </Paragraph>
-        <Paragraph>
-          If skipped, you will need to provide the database master password
-          every time you open the app.
-        </Paragraph>
-      </ParagraphGroup>
+        <ParagraphGroup>
+          <Paragraph>
+            If enabled, the database master password will be stored and your
+            biometrics will be used to unlock.
+          </Paragraph>
+          <Paragraph>
+            If skipped, you will need to provide the database master password
+            every time you open the app.
+          </Paragraph>
+        </ParagraphGroup>
 
-      {enrolled === 'error' ? (
-        <AlertBox
-          message="An error occurred while checking biometric enrollment."
-          theme="error"
-        />
-      ) : enrolled === 'not_enrolled' ? (
-        <View style={styles.notEnrolledContainer}>
+        {enrolled === 'error' ? (
           <AlertBox
-            message="No usable biometric devices are enrolled. Only class 3 devices are supported."
-            theme="info"
+            message="An error occurred while checking biometric enrollment."
+            theme="error"
           />
-          <View style={styles.openSettingsContainer}>
-            <Button onPress={openSettings} variant="ghost">
-              <ButtonText>Open Settings</ButtonText>
-            </Button>
+        ) : enrolled === 'not_enrolled' ? (
+          <View style={styles.notEnrolledContainer}>
+            <AlertBox
+              message="No usable biometric devices are enrolled. Only class 3 devices are supported."
+              theme="info"
+            />
+            <View style={styles.openSettingsContainer}>
+              <Button onPress={openSettings} variant="ghost">
+                <ButtonText>Open Settings</ButtonText>
+              </Button>
+            </View>
           </View>
-        </View>
-      ) : null}
+        ) : null}
+      </OnboardingContent>
 
       <OnboardingActions>
         <View style={styles.buttonContainer}>
