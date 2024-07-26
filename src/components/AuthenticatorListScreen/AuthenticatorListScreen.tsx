@@ -1,7 +1,7 @@
 import {faQrcode} from '@fortawesome/free-solid-svg-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {FunctionComponent, useCallback, useState} from 'react';
-import {Alert, View} from 'react-native';
+import {Alert, Linking, View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 import {useCameraPermission} from 'react-native-vision-camera';
 
@@ -25,6 +25,18 @@ const AuthenticatorListScreen: FunctionComponent<
         Alert.alert(
           'Permission denied',
           'You need to grant camera permission to add authenticators with QR codes.',
+          [
+            {
+              text: 'Open Settings',
+              onPress: () => {
+                void Linking.openSettings();
+              },
+            },
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+          ],
         );
         return;
       }
