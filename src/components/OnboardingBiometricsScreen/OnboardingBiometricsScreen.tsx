@@ -109,10 +109,10 @@ const stylesheet = createStyleSheet(() => ({
   continueButtonContainer: {
     alignItems: 'flex-end',
     flexDirection: 'column',
-    gap: 24,
+    gap: 12,
   },
   notEnrolledContainer: {
-    gap: 8,
+    gap: 12,
   },
   openSettingsContainer: {
     alignItems: 'flex-end',
