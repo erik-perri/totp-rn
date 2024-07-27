@@ -52,7 +52,7 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
   return (
     <OnboardingShell>
       <OnboardingContent>
-        <Heading>Database Setup</Heading>
+        <Heading>Create Database</Heading>
 
         <Paragraph>
           Authenticators are stored in a KeePass database file. Biometrics can

@@ -64,7 +64,7 @@ const MainStack: FunctionComponent = () => {
         component={OnboardingDatabaseCreateScreen}
         name="OnboardingDatabaseCreate"
         options={{
-          title: 'Database Setup',
+          title: 'Create Database',
         }}
       />
       <Stack.Screen
