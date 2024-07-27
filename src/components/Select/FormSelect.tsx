@@ -10,21 +10,21 @@ import PressableShell from '../PressableShell';
 import FormSelectBox from './FormSelectBox';
 import FormSelectMenuItem from './FormSelectMenuItem';
 
-type FormSelectProps = {
+type FormSelectProps<T> = {
   disabled?: boolean;
   emptyLabel: string;
-  onChange: (value: string) => void;
-  options: Array<{label: string; value: string}>;
-  value: string | undefined;
+  onChange: (value: T) => void;
+  options: Readonly<Array<{label: string; value: T}>>;
+  value: T | undefined;
 };
 
-const FormSelect = ({
+const FormSelect = <T extends string>({
   disabled,
   emptyLabel,
   onChange,
   options,
   value,
-}: FormSelectProps) => {
+}: FormSelectProps<T>) => {
   const {styles} = useStyles(stylesheet);
   const dimensions = useWindowDimensions();
   const maxHeight = useMemo(() => dimensions.height * 0.5, [dimensions]);
