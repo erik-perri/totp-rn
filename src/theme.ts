@@ -29,7 +29,7 @@ const fontSize = {
   xl: 24,
 } as const;
 
-export const lightTheme = {
+const lightTheme = {
   colors: {
     text: colors.slate[800],
     textAlt: colors.slate[500],
@@ -140,7 +140,7 @@ export const lightTheme = {
   fontSize,
 } as const;
 
-export const darkTheme = {
+const darkTheme = {
   colors: {
     text: colors.slate[50],
     textAlt: colors.slate[400],
