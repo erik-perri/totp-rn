@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {FunctionComponent, useMemo} from 'react';
 
-import useAppSettingsQuery from '../hooks/useAppSettingsQuery';
+import useAppSettings from '../hooks/useAppSettings';
 import AuthenticatorListScreen from './AuthenticatorListScreen/AuthenticatorListScreen';
 import OnboardingBiometricsScreen from './OnboardingBiometricsScreen/OnboardingBiometricsScreen';
 import OnboardingDatabaseCreateScreen from './OnboardingDatabaseCreateScreen/OnboardingDatabaseCreateScreen';
@@ -21,18 +21,17 @@ export type MainStackParamList = {
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
 const MainStack: FunctionComponent = () => {
-  const {data: appSettings, isPending: isAppSettingsPending} =
-    useAppSettingsQuery();
+  const {settingsError, settingsLoading, settings} = useAppSettings();
 
   const initialRouteName: keyof MainStackParamList = useMemo(() => {
-    if (appSettings === null) {
+    if (!settings) {
       // return 'OnboardingDatabaseCreate';
     }
 
     return 'AuthenticatorList';
-  }, [appSettings]);
+  }, [settings]);
 
-  if (isAppSettingsPending) {
+  if (settingsLoading) {
     return null;
   }
 

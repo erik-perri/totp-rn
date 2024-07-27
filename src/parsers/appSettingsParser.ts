@@ -21,7 +21,7 @@ export const storageSettingsParser = discriminatedUnion('storageLocation', [
 ]);
 
 export const appSettingsParser = object({
-  biometrics: boolean(),
+  biometricsEnabled: boolean(),
   storage: storageSettingsParser,
   version: number(),
 });
