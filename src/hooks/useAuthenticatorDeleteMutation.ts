@@ -11,7 +11,7 @@ export default function useAuthenticatorDeleteMutation() {
   const {data} = useAuthenticatorListQuery();
 
   return useMutation({
-    mutationFn: async (id: Authenticator['id']) => {
+    async mutationFn(id: Authenticator['id']) {
       const newData: Authenticator[] = [...(data ?? [])];
       const index = newData.findIndex(a => a.id === id);
 

@@ -17,7 +17,7 @@ function updateSettingsData(queryClient: QueryClient, newData: AppSettings) {
 function useAppSettingsQuery() {
   return useQuery({
     queryKey: settingsQueryKey,
-    queryFn: async (): Promise<AppSettings | null> => {
+    async queryFn(): Promise<AppSettings | null> {
       const serialized = await AsyncStorage.getItem('settings');
 
       if (serialized === null) {
@@ -35,7 +35,7 @@ function useAuthenticatorUpdateMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (settings: AppSettings) => {
+    async mutationFn(settings: AppSettings) {
       await AsyncStorage.setItem('settings', JSON.stringify(settings));
 
       return settings;

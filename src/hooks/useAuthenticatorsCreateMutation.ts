@@ -15,7 +15,7 @@ export default function useAuthenticatorsCreateMutation() {
   const {data} = useAuthenticatorListQuery();
 
   return useMutation({
-    mutationFn: async (newAuthenticators: AuthenticatorWithoutId[]) => {
+    async mutationFn(newAuthenticators: AuthenticatorWithoutId[]) {
       const newData: Authenticator[] = [
         ...(data ?? []),
         ...newAuthenticators.map(authenticator => ({

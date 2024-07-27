@@ -19,7 +19,7 @@ export function updateAuthenticatorListData(
 export default function useAuthenticatorListQuery() {
   return useQuery({
     queryKey: authenticatorListQueryKey,
-    queryFn: async (): Promise<Authenticator[]> => {
+    async queryFn(): Promise<Authenticator[]> {
       const serialized = await AsyncStorage.getItem('authenticators');
 
       if (serialized === null) {

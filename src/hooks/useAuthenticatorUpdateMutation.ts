@@ -17,7 +17,7 @@ export default function useAuthenticatorUpdateMutation() {
   const {data} = useAuthenticatorListQuery();
 
   return useMutation({
-    mutationFn: async (authenticator: UpdatingAuthenticator) => {
+    async mutationFn(authenticator: UpdatingAuthenticator) {
       const newData: Authenticator[] = [...(data ?? [])];
       const index = newData.findIndex(a => a.id === authenticator.id);
 
