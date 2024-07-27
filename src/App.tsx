@@ -14,7 +14,11 @@ import useCurrentTimeUpdater from './hooks/useCurrentTimeUpdater';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
       retry: false,
+      retryOnMount: false,
       staleTime: Infinity,
     },
   },
