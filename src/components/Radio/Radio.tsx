@@ -2,7 +2,9 @@ import React, {
   createContext,
   PropsWithChildren,
   ReactElement,
+  useCallback,
   useContext,
+  useMemo,
 } from 'react';
 
 import PressableShell from '../PressableShell';
@@ -16,12 +18,18 @@ type RadioProps<T> = PropsWithChildren<{
 function Radio<T>({children, value}: RadioProps<T>): ReactElement {
   const {currentValue, setValue} = useRadioGroupContext<T>();
 
+  const onPressShell = useCallback(() => {
+    setValue(value);
+  }, [setValue, value]);
+
+  const providerValue = useMemo(
+    () => ({selected: currentValue === value}),
+    [currentValue, value],
+  );
+
   return (
-    <PressableShell
-      onPress={() => {
-        setValue(value);
-      }}>
-      <RadioContext.Provider value={{selected: currentValue === value}}>
+    <PressableShell onPress={onPressShell}>
+      <RadioContext.Provider value={providerValue}>
         <RadioBox>{children}</RadioBox>
       </RadioContext.Provider>
     </PressableShell>

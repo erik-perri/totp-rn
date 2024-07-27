@@ -2,6 +2,7 @@ import React, {
   createContext,
   PropsWithChildren,
   ReactElement,
+  useCallback,
   useContext,
 } from 'react';
 import {Pressable} from 'react-native';
@@ -16,13 +17,24 @@ function PressableShell({
   disabled,
   onPress,
 }: PressableShellProps): ReactElement {
+  const onPressContainer = useCallback(() => {
+    void onPress();
+  }, [onPress]);
+
   return (
-    <Pressable disabled={disabled} onPress={() => void onPress()}>
-      {({pressed}) => (
-        <PressableContext.Provider value={{disabled, pressed}}>
-          {children}
-        </PressableContext.Provider>
-      )}
+    <Pressable disabled={disabled} onPress={onPressContainer}>
+      {({pressed}) => {
+        return (
+          <PressableContext.Provider
+            value={{
+              disabled,
+              pressed,
+              state: disabled ? 'disabled' : pressed ? 'pressed' : undefined,
+            }}>
+            {children}
+          </PressableContext.Provider>
+        );
+      }}
     </Pressable>
   );
 }
@@ -30,9 +42,11 @@ function PressableShell({
 const PressableContext = createContext<{
   disabled: boolean | undefined;
   pressed: boolean;
+  state?: 'pressed' | 'disabled';
 }>({
   disabled: false,
   pressed: false,
+  state: undefined,
 });
 
 export function usePressableContext() {

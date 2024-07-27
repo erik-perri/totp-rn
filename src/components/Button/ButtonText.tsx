@@ -2,65 +2,44 @@ import React, {FunctionComponent, PropsWithChildren} from 'react';
 import {Text} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
-import usePressableVariant from '../../hooks/usePressableVariant';
+import {usePressableContext} from '../PressableShell';
 import {useButtonContext} from './Button';
 
 const ButtonText: FunctionComponent<PropsWithChildren> = ({children}) => {
-  const {styles} = useStyles(stylesheet);
+  const {disabled, pressed} = usePressableContext();
   const {variant} = useButtonContext();
 
-  const textStyles = usePressableVariant(
-    {
-      default: {
-        base: styles.text,
-        disabled: styles.textDisabled,
-        pressed: styles.textPressed,
-      },
-      ghost: {
-        base: styles.ghostText,
-        disabled: styles.ghostTextDisabled,
-        pressed: styles.ghostTextPressed,
-      },
-      solid: {
-        base: styles.solidText,
-        disabled: styles.solidTextDisabled,
-        pressed: styles.solidTextPressed,
-      },
-    },
-    variant,
-  );
+  const {styles} = useStyles(stylesheet, {variant});
 
-  return <Text style={textStyles}>{children}</Text>;
+  return <Text style={styles.text(disabled, pressed)}>{children}</Text>;
 };
 
 const stylesheet = createStyleSheet(theme => ({
-  ghostText: {
-    color: theme.colors.button.ghost.enabled.text,
-  },
-  ghostTextDisabled: {
-    color: theme.colors.button.ghost.disabled.text,
-  },
-  ghostTextPressed: {
-    color: theme.colors.button.ghost.pressed.text,
-  },
-  solidText: {
-    color: theme.colors.button.solid.enabled.text,
-  },
-  solidTextDisabled: {
-    color: theme.colors.button.solid.disabled.text,
-  },
-  solidTextPressed: {
-    color: theme.colors.button.solid.pressed.text,
-  },
-  text: {
+  text: (disabled: boolean | undefined, pressed: boolean) => ({
     fontSize: theme.fontSize.base,
-  },
-  textDisabled: {
-    //
-  },
-  textPressed: {
-    //
-  },
+
+    variants: {
+      variant: {
+        default: {
+          //
+        },
+        ghost: {
+          color: disabled
+            ? theme.colors.button.ghost.disabled.text
+            : pressed
+            ? theme.colors.button.ghost.pressed.text
+            : theme.colors.button.ghost.enabled.text,
+        },
+        solid: {
+          color: disabled
+            ? theme.colors.button.solid.disabled.text
+            : pressed
+            ? theme.colors.button.solid.pressed.text
+            : theme.colors.button.solid.enabled.text,
+        },
+      },
+    },
+  }),
 }));
 
 export default ButtonText;

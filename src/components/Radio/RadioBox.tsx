@@ -2,54 +2,49 @@ import React, {FunctionComponent, PropsWithChildren} from 'react';
 import {View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
-import usePressableVariant from '../../hooks/usePressableVariant';
+import {usePressableContext} from '../PressableShell';
 import {useRadioContext} from './Radio';
 
 const RadioBox: FunctionComponent<PropsWithChildren> = ({children}) => {
-  const {styles} = useStyles(stylesheet);
-  const state = useRadioContext();
+  const {state} = usePressableContext();
+  const {selected} = useRadioContext();
 
-  const containerStyles = usePressableVariant(
-    {
-      default: {
-        base: styles.container,
-        pressed: styles.containerPressed,
-        selected: styles.containerSelected,
-      },
-    },
-    'default',
+  const {styles} = useStyles(stylesheet, {
     state,
-  );
+  });
 
-  return <View style={containerStyles}>{children}</View>;
+  return <View style={styles.container(selected)}>{children}</View>;
 };
 
 const stylesheet = createStyleSheet(theme => ({
-  container: {
+  container: (selected: boolean) => ({
     alignItems: 'center',
-    backgroundColor: theme.colors.radio.base.background,
-    borderColor: theme.colors.radio.base.border,
     borderWidth: 1,
     flexDirection: 'row',
     gap: 8,
     justifyContent: 'center',
     padding: 8,
-  },
-  containerPressed: {
-    backgroundColor: theme.colors.radio.pressed.background,
-    borderColor: theme.colors.radio.pressed.border,
-  },
-  containerSelected: {
-    backgroundColor: theme.colors.radio.selected.background,
-    borderColor: theme.colors.radio.selected.border,
-  },
-  text: {
-    color: theme.colors.radio.base.text,
-    fontSize: theme.fontSize.base,
-  },
-  textSelected: {
-    color: theme.colors.radio.selected.text,
-  },
+
+    variants: {
+      state: {
+        default: {
+          backgroundColor: selected
+            ? theme.colors.radio.selected.background
+            : theme.colors.radio.base.background,
+          borderColor: selected
+            ? theme.colors.radio.selected.border
+            : theme.colors.radio.base.border,
+        },
+        disabled: {
+          //
+        },
+        pressed: {
+          backgroundColor: theme.colors.radio.pressed.background,
+          borderColor: theme.colors.radio.pressed.border,
+        },
+      },
+    },
+  }),
 }));
 
 export default RadioBox;

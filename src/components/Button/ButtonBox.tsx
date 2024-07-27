@@ -2,39 +2,20 @@ import React, {FunctionComponent, PropsWithChildren} from 'react';
 import {View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
-import usePressableVariant from '../../hooks/usePressableVariant';
+import {usePressableContext} from '../PressableShell';
 import {useButtonContext} from './Button';
 
 const ButtonBox: FunctionComponent<PropsWithChildren> = ({children}) => {
-  const {styles} = useStyles(stylesheet);
+  const {disabled, pressed} = usePressableContext();
   const {variant} = useButtonContext();
 
-  const containerStyles = usePressableVariant(
-    {
-      default: {
-        base: styles.container,
-        pressed: styles.containerPressed,
-        disabled: styles.containerDisabled,
-      },
-      ghost: {
-        base: styles.ghostContainer,
-        pressed: styles.ghostContainerPressed,
-        disabled: styles.ghostContainerDisabled,
-      },
-      solid: {
-        base: styles.solidContainer,
-        pressed: styles.solidContainerPressed,
-        disabled: styles.solidContainerDisabled,
-      },
-    },
-    variant,
-  );
+  const {styles} = useStyles(stylesheet, {variant});
 
-  return <View style={containerStyles}>{children}</View>;
+  return <View style={styles.container(disabled, pressed)}>{children}</View>;
 };
 
 const stylesheet = createStyleSheet(theme => ({
-  container: {
+  container: (disabled: boolean | undefined, pressed: boolean) => ({
     alignItems: 'center',
     flexDirection: 'row',
     gap: 8,
@@ -44,37 +25,39 @@ const stylesheet = createStyleSheet(theme => ({
     paddingEnd: 12,
     paddingStart: 12,
     paddingTop: 12,
-  },
-  containerPressed: {
-    //
-  },
-  containerDisabled: {
-    //
-  },
-  solidContainer: {
-    backgroundColor: theme.colors.button.solid.enabled.background,
-    borderColor: theme.colors.button.solid.enabled.background,
-  },
-  solidContainerDisabled: {
-    backgroundColor: theme.colors.button.solid.disabled.background,
-    borderColor: theme.colors.button.solid.disabled.background,
-  },
-  solidContainerPressed: {
-    backgroundColor: theme.colors.button.solid.pressed.background,
-    borderColor: theme.colors.button.solid.pressed.background,
-  },
-  ghostContainer: {
-    backgroundColor: theme.colors.button.ghost.enabled.background,
-    borderColor: theme.colors.button.ghost.enabled.background,
-  },
-  ghostContainerDisabled: {
-    backgroundColor: theme.colors.button.ghost.disabled.background,
-    borderColor: theme.colors.button.ghost.disabled.background,
-  },
-  ghostContainerPressed: {
-    backgroundColor: theme.colors.button.ghost.pressed.background,
-    borderColor: theme.colors.button.ghost.pressed.background,
-  },
+
+    variants: {
+      variant: {
+        default: {
+          //
+        },
+        ghost: {
+          backgroundColor: disabled
+            ? theme.colors.button.ghost.disabled.background
+            : pressed
+            ? theme.colors.button.ghost.pressed.background
+            : theme.colors.button.ghost.enabled.background,
+          borderColor: disabled
+            ? theme.colors.button.ghost.disabled.background
+            : pressed
+            ? theme.colors.button.ghost.pressed.background
+            : theme.colors.button.ghost.enabled.background,
+        },
+        solid: {
+          backgroundColor: disabled
+            ? theme.colors.button.solid.disabled.background
+            : pressed
+            ? theme.colors.button.solid.pressed.background
+            : theme.colors.button.solid.enabled.background,
+          borderColor: disabled
+            ? theme.colors.button.solid.disabled.background
+            : pressed
+            ? theme.colors.button.solid.pressed.background
+            : theme.colors.button.solid.enabled.background,
+        },
+      },
+    },
+  }),
 }));
 
 export default ButtonBox;
