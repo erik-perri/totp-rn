@@ -3,6 +3,7 @@ import React, {FunctionComponent, useMemo} from 'react';
 
 import useAppSettings from '../hooks/useAppSettings';
 import AuthenticatorListScreen from './AuthenticatorListScreen/AuthenticatorListScreen';
+import FatalErrorScreen from './FatalErrorScreen';
 import OnboardingBiometricsScreen from './OnboardingBiometricsScreen/OnboardingBiometricsScreen';
 import OnboardingDatabaseCreateScreen from './OnboardingDatabaseCreateScreen/OnboardingDatabaseCreateScreen';
 import OnboardingDatabaseOpenScreen from './OnboardingDatabaseOpenScreen/OnboardingDatabaseOpenScreen';
@@ -33,6 +34,10 @@ const MainStack: FunctionComponent = () => {
 
   if (settingsLoading) {
     return null;
+  }
+
+  if (settingsError) {
+    return <FatalErrorScreen error={settingsError} />;
   }
 
   return (
