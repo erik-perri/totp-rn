@@ -47,7 +47,7 @@ class KdbxModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
 
       promise.resolve(result.toWritableArray())
     } catch (e: Exception) {
-      promise.reject("transform_error", e)
+      promise.reject("transform_aes_error", e)
     }
   }
 
@@ -67,7 +67,7 @@ class KdbxModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         ARGON2_VERSION_10 -> Version.V10
         ARGON2_VERSION_13 -> Version.V13
         else -> {
-          promise.reject("transform_error", "Invalid Argon2 version \"$version\"")
+          promise.reject("invalid_argon_version", "Invalid Argon2 version \"$version\"")
           return
         }
       }
@@ -76,7 +76,7 @@ class KdbxModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         ARGON2_TYPE_2D -> Type.Argon2d
         ARGON2_TYPE_2ID -> Type.Argon2id
         else -> {
-          promise.reject("transform_error", "Invalid Argon2 type \"$type\"")
+          promise.reject("invalid_argon_type", "Invalid Argon2 type \"$type\"")
           return
         }
       }
@@ -95,7 +95,7 @@ class KdbxModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
 
       promise.resolve(result.hash.toWritableArray())
     } catch (e: Exception) {
-      promise.reject("transform_error", e)
+      promise.reject("transform_argon_error", e)
     }
   }
 
