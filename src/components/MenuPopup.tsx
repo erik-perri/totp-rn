@@ -1,9 +1,4 @@
-import {
-  BottomSheetBackdrop,
-  BottomSheetBackdropProps,
-  BottomSheetModal,
-  BottomSheetView,
-} from '@gorhom/bottom-sheet';
+import {BottomSheetModal, BottomSheetView} from '@gorhom/bottom-sheet';
 import React, {
   FunctionComponent,
   PropsWithChildren,
@@ -15,22 +10,13 @@ import {StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
+import MenuPopupBackdrop from './MenuPopupBackdrop';
+
 type MenuPopupProps = PropsWithChildren<{
   isOpen: boolean;
   maxDynamicContentSize?: number;
   onClose: () => void;
 }>;
-
-const PopupBackdrop: FunctionComponent<BottomSheetBackdropProps> = props => {
-  return (
-    <BottomSheetBackdrop
-      opacity={0.25}
-      appearsOnIndex={0}
-      disappearsOnIndex={-1}
-      {...props}
-    />
-  );
-};
 
 const MenuPopup: FunctionComponent<MenuPopupProps> = ({
   children,
@@ -74,7 +60,7 @@ const MenuPopup: FunctionComponent<MenuPopupProps> = ({
 
   return (
     <BottomSheetModal
-      backdropComponent={PopupBackdrop}
+      backdropComponent={MenuPopupBackdrop}
       backgroundComponent={PopupBackground}
       enableDynamicSizing
       enablePanDownToClose

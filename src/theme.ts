@@ -52,6 +52,9 @@ const lightTheme = {
         background: colors.slate[200],
       },
     },
+    backdrop: {
+      background: colors.slate[950],
+    },
     button: {
       solid: {
         enabled: {
@@ -162,6 +165,9 @@ const darkTheme = {
       pressed: {
         background: colors.slate[600],
       },
+    },
+    backdrop: {
+      background: colors.slate[950],
     },
     button: {
       solid: {
