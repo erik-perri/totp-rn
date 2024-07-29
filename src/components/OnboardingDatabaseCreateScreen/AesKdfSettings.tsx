@@ -69,11 +69,6 @@ export const AesKdfSettings: FunctionComponent<AesKdfSettingsProps> = ({
 };
 
 const stylesheet = createStyleSheet(() => ({
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: 16,
-    justifyContent: 'center',
-  },
   container: {
     gap: 16,
   },

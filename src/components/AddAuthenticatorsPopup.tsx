@@ -109,12 +109,6 @@ const AddAuthenticatorsPopup: FunctionComponent<
 };
 
 const stylesheet = createStyleSheet(() => ({
-  contentContainer: {
-    alignItems: 'stretch',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 8,
-  },
   buttonContainer: {
     alignItems: 'center',
     display: 'flex',
@@ -122,6 +116,12 @@ const stylesheet = createStyleSheet(() => ({
     gap: 12,
     justifyContent: 'space-between',
     padding: 12,
+  },
+  contentContainer: {
+    alignItems: 'stretch',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
   },
 }));
 

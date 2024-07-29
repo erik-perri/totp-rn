@@ -62,27 +62,27 @@ const FormGroup: FunctionComponent<FormGroupProps> = ({
 };
 
 const stylesheet = createStyleSheet(theme => ({
-  root: {
-    flexGrow: 1,
-    gap: 4,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  labelContainer: {
-    //
-  },
-  label: {
-    color: theme.colors.text,
-    fontSize: theme.fontSize.base,
-  },
   error: {
     color: theme.colors.alertBox.error.text,
     fontSize: theme.fontSize.sm,
   },
   errorContainer: {
     //
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  label: {
+    color: theme.colors.text,
+    fontSize: theme.fontSize.base,
+  },
+  labelContainer: {
+    //
+  },
+  root: {
+    flexGrow: 1,
+    gap: 4,
   },
 }));
 

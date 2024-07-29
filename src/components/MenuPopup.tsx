@@ -79,18 +79,18 @@ const MenuPopup: FunctionComponent<MenuPopupProps> = ({
 };
 
 const stylesheet = createStyleSheet(theme => ({
+  background: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: theme.colors.background,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
   contentContainer: {
     alignItems: 'stretch',
     display: 'flex',
     flexDirection: 'column',
     gap: 4,
     paddingBottom: 12,
-  },
-  background: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: theme.colors.background,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
   },
   handle: {
     backgroundColor: theme.colors.text,

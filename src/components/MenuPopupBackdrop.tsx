@@ -23,8 +23,8 @@ const MenuPopupBackdrop: FunctionComponent<
 
 const stylesheet = createStyleSheet(theme => ({
   backdrop: {
-    opacity: 0.4,
     backgroundColor: theme.colors.backdrop.background,
+    opacity: 0.4,
   },
 }));
 

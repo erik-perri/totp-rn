@@ -71,20 +71,20 @@ const stylesheet = createStyleSheet(theme => ({
     justifyContent: 'center',
   },
   scrollContainer: {
-    borderWidth: 1,
-    borderRadius: 4,
     borderColor: theme.colors.input.border,
-    width: UnistylesRuntime.screen.width * 0.8,
+    borderRadius: 4,
+    borderWidth: 1,
     maxHeight: UnistylesRuntime.screen.height * 0.15,
+    width: UnistylesRuntime.screen.width * 0.8,
   },
   scrollContentContainer: {
+    paddingBottom: 12,
     paddingHorizontal: 12,
     paddingVertical: 4,
-    paddingBottom: 12,
   },
   svg: {
-    width: 120,
     height: 160,
+    width: 120,
   },
   textContainer: {
     alignItems: 'center',

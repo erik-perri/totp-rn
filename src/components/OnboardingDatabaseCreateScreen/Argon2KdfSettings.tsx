@@ -97,16 +97,11 @@ export const Argon2KdfSettings: FunctionComponent<Argon2KdfSettingsProps> = ({
 };
 
 const stylesheet = createStyleSheet(() => ({
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: 16,
-    justifyContent: 'center',
-  },
-  container: {
-    gap: 16,
-  },
   columnInputs: {
     flexDirection: 'row',
+    gap: 16,
+  },
+  container: {
     gap: 16,
   },
 }));

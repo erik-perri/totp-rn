@@ -102,8 +102,9 @@ const OnboardingBiometricsScreen: FunctionComponent<
 
 const stylesheet = createStyleSheet(() => ({
   buttonContainer: {
-    flexDirection: 'row',
     alignItems: 'flex-end',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
   continueButtonContainer: {

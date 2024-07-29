@@ -73,12 +73,12 @@ const stylesheet = createStyleSheet(theme => ({
   errorIcon: {
     color: theme.colors.alertBox.error.text,
   },
+  icon: {
+    color: theme.colors.text,
+  },
   iconContainer: {
     alignSelf: 'flex-start',
     paddingTop: 4,
-  },
-  icon: {
-    color: theme.colors.text,
   },
   info: {
     flexDirection: 'column',
@@ -100,14 +100,14 @@ const stylesheet = createStyleSheet(theme => ({
   root: {
     padding: 12,
   },
+  rootPressed: {
+    backgroundColor: theme.colors.authenticatorRow.pressed.background,
+  },
   row: {
     alignItems: 'center',
     flexDirection: 'row',
     gap: 8,
     overflow: 'hidden',
-  },
-  rootPressed: {
-    backgroundColor: theme.colors.authenticatorRow.pressed.background,
   },
   username: {
     color: theme.colors.textAlt,

@@ -53,11 +53,11 @@ const FormFileSelect: FunctionComponent<FormFileInputProps> = ({
 
 const stylesheet = createStyleSheet(theme => ({
   container: {
-    flexGrow: 1,
     alignItems: 'center',
-    justifyContent: 'space-between',
     flexDirection: 'row',
+    flexGrow: 1,
     gap: 8,
+    justifyContent: 'space-between',
   },
   currentFileContainer: {
     flexShrink: 1,

@@ -103,12 +103,12 @@ const stylesheet = createStyleSheet(theme => ({
     flexGrow: 1,
   },
   icon: {
-    color: theme.colors.text,
     borderColor: theme.colors.input.text,
+    color: theme.colors.text,
   },
   input: {
-    fontSize: theme.fontSize.md,
     flexShrink: 1,
+    fontSize: theme.fontSize.md,
   },
   inputEmpty: {
     color: theme.colors.textAlt,
