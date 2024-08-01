@@ -72,15 +72,12 @@ const stylesheet = createStyleSheet(theme => ({
   },
   scrollContainer: {
     borderColor: theme.colors.input.border,
-    borderRadius: 4,
     borderWidth: 1,
     maxHeight: UnistylesRuntime.screen.height * 0.15,
     width: UnistylesRuntime.screen.width * 0.8,
   },
   scrollContentContainer: {
-    paddingBottom: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    padding: 12,
   },
   svg: {
     height: 160,
