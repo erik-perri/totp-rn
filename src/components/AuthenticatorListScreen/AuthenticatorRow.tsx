@@ -5,7 +5,7 @@ import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import useAuthenticatorDeleteMutation from '../../hooks/useAuthenticatorDeleteMutation';
 import {Authenticator} from '../../parsers/authenticatorParser';
-import {useCurrentTime} from '../../stores/useCurrentTimeStore';
+import useCurrentTimeStore from '../../stores/useCurrentTimeStore';
 import generateTotp from '../../utilities/generateTotp';
 import getNextTotpTime from '../../utilities/getNextTotpTime';
 import CountdownBar from '../CountdownBar';
@@ -22,7 +22,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
   showNextCode,
 }) => {
   const {styles} = useStyles(stylesheet);
-  const currentTime = useCurrentTime();
+  const currentTime = useCurrentTimeStore(state => state.currentTime);
   const {mutateAsync: deleteAuthenticator} = useAuthenticatorDeleteMutation();
 
   const totpChangeTime = useMemo(

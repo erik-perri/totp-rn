@@ -1,16 +1,13 @@
 import {RefObject, useCallback, useMemo} from 'react';
 
-import {
-  useSharedLoadingSetLoading,
-  useSharedLoadingState,
-} from '../stores/useSharedLoadingStore';
+import useSharedLoadingStore from '../stores/useSharedLoadingStore';
 
 export default function useSharedLoading(
   key: string,
   component: symbol | RefObject<symbol>,
 ) {
-  const setSharedLoading = useSharedLoadingSetLoading();
-  const sharedLoadingState = useSharedLoadingState();
+  const setSharedLoading = useSharedLoadingStore(state => state.setLoading);
+  const sharedLoadingState = useSharedLoadingStore(state => state.state);
 
   const setLoading = useCallback(
     (loading: boolean) => {

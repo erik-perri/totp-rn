@@ -1,9 +1,11 @@
 import {useEffect} from 'react';
 
-import {useUpdateCurrentTime} from '../stores/useCurrentTimeStore';
+import useCurrentTimeStore from '../stores/useCurrentTimeStore';
 
 export default function useCurrentTimeUpdater() {
-  const updateCurrentTime = useUpdateCurrentTime();
+  const updateCurrentTime = useCurrentTimeStore(
+    state => state.updateCurrentTime,
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {

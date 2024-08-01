@@ -17,10 +17,4 @@ const useCurrentTimeStore = create<CurrentTimeStore>(set => ({
   },
 }));
 
-const selectCurrentTime = (state: CurrentTimeStore) => state.currentTime;
-const selectUpdateCurrentTime = (state: CurrentTimeStore) =>
-  state.updateCurrentTime;
-
-export const useCurrentTime = () => useCurrentTimeStore(selectCurrentTime);
-export const useUpdateCurrentTime = () =>
-  useCurrentTimeStore(selectUpdateCurrentTime);
+export default useCurrentTimeStore;

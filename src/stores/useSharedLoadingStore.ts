@@ -25,9 +25,4 @@ const useSharedLoadingStore = create<SharedLoadingStore>((set, get) => ({
   state: {},
 }));
 
-const selectSetLoading = (state: SharedLoadingStore) => state.setLoading;
-const selectState = (state: SharedLoadingStore) => state.state;
-
-export const useSharedLoadingSetLoading = () =>
-  useSharedLoadingStore(selectSetLoading);
-export const useSharedLoadingState = () => useSharedLoadingStore(selectState);
+export default useSharedLoadingStore;
