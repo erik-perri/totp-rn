@@ -2,7 +2,6 @@ import React, {
   FunctionComponent,
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import {View} from 'react-native';
@@ -28,7 +27,7 @@ export const AesKdfSettings: FunctionComponent<AesKdfSettingsProps> = ({
   const {styles} = useStyles(stylesheet);
   const {loading, setLoading} = useSharedLoading(
     'OnboardingDatabaseCreateScreen',
-    useRef(Symbol('AesKdfSettings')),
+    AesKdfSettings.name,
   );
   const [iterations, setIterations] = useState<string>('150000');
 

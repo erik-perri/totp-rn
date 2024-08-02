@@ -2,25 +2,22 @@ import {create} from 'zustand';
 
 type SharedLoadingStore = {
   setLoading: (key: string, component: symbol, loading: boolean) => void;
-  state: Record<string, symbol[] | undefined>;
+  state: Record<string, Set<symbol> | undefined>;
 };
 
-const useSharedLoadingStore = create<SharedLoadingStore>((set, get) => ({
+const useSharedLoadingStore = create<SharedLoadingStore>(set => ({
   setLoading: (key, component, loading: boolean) => {
-    const loadingState = get().state;
+    set(state => {
+      const currentLoadingForKey = state.state[key] ?? new Set<symbol>();
 
-    const currentLoadingForKey = loadingState[key] || [];
-
-    if (loading) {
-      currentLoadingForKey.push(component);
-    } else {
-      const index = currentLoadingForKey.indexOf(component);
-      if (index !== -1) {
-        currentLoadingForKey.splice(index, 1);
+      if (loading) {
+        currentLoadingForKey.add(component);
+      } else {
+        currentLoadingForKey.delete(component);
       }
-    }
 
-    set({state: {...loadingState, [key]: currentLoadingForKey}});
+      return {state: {...state.state, [key]: currentLoadingForKey}};
+    });
   },
   state: {},
 }));

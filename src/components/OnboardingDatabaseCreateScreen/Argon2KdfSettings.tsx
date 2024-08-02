@@ -2,7 +2,6 @@ import React, {
   FunctionComponent,
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import {View} from 'react-native';
@@ -31,7 +30,7 @@ export const Argon2KdfSettings: FunctionComponent<Argon2KdfSettingsProps> = ({
   const {styles} = useStyles(stylesheet);
   const {loading, setLoading} = useSharedLoading(
     'OnboardingDatabaseCreateScreen',
-    useRef(Symbol('Argon2KdfSettings')),
+    Argon2KdfSettings.name,
   );
 
   const [iterations, setIterations] = useState<string>('20');

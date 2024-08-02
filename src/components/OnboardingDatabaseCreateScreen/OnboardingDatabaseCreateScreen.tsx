@@ -1,11 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {
-  FunctionComponent,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, {FunctionComponent, useCallback, useMemo, useState} from 'react';
 import {View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
@@ -30,7 +24,7 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
   const {styles} = useStyles(stylesheet);
   const {loading} = useSharedLoading(
     'OnboardingDatabaseCreateScreen',
-    useRef(Symbol('OnboardingDatabaseCreateScreen')),
+    OnboardingDatabaseCreateScreen.name,
   );
   const [options, setOptions] = useState<AdvancedDatabaseOptionsData>();
   const [masterPassword, setMasterPassword] = useState('');
