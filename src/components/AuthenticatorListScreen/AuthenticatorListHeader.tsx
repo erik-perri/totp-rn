@@ -1,8 +1,11 @@
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import React, {FunctionComponent} from 'react';
 import {View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {createStyleSheet, useStyles} from 'react-native-unistyles';
+import {
+  createStyleSheet,
+  UnistylesRuntime,
+  useStyles,
+} from 'react-native-unistyles';
 
 import Button from '../Button/Button';
 import ButtonIcon from '../Button/ButtonIcon';
@@ -15,10 +18,9 @@ const AuthenticatorListHeader: FunctionComponent<
   AuthenticatorListHeaderProps
 > = ({onNewAuthenticator}) => {
   const {styles} = useStyles(stylesheet);
-  const {top} = useSafeAreaInsets();
 
   return (
-    <View style={[styles.root, {marginTop: top}]}>
+    <View style={[styles.root]}>
       <Button onPress={onNewAuthenticator} variant="ghost">
         <ButtonIcon icon={faPlus} />
       </Button>
@@ -34,6 +36,7 @@ const stylesheet = createStyleSheet(theme => ({
     borderBottomWidth: 1,
     display: 'flex',
     justifyContent: 'flex-end',
+    marginTop: UnistylesRuntime.insets.top,
     padding: 8,
   },
 }));

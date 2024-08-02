@@ -6,10 +6,13 @@ import {
   faLightbulb as faSolidLightbulb,
 } from '@fortawesome/free-solid-svg-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {FunctionComponent, useCallback, useMemo, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {createStyleSheet, useStyles} from 'react-native-unistyles';
+import React, {FunctionComponent, useCallback, useState} from 'react';
+import {Text, View} from 'react-native';
+import {
+  createStyleSheet,
+  UnistylesRuntime,
+  useStyles,
+} from 'react-native-unistyles';
 import {
   Camera,
   CameraPosition,
@@ -36,27 +39,6 @@ const QrCodeScannerScreen: FunctionComponent<
 
   const device = useCameraDevice(devicePosition);
   const {hasPermission} = useCameraPermission();
-
-  const insets = useSafeAreaInsets();
-  const positionStyles = useMemo(
-    () =>
-      StyleSheet.create({
-        help: {
-          paddingBottom: insets.bottom,
-          paddingLeft: insets.left,
-          paddingRight: insets.right,
-        },
-        left: {
-          left: insets.left + 16,
-          top: insets.top + 16,
-        },
-        right: {
-          right: insets.right + 16,
-          top: insets.top + 16,
-        },
-      }),
-    [insets],
-  );
 
   const [potentialAuthenticators, setPotentialAuthenticators] = useState<
     AuthenticatorWithoutId[]
@@ -127,7 +109,7 @@ const QrCodeScannerScreen: FunctionComponent<
 
   return (
     <View style={styles.root}>
-      <View style={[styles.buttonContainer, positionStyles.left]}>
+      <View style={[styles.buttonContainer, styles.leftContainer]}>
         <CameraButton
           icon={faAngleLeft}
           onPress={() => {
@@ -135,7 +117,7 @@ const QrCodeScannerScreen: FunctionComponent<
           }}
         />
       </View>
-      <View style={[styles.buttonContainer, positionStyles.right]}>
+      <View style={[styles.buttonContainer, styles.rightContainer]}>
         <CameraButton
           icon={faArrowsRotate}
           onPress={() => {
@@ -168,7 +150,7 @@ const QrCodeScannerScreen: FunctionComponent<
         )}
       </View>
       <View style={styles.helpContainer}>
-        <Text style={[styles.helpText, positionStyles.help]}>
+        <Text style={[styles.helpText]}>
           Place the QR code within the frame.
         </Text>
       </View>
@@ -251,6 +233,17 @@ const stylesheet = createStyleSheet(theme => ({
     color: theme.colors.cameraOverlay.button.base.text,
     fontSize: theme.fontSize.base,
     fontWeight: 'bold',
+    paddingBottom: UnistylesRuntime.insets.bottom,
+    paddingLeft: UnistylesRuntime.insets.left,
+    paddingRight: UnistylesRuntime.insets.right,
+  },
+  leftContainer: {
+    left: UnistylesRuntime.insets.left + 16,
+    top: UnistylesRuntime.insets.top + 16,
+  },
+  rightContainer: {
+    right: UnistylesRuntime.insets.right + 16,
+    top: UnistylesRuntime.insets.top + 16,
   },
   root: {
     alignItems: 'center',
