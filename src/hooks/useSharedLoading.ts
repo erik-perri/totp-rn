@@ -5,7 +5,7 @@ import useSharedLoadingStore from '../stores/useSharedLoadingStore';
 export default function useSharedLoading(key: string, component: string) {
   const componentSymbol = useRef(Symbol(component));
   const setSharedLoading = useSharedLoadingStore(state => state.setLoading);
-  const sharedLoadingState = useSharedLoadingStore(state => state.state);
+  const sharedLoadingState = useSharedLoadingStore(state => state.loadingState);
 
   const setLoading = useCallback(
     (loading: boolean) => {
@@ -15,7 +15,7 @@ export default function useSharedLoading(key: string, component: string) {
   );
 
   const loading = useMemo(() => {
-    const currentContext = sharedLoadingState[key];
+    const currentContext = sharedLoadingState.get(key);
 
     return currentContext && currentContext.size > 0;
   }, [key, sharedLoadingState]);

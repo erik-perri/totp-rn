@@ -2,13 +2,14 @@ import {create} from 'zustand';
 
 type SharedLoadingStore = {
   setLoading: (key: string, component: symbol, loading: boolean) => void;
-  state: Record<string, Set<symbol> | undefined>;
+  loadingState: Map<string, Set<symbol>>;
 };
 
 const useSharedLoadingStore = create<SharedLoadingStore>(set => ({
   setLoading: (key, component, loading: boolean) => {
     set(state => {
-      const currentLoadingForKey = state.state[key] ?? new Set<symbol>();
+      const loadingState = new Map(state.loadingState);
+      const currentLoadingForKey = loadingState.get(key) ?? new Set<symbol>();
 
       if (loading) {
         currentLoadingForKey.add(component);
@@ -16,10 +17,12 @@ const useSharedLoadingStore = create<SharedLoadingStore>(set => ({
         currentLoadingForKey.delete(component);
       }
 
-      return {state: {...state.state, [key]: currentLoadingForKey}};
+      loadingState.set(key, currentLoadingForKey);
+
+      return {loadingState};
     });
   },
-  state: {},
+  loadingState: new Map(),
 }));
 
 export default useSharedLoadingStore;
