@@ -7,8 +7,11 @@ import React, {
   useRef,
 } from 'react';
 import {StyleSheet, View} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {createStyleSheet, useStyles} from 'react-native-unistyles';
+import {
+  createStyleSheet,
+  UnistylesRuntime,
+  useStyles,
+} from 'react-native-unistyles';
 
 import MenuPopupBackdrop from './MenuPopupBackdrop';
 
@@ -70,9 +73,7 @@ const MenuPopup: FunctionComponent<MenuPopupProps> = ({
       onChange={handleSheetChanges}
       ref={bottomSheetRef}>
       <BottomSheetView>
-        <SafeAreaView edges={['bottom']}>
-          <View style={styles.contentContainer}>{children}</View>
-        </SafeAreaView>
+        <View style={styles.contentContainer}>{children}</View>
       </BottomSheetView>
     </BottomSheetModal>
   );
@@ -90,7 +91,7 @@ const stylesheet = createStyleSheet(theme => ({
     display: 'flex',
     flexDirection: 'column',
     gap: 4,
-    paddingBottom: 12,
+    paddingBottom: UnistylesRuntime.insets.bottom + 12,
   },
   handle: {
     backgroundColor: theme.colors.text,

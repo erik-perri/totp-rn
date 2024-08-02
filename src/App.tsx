@@ -6,7 +6,6 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import React from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import MainStack from './components/MainStack';
 import useCurrentTimeUpdater from './hooks/useCurrentTimeUpdater';
@@ -30,23 +29,21 @@ function App(): React.JSX.Element {
   useCurrentTimeUpdater();
 
   return (
-    <SafeAreaProvider>
-      <QueryClientProvider client={queryClient}>
-        <StatusBar
-          animated
-          backgroundColor="transparent"
-          barStyle={scheme === 'dark' ? 'light-content' : 'dark-content'}
-          translucent
-        />
-        <GestureHandlerRootView>
-          <NavigationContainer>
-            <BottomSheetModalProvider>
-              <MainStack />
-            </BottomSheetModalProvider>
-          </NavigationContainer>
-        </GestureHandlerRootView>
-      </QueryClientProvider>
-    </SafeAreaProvider>
+    <QueryClientProvider client={queryClient}>
+      <StatusBar
+        animated
+        backgroundColor="transparent"
+        barStyle={scheme === 'dark' ? 'light-content' : 'dark-content'}
+        translucent
+      />
+      <GestureHandlerRootView>
+        <NavigationContainer>
+          <BottomSheetModalProvider>
+            <MainStack />
+          </BottomSheetModalProvider>
+        </NavigationContainer>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   );
 }
 
