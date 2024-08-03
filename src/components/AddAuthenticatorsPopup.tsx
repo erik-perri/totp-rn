@@ -69,40 +69,42 @@ const AddAuthenticatorsPopup: FunctionComponent<
       maxDynamicContentSize={maxHeight}
       isOpen={isOpen}
       onClose={onCancel}>
-      <View style={styles.contentContainer}>
-        {authenticators.map((authenticator, index) => {
-          const isDuplicate = checkDuplicate(authenticator);
-          return (
-            <AddAuthenticatorsPopupItem
-              key={`${index.toString()}-${authenticator.issuer}`}
-              authenticator={authenticator}
-              error={
-                isDuplicate ? 'This authenticator already exists.' : undefined
-              }
-              canCheck={!isDuplicate && authenticators.length > 1}
-              isChecked={Boolean(enabledState[index])}
-              onPress={() => {
-                setEnabledState(state => {
-                  return {
-                    ...state,
-                    [index]: !state[index],
-                  };
-                });
-              }}
-            />
-          );
-        })}
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button onPress={onCancel} variant="ghost">
-          <ButtonText>Cancel</ButtonText>
-        </Button>
-        <Button
-          onPress={handleSave}
-          variant="solid"
-          disabled={isSaving || !hasEnabled}>
-          <ButtonText>Save</ButtonText>
-        </Button>
+      <View style={styles.menuContainer}>
+        <View style={styles.contentContainer}>
+          {authenticators.map((authenticator, index) => {
+            const isDuplicate = checkDuplicate(authenticator);
+            return (
+              <AddAuthenticatorsPopupItem
+                key={`${index.toString()}-${authenticator.issuer}`}
+                authenticator={authenticator}
+                error={
+                  isDuplicate ? 'This authenticator already exists.' : undefined
+                }
+                canCheck={!isDuplicate && authenticators.length > 1}
+                isChecked={Boolean(enabledState[index])}
+                onPress={() => {
+                  setEnabledState(state => {
+                    return {
+                      ...state,
+                      [index]: !state[index],
+                    };
+                  });
+                }}
+              />
+            );
+          })}
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button onPress={onCancel} variant="ghost">
+            <ButtonText>Cancel</ButtonText>
+          </Button>
+          <Button
+            onPress={handleSave}
+            variant="solid"
+            disabled={isSaving || !hasEnabled}>
+            <ButtonText>Save</ButtonText>
+          </Button>
+        </View>
       </View>
     </MenuPopup>
   );
@@ -115,13 +117,16 @@ const stylesheet = createStyleSheet(() => ({
     flexDirection: 'row',
     gap: 12,
     justifyContent: 'space-between',
-    padding: 12,
+    paddingHorizontal: 12,
   },
   contentContainer: {
     alignItems: 'stretch',
     display: 'flex',
     flexDirection: 'column',
     gap: 8,
+  },
+  menuContainer: {
+    gap: 16,
   },
 }));
 
