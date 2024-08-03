@@ -6,6 +6,7 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import React from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import FatalErrorBoundary from './components/FatalErrorBoundary';
 import MainStack from './components/MainStack';
@@ -37,15 +38,17 @@ function App(): React.JSX.Element {
         barStyle={scheme === 'dark' ? 'light-content' : 'dark-content'}
         translucent
       />
-      <GestureHandlerRootView>
-        <NavigationContainer>
-          <FatalErrorBoundary>
-            <BottomSheetModalProvider>
-              <MainStack />
-            </BottomSheetModalProvider>
-          </FatalErrorBoundary>
-        </NavigationContainer>
-      </GestureHandlerRootView>
+      <SafeAreaProvider>
+        <GestureHandlerRootView>
+          <NavigationContainer>
+            <FatalErrorBoundary>
+              <BottomSheetModalProvider>
+                <MainStack />
+              </BottomSheetModalProvider>
+            </FatalErrorBoundary>
+          </NavigationContainer>
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
     </QueryClientProvider>
   );
 }
