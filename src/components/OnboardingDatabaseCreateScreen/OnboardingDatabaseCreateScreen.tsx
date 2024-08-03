@@ -22,7 +22,7 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
   NativeStackScreenProps<MainStackParamList, 'OnboardingDatabaseCreate'>
 > = ({navigation}) => {
   const {styles} = useStyles(stylesheet);
-  const {loading} = useSharedLoading(
+  const [loading] = useSharedLoading(
     'OnboardingDatabaseCreateScreen',
     OnboardingDatabaseCreateScreen.name,
   );

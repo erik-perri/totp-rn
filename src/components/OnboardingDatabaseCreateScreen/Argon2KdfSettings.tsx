@@ -28,7 +28,7 @@ export const Argon2KdfSettings: FunctionComponent<Argon2KdfSettingsProps> = ({
   onChange,
 }) => {
   const {styles} = useStyles(stylesheet);
-  const {loading, setLoading} = useSharedLoading(
+  const [loading, setLoading] = useSharedLoading(
     'OnboardingDatabaseCreateScreen',
     Argon2KdfSettings.name,
   );

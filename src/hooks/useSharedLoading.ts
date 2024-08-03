@@ -2,7 +2,10 @@ import {useCallback, useEffect, useMemo, useRef} from 'react';
 
 import useSharedLoadingStore from '../stores/useSharedLoadingStore';
 
-export default function useSharedLoading(key: string, component: string) {
+export default function useSharedLoading(
+  key: string,
+  component: string,
+): [boolean, (loading: boolean) => void] {
   const componentSymbol = useRef(Symbol(component));
   const setSharedLoading = useSharedLoadingStore(state => state.setLoading);
   const sharedLoadingState = useSharedLoadingStore(state => state.loadingState);
@@ -17,7 +20,7 @@ export default function useSharedLoading(key: string, component: string) {
   const loading = useMemo(() => {
     const currentContext = sharedLoadingState.get(key);
 
-    return currentContext && currentContext.size > 0;
+    return Boolean(currentContext && currentContext.size > 0);
   }, [key, sharedLoadingState]);
 
   useEffect(() => {
@@ -26,5 +29,5 @@ export default function useSharedLoading(key: string, component: string) {
     };
   }, [setLoading]);
 
-  return {setLoading, loading};
+  return [loading, setLoading];
 }

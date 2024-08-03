@@ -25,7 +25,7 @@ export const AesKdfSettings: FunctionComponent<AesKdfSettingsProps> = ({
   onChange,
 }) => {
   const {styles} = useStyles(stylesheet);
-  const {loading, setLoading} = useSharedLoading(
+  const [loading, setLoading] = useSharedLoading(
     'OnboardingDatabaseCreateScreen',
     AesKdfSettings.name,
   );
