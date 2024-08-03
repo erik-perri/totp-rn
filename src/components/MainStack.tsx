@@ -26,8 +26,14 @@ const MainStack: FunctionComponent = () => {
 
   const initialRouteName: keyof MainStackParamList = useMemo(() => {
     if (!settings) {
+      // TODO Detect existing database in internal storage and show a screen
+      //      asking to open it or start fresh. Likely someone aborting
+      //      onboarding?
       // return 'OnboardingDatabaseCreate';
     }
+
+    // TODO Detect if composite key and master password are available
+    //      and show unlock screen if not
 
     return 'AuthenticatorList';
   }, [settings]);
@@ -37,6 +43,8 @@ const MainStack: FunctionComponent = () => {
   }
 
   if (settingsError) {
+    // TODO Add a way to retry or re-create the settings without needing the
+    //      user to clear the app data.
     return <FatalErrorScreen error={settingsError} />;
   }
 
