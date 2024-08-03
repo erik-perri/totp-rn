@@ -23,7 +23,15 @@ const FatalErrorScreen: FunctionComponent<FatalErrorScreenProps> = ({
       return error.message;
     }
 
-    return String(error);
+    return 'An unknown error occurred.';
+  }, [error]);
+
+  const errorStackLines = useMemo(() => {
+    if (error instanceof Error) {
+      return error.stack?.split('\n') ?? [];
+    }
+
+    return [];
   }, [error]);
 
   return (
@@ -42,11 +50,18 @@ const FatalErrorScreen: FunctionComponent<FatalErrorScreenProps> = ({
       <View style={styles.textContainer}>
         <Heading>You broke it.</Heading>
 
-        {errorMessage.includes('\n') ? (
+        {errorStackLines.length > 0 ? (
           <ScrollView
             style={styles.scrollContainer}
             contentContainerStyle={styles.scrollContentContainer}>
-            <Text style={styles.message}>{errorMessage}</Text>
+            {errorStackLines.map((errorStack, index) => (
+              <Text
+                numberOfLines={1}
+                key={`${index.toString()}-${errorStack}`}
+                style={styles.stackMessage}>
+                {errorStack}
+              </Text>
+            ))}
           </ScrollView>
         ) : (
           <Text style={styles.message}>{errorMessage}</Text>
@@ -67,8 +82,13 @@ const stylesheet = createStyleSheet(theme => ({
     backgroundColor: theme.colors.background,
     display: 'flex',
     flex: 1,
+    flexGrow: 1,
     gap: 16,
     justifyContent: 'center',
+    paddingBottom: UnistylesRuntime.insets.bottom,
+    paddingLeft: UnistylesRuntime.insets.left,
+    paddingRight: UnistylesRuntime.insets.right,
+    paddingTop: UnistylesRuntime.insets.top,
   },
   scrollContainer: {
     borderColor: theme.colors.input.border,
@@ -78,6 +98,13 @@ const stylesheet = createStyleSheet(theme => ({
   },
   scrollContentContainer: {
     padding: 12,
+  },
+  stackMessage: {
+    color: theme.colors.textAlt,
+    flexShrink: 1,
+    flexWrap: 'nowrap',
+    fontSize: theme.fontSize.sm,
+    whiteSpace: 'nowrap',
   },
   svg: {
     height: 160,

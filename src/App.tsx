@@ -7,6 +7,7 @@ import React from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
+import FatalErrorBoundary from './components/FatalErrorBoundary';
 import MainStack from './components/MainStack';
 import useCurrentTimeUpdater from './hooks/useCurrentTimeUpdater';
 
@@ -38,9 +39,11 @@ function App(): React.JSX.Element {
       />
       <GestureHandlerRootView>
         <NavigationContainer>
-          <BottomSheetModalProvider>
-            <MainStack />
-          </BottomSheetModalProvider>
+          <FatalErrorBoundary>
+            <BottomSheetModalProvider>
+              <MainStack />
+            </BottomSheetModalProvider>
+          </FatalErrorBoundary>
         </NavigationContainer>
       </GestureHandlerRootView>
     </QueryClientProvider>
