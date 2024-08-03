@@ -20,22 +20,22 @@ const AlertBox: FunctionComponent<AlertBoxProps> = ({
   message,
   theme,
 }) => {
-  const {styles} = useStyles(stylesheet);
+  const {styles} = useStyles(stylesheet, {theme});
 
-  const [containerStyles, textStyles, icon] = useMemo(() => {
+  const icon = useMemo(() => {
     switch (theme) {
       case 'error':
-        return [styles.errorContainer, styles.errorText, faExclamationCircle];
+        return faExclamationCircle;
       case 'info':
-        return [styles.infoContainer, styles.infoText, faCircleInfo];
+        return faCircleInfo;
     }
-  }, [styles, theme]);
+  }, [theme]);
 
   return (
-    <View style={[styles.container, containerStyles]}>
-      <FontAwesomeIcon icon={icon} size={18} style={textStyles} />
+    <View style={styles.container}>
+      <FontAwesomeIcon icon={icon} size={18} style={styles.icon} />
       <View style={styles.innerContainer}>
-        <Text style={[styles.text, textStyles]}>{message}</Text>
+        <Text style={styles.text}>{message}</Text>
         {additionalMessage && (
           <Text style={styles.textAdditional}>{additionalMessage}</Text>
         )}
@@ -50,18 +50,29 @@ const stylesheet = createStyleSheet(theme => ({
     flexDirection: 'row',
     gap: 8,
     padding: 12,
+
+    variants: {
+      theme: {
+        error: {
+          backgroundColor: theme.colors.alertBox.error.background,
+        },
+        info: {
+          backgroundColor: theme.colors.alertBox.info.background,
+        },
+      },
+    },
   },
-  errorContainer: {
-    backgroundColor: theme.colors.alertBox.error.background,
-  },
-  errorText: {
-    color: theme.colors.alertBox.error.text,
-  },
-  infoContainer: {
-    backgroundColor: theme.colors.alertBox.info.background,
-  },
-  infoText: {
-    color: theme.colors.alertBox.info.text,
+  icon: {
+    variants: {
+      theme: {
+        error: {
+          color: theme.colors.alertBox.error.text,
+        },
+        info: {
+          color: theme.colors.alertBox.info.text,
+        },
+      },
+    },
   },
   innerContainer: {
     flexShrink: 1,
@@ -70,11 +81,33 @@ const stylesheet = createStyleSheet(theme => ({
   text: {
     flexShrink: 1,
     fontSize: theme.fontSize.base,
+
+    variants: {
+      theme: {
+        error: {
+          color: theme.colors.alertBox.error.text,
+        },
+        info: {
+          color: theme.colors.alertBox.info.text,
+        },
+      },
+    },
   },
   textAdditional: {
     color: theme.colors.textAlt,
     flexShrink: 1,
     fontSize: theme.fontSize.sm,
+
+    variants: {
+      theme: {
+        error: {
+          color: theme.colors.alertBox.error.textAlt,
+        },
+        info: {
+          color: theme.colors.alertBox.info.textAlt,
+        },
+      },
+    },
   },
 }));
 

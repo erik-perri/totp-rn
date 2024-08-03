@@ -38,10 +38,12 @@ const lightTheme = {
       error: {
         background: colors.red[200],
         text: colors.red[800],
+        textAlt: colors.slate[500],
       },
       info: {
         background: colors.slate[200],
         text: colors.slate[800],
+        textAlt: colors.slate[500],
       },
     },
     authenticatorRow: {
@@ -152,10 +154,12 @@ const darkTheme = {
       error: {
         background: colors.red[800],
         text: colors.red[100],
+        textAlt: colors.slate[300],
       },
       info: {
         background: colors.slate[800],
         text: colors.slate[200],
+        textAlt: colors.slate[400],
       },
     },
     authenticatorRow: {
