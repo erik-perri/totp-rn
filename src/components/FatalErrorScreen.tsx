@@ -1,11 +1,7 @@
 import React, {FunctionComponent, useMemo} from 'react';
 import {ScrollView, Text, View} from 'react-native';
 import Svg, {Path} from 'react-native-svg';
-import {
-  createStyleSheet,
-  UnistylesRuntime,
-  useStyles,
-} from 'react-native-unistyles';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import Heading from './Heading';
 
@@ -71,7 +67,7 @@ const FatalErrorScreen: FunctionComponent<FatalErrorScreenProps> = ({
   );
 };
 
-const stylesheet = createStyleSheet(theme => ({
+const stylesheet = createStyleSheet((theme, runtime) => ({
   message: {
     color: theme.colors.textAlt,
     flexShrink: 1,
@@ -85,16 +81,16 @@ const stylesheet = createStyleSheet(theme => ({
     flexGrow: 1,
     gap: 16,
     justifyContent: 'center',
-    paddingBottom: UnistylesRuntime.insets.bottom,
-    paddingLeft: UnistylesRuntime.insets.left,
-    paddingRight: UnistylesRuntime.insets.right,
-    paddingTop: UnistylesRuntime.insets.top,
+    paddingBottom: runtime.insets.bottom,
+    paddingLeft: runtime.insets.left,
+    paddingRight: runtime.insets.right,
+    paddingTop: runtime.insets.top,
   },
   scrollContainer: {
     borderColor: theme.colors.input.border,
     borderWidth: 1,
-    maxHeight: UnistylesRuntime.screen.height * 0.15,
-    width: UnistylesRuntime.screen.width * 0.8,
+    maxHeight: runtime.screen.height * 0.15,
+    width: runtime.screen.width * 0.8,
   },
   scrollContentContainer: {
     padding: 12,

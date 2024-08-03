@@ -7,11 +7,7 @@ import React, {
   useRef,
 } from 'react';
 import {StyleSheet, View} from 'react-native';
-import {
-  createStyleSheet,
-  UnistylesRuntime,
-  useStyles,
-} from 'react-native-unistyles';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import MenuPopupBackdrop from './MenuPopupBackdrop';
 
@@ -79,7 +75,7 @@ const MenuPopup: FunctionComponent<MenuPopupProps> = ({
   );
 };
 
-const stylesheet = createStyleSheet(theme => ({
+const stylesheet = createStyleSheet((theme, runtime) => ({
   background: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: theme.colors.background,
@@ -91,7 +87,7 @@ const stylesheet = createStyleSheet(theme => ({
     display: 'flex',
     flexDirection: 'column',
     gap: 4,
-    paddingBottom: UnistylesRuntime.insets.bottom + 12,
+    paddingBottom: runtime.insets.bottom + 12,
   },
   handle: {
     backgroundColor: theme.colors.text,

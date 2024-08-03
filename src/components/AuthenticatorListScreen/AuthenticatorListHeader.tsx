@@ -1,11 +1,7 @@
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import React, {FunctionComponent} from 'react';
 import {View} from 'react-native';
-import {
-  createStyleSheet,
-  UnistylesRuntime,
-  useStyles,
-} from 'react-native-unistyles';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import Button from '../Button/Button';
 import ButtonIcon from '../Button/ButtonIcon';
@@ -28,7 +24,7 @@ const AuthenticatorListHeader: FunctionComponent<
   );
 };
 
-const stylesheet = createStyleSheet(theme => ({
+const stylesheet = createStyleSheet((theme, runtime) => ({
   root: {
     alignItems: 'flex-end',
     backgroundColor: theme.colors.header.background,
@@ -36,7 +32,7 @@ const stylesheet = createStyleSheet(theme => ({
     borderBottomWidth: 1,
     display: 'flex',
     justifyContent: 'flex-end',
-    marginTop: UnistylesRuntime.insets.top,
+    marginTop: runtime.insets.top,
     padding: 8,
   },
 }));

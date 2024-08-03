@@ -8,11 +8,7 @@ import {
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {FunctionComponent, useCallback, useState} from 'react';
 import {Text, View} from 'react-native';
-import {
-  createStyleSheet,
-  UnistylesRuntime,
-  useStyles,
-} from 'react-native-unistyles';
+import {createStyleSheet, useStyles} from 'react-native-unistyles';
 import {
   Camera,
   CameraPosition,
@@ -195,7 +191,7 @@ function generateRandomAuthenticator(): AuthenticatorWithoutId {
   };
 }
 
-const stylesheet = createStyleSheet(theme => ({
+const stylesheet = createStyleSheet((theme, runtime) => ({
   buttonContainer: {
     alignItems: 'center',
     display: 'flex',
@@ -234,17 +230,17 @@ const stylesheet = createStyleSheet(theme => ({
     color: theme.colors.cameraOverlay.button.base.text,
     fontSize: theme.fontSize.base,
     fontWeight: 'bold',
-    paddingBottom: UnistylesRuntime.insets.bottom,
-    paddingLeft: UnistylesRuntime.insets.left,
-    paddingRight: UnistylesRuntime.insets.right,
+    paddingBottom: runtime.insets.bottom,
+    paddingLeft: runtime.insets.left,
+    paddingRight: runtime.insets.right,
   },
   leftContainer: {
-    left: UnistylesRuntime.insets.left + 16,
-    top: UnistylesRuntime.insets.top + 16,
+    left: runtime.insets.left + 16,
+    top: runtime.insets.top + 16,
   },
   rightContainer: {
-    right: UnistylesRuntime.insets.right + 16,
-    top: UnistylesRuntime.insets.top + 16,
+    right: runtime.insets.right + 16,
+    top: runtime.insets.top + 16,
   },
   root: {
     alignItems: 'center',
