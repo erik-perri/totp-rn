@@ -1,7 +1,7 @@
 import {NativeModules} from 'react-native';
 
 export type NativeFile = {
-  name?: string;
+  name: string | null;
   uri: string;
 };
 
