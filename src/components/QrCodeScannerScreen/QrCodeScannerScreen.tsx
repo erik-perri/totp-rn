@@ -121,6 +121,7 @@ const QrCodeScannerScreen: FunctionComponent<
         <CameraButton
           icon={faArrowsRotate}
           onPress={() => {
+            setTorch('off');
             setDevicePosition(currentPosition =>
               currentPosition === 'back' ? 'front' : 'back',
             );
