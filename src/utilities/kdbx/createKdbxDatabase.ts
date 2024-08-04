@@ -24,7 +24,7 @@ export type AesKdfParameters = {
 export type Argon2KdfParameters = {
   type: 'argon2d' | 'argon2id';
   iterations: number;
-  memoryUsage: number;
+  memoryInBytes: number;
   parallelism: number;
 };
 
@@ -49,7 +49,7 @@ export default async function createKdbxDatabase(
       ? await createAesKdfParameters(BigInt(kdfParameters.iterations))
       : await createArgon2KdfParameters(
           BigInt(kdfParameters.iterations),
-          BigInt(kdfParameters.memoryUsage),
+          BigInt(kdfParameters.memoryInBytes),
           BigInt(kdfParameters.parallelism),
           kdfParameters.type === 'argon2d'
             ? Argon2Type.Argon2d

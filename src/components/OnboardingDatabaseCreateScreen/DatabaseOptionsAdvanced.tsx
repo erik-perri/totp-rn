@@ -51,7 +51,7 @@ export const DatabaseOptionsAdvanced: FunctionComponent<
       onChange(encryptionAlgorithm, {
         type: kdf,
         iterations: params.iterations,
-        memoryUsage: params.memoryUsage,
+        memoryInBytes: params.memoryInBytes,
         parallelism: params.parallelism,
       });
     },

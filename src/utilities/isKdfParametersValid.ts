@@ -18,7 +18,7 @@ export default function isKdfParametersValid(
     case 'argon2id':
       if (
         isInvalidUnsignedNumber(options.iterations) ||
-        isInvalidUnsignedNumber(options.memoryUsage) ||
+        isInvalidUnsignedNumber(options.memoryInBytes) ||
         isInvalidUnsignedNumber(options.parallelism)
       ) {
         return false;

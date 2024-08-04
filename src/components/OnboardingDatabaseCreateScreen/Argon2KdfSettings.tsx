@@ -16,7 +16,7 @@ import IterationCalculateButton from './IterationCalculateButton';
 
 export type Argon2KdfSettingsData = {
   iterations: number;
-  memoryUsage: number;
+  memoryInBytes: number;
   parallelism: number;
 };
 
@@ -62,7 +62,7 @@ export const Argon2KdfSettings: FunctionComponent<Argon2KdfSettingsProps> = ({
   useEffect(() => {
     onChange({
       iterations: safeInputToNumber(iterations),
-      memoryUsage: safeInputToNumber(memoryUsage) * 1024 * 1024,
+      memoryInBytes: safeInputToNumber(memoryUsage) * 1024 * 1024,
       parallelism: safeInputToNumber(parallelism),
     });
   }, [iterations, memoryUsage, onChange, parallelism]);
