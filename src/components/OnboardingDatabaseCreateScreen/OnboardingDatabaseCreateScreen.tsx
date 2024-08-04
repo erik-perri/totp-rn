@@ -67,27 +67,21 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
       </OnboardingContent>
 
       <OnboardingActions>
-        <View style={styles.buttonContainer}>
-          <Button disabled={loading} onPress={onOpenDatabase} variant="ghost">
-            <ButtonText>Open Database</ButtonText>
-          </Button>
-          <Button
-            disabled={isCreateBlocked}
-            onPress={onCreateDatabase}
-            variant="solid">
-            <ButtonText>Create Database</ButtonText>
-          </Button>
-        </View>
+        <Button disabled={loading} onPress={onOpenDatabase} variant="ghost">
+          <ButtonText>Open Database</ButtonText>
+        </Button>
+        <Button
+          disabled={isCreateBlocked}
+          onPress={onCreateDatabase}
+          variant="solid">
+          <ButtonText>Create Database</ButtonText>
+        </Button>
       </OnboardingActions>
     </OnboardingShell>
   );
 };
 
 const stylesheet = createStyleSheet(() => ({
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   formContainer: {
     gap: 16,
   },

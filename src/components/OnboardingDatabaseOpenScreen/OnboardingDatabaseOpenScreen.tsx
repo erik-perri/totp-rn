@@ -1,7 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {FunctionComponent, useCallback, useMemo, useState} from 'react';
 import {View} from 'react-native';
-import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import {NativeFile} from '../../modules/filesystemModule';
 import Button from '../Button/Button';
@@ -19,8 +18,6 @@ import Paragraph from '../Paragraph';
 const OnboardingDatabaseOpenScreen: FunctionComponent<
   NativeStackScreenProps<MainStackParamList, 'OnboardingDatabaseOpen'>
 > = ({navigation}) => {
-  const {styles} = useStyles(stylesheet);
-
   const [file, setFile] = useState<NativeFile>();
   const [fileError, setFileError] = useState<string>();
   const [masterPassword, setMasterPassword] = useState('');
@@ -107,27 +104,18 @@ const OnboardingDatabaseOpenScreen: FunctionComponent<
       </OnboardingContent>
 
       <OnboardingActions>
-        <View style={styles.buttonContainer}>
-          <Button onPress={onBack} variant="ghost">
-            <ButtonText>Back</ButtonText>
-          </Button>
-          <Button
-            disabled={isSubmitDisabled}
-            onPress={onUnlockDatabase}
-            variant="solid">
-            <ButtonText>Unlock Database</ButtonText>
-          </Button>
-        </View>
+        <Button onPress={onBack} variant="ghost">
+          <ButtonText>Back</ButtonText>
+        </Button>
+        <Button
+          disabled={isSubmitDisabled}
+          onPress={onUnlockDatabase}
+          variant="solid">
+          <ButtonText>Unlock Database</ButtonText>
+        </Button>
       </OnboardingActions>
     </OnboardingShell>
   );
 };
-
-const stylesheet = createStyleSheet(() => ({
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-}));
 
 export default OnboardingDatabaseOpenScreen;

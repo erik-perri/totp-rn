@@ -75,27 +75,21 @@ const OnboardingStorageScreen: FunctionComponent<
       </OnboardingContent>
 
       <OnboardingActions>
-        <View style={styles.buttonContainer}>
-          <Button variant="ghost" onPress={onGoBack}>
-            <ButtonText>Back</ButtonText>
-          </Button>
-          <Button
-            disabled={storageLocation === undefined}
-            variant="solid"
-            onPress={onSaveDatabase}>
-            <ButtonText>Save Database</ButtonText>
-          </Button>
-        </View>
+        <Button onPress={onGoBack} variant="ghost">
+          <ButtonText>Back</ButtonText>
+        </Button>
+        <Button
+          disabled={storageLocation === undefined}
+          onPress={onSaveDatabase}
+          variant="solid">
+          <ButtonText>Save Database</ButtonText>
+        </Button>
       </OnboardingActions>
     </OnboardingShell>
   );
 };
 
 const stylesheet = createStyleSheet(() => ({
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   radioContainer: {
     paddingVertical: 4,
   },
