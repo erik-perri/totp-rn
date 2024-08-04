@@ -2,7 +2,6 @@ import './theme';
 
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {NavigationContainer} from '@react-navigation/native';
-import {configureDependencies} from 'kdbx-ts';
 import React, {useEffect} from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -11,16 +10,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import FatalErrorBoundary from './components/FatalErrorBoundary';
 import MainStack from './components/MainStack';
 import useCurrentTimeUpdater from './hooks/useCurrentTimeUpdater';
-import {
-  transformAes256KdfKey,
-  transformArgon2KdfKey,
-} from './modules/kdbxModule';
 import usePublicSettingsStore from './stores/usePublicSettingsStore';
-
-configureDependencies({
-  transformAes256KdfKey,
-  transformArgon2KdfKey,
-});
 
 function App(): React.JSX.Element {
   const scheme = useColorScheme();
