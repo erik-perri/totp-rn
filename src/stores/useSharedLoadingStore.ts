@@ -1,15 +1,17 @@
 import {create} from 'zustand';
 
+type SharedLoadingStore = {
+  loadingState: Map<string, Set<symbol>>;
+
+  setLoading: (key: string, component: symbol, loading: boolean) => void;
+};
+
 /**
  * Contains a map of sets that track a shared loading state for the key. This is
  * used to allow child components to let their parent know when they are loading
  * and need actions to be disabled.
  */
-const useSharedLoadingStore = create<{
-  loadingState: Map<string, Set<symbol>>;
-
-  setLoading: (key: string, component: symbol, loading: boolean) => void;
-}>(set => ({
+const useSharedLoadingStore = create<SharedLoadingStore>(set => ({
   loadingState: new Map(),
 
   setLoading: (key, component, loading: boolean) => {
