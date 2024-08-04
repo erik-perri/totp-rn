@@ -8,7 +8,7 @@ import React, {
 import {useWindowDimensions, View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
-import useCheckDuplicateAuthenticator from '../hooks/useIsDuplicateAuthenticator';
+import useAuthenticatorDuplicateCheck from '../hooks/useAuthenticatorDuplicateCheck';
 import {AuthenticatorWithoutId} from '../parsers/authenticatorParser';
 import AddAuthenticatorsPopupItem from './AddAuthenticatorsPopupItem';
 import Button from './Button/Button';
@@ -26,7 +26,7 @@ const AddAuthenticatorsPopup: FunctionComponent<
   AddAuthenticatorsPopupProps
 > = ({authenticators, isOpen, onCancel, onSave}) => {
   const {styles} = useStyles(stylesheet);
-  const checkDuplicate = useCheckDuplicateAuthenticator();
+  const checkDuplicate = useAuthenticatorDuplicateCheck();
   const dimensions = useWindowDimensions();
   const maxHeight = useMemo(() => dimensions.height * 0.5, [dimensions]);
 

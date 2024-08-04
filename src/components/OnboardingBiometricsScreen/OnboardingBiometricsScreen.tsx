@@ -1,12 +1,21 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {FunctionComponent, useCallback} from 'react';
+import React, {FunctionComponent, useCallback, useMemo, useState} from 'react';
 import {Alert, Linking, View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
-import useBiometricsIsEnrolled from '../../hooks/useBiometricsIsEnrolled';
+import useBiometricsStatus from '../../hooks/useBiometricsStatus';
+import {PublicSettings} from '../../parsers/publicSettingsParser';
+import {SecureSettings} from '../../parsers/secureSettingsParser';
+import useOnboardingStore from '../../stores/useOnboardingStore';
+import usePublicSettingsStore from '../../stores/usePublicSettingsStore';
+import useSecureSettingsStore from '../../stores/useSecureSettingsStore';
+import isStorageSettingsValid from '../../utilities/isStorageSettingsValid';
+import openKdbxDatabase from '../../utilities/kdbx/openKdbxDatabase';
+import storeSecureSettings from '../../utilities/storeSecureSettings';
 import AlertBox from '../AlertBox';
 import Button from '../Button/Button';
 import ButtonText from '../Button/ButtonText';
+import ErrorBox from '../ErrorBox';
 import Heading from '../Heading';
 import {MainStackParamList} from '../MainStack';
 import OnboardingActions from '../OnboardingActions';
@@ -26,21 +35,87 @@ function openSettings() {
 const OnboardingBiometricsScreen: FunctionComponent<
   NativeStackScreenProps<MainStackParamList, 'OnboardingBiometrics'>
 > = ({navigation}) => {
-  const enrolled = useBiometricsIsEnrolled();
   const {styles} = useStyles(stylesheet);
+
+  const {enrolledError, enrolledStatus} = useBiometricsStatus();
+  const clearDetails = useOnboardingStore(state => state.clearDetails);
+  const compositeKey = useOnboardingStore(state => state.compositeKey);
+  const masterPassword = useOnboardingStore(state => state.masterPassword);
+  const storageSettings = useOnboardingStore(state => state.storage);
+  const unlock = useSecureSettingsStore(state => state.unlock);
+  const save = usePublicSettingsStore(state => state.save);
+
+  const [generalError, setGeneralError] = useState<unknown>();
+  const [loading, setLoading] = useState(false);
+
+  const saveSettings = useCallback(
+    async (biometricsEnabled: boolean) => {
+      if (
+        !isStorageSettingsValid(storageSettings) ||
+        compositeKey === undefined ||
+        masterPassword === undefined
+      ) {
+        setGeneralError(new Error('Missing onboarding details'));
+        return;
+      }
+
+      try {
+        const publicSettings: PublicSettings = {
+          biometricsEnabled,
+          storage: storageSettings,
+          settingsVersion: 1,
+        };
+
+        const secureSettings: SecureSettings = {
+          compositeKey: Array.from(compositeKey),
+          masterPassword,
+          settingsVersion: 1,
+        };
+
+        const result = await openKdbxDatabase(
+          storageSettings.file,
+          Uint8Array.from(secureSettings.compositeKey),
+        );
+
+        if (biometricsEnabled) {
+          await storeSecureSettings(secureSettings);
+        }
+
+        unlock(result.file, secureSettings);
+
+        await save(publicSettings);
+
+        navigation.replace('AuthenticatorList');
+
+        clearDetails();
+      } catch (error) {
+        setGeneralError(error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [
+      clearDetails,
+      compositeKey,
+      masterPassword,
+      navigation,
+      save,
+      storageSettings,
+      unlock,
+    ],
+  );
 
   const onGoBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
-  const onSkipBiometrics = useCallback(() => {
-    navigation.navigate('AuthenticatorList');
-  }, [navigation]);
+  const displayError = useMemo(() => {
+    if (enrolledError !== undefined) {
+      return enrolledError;
+    }
 
-  const onEnableBiometrics = useCallback(() => {
-    // TODO Save master password and transformed key into secure storage
-    navigation.navigate('AuthenticatorList');
-  }, [navigation]);
+    return generalError;
+  }, [enrolledError, generalError]);
 
   return (
     <OnboardingShell>
@@ -58,12 +133,7 @@ const OnboardingBiometricsScreen: FunctionComponent<
           </Paragraph>
         </ParagraphGroup>
 
-        {enrolled === 'error' ? (
-          <AlertBox
-            message="An error occurred while checking biometric enrollment."
-            theme="error"
-          />
-        ) : enrolled === 'not_enrolled' ? (
+        {enrolledStatus === 'not_enrolled' && (
           <View style={styles.notEnrolledContainer}>
             <AlertBox
               message="No usable biometric devices are enrolled. Only class 3 devices are supported."
@@ -75,25 +145,32 @@ const OnboardingBiometricsScreen: FunctionComponent<
               </Button>
             </View>
           </View>
-        ) : null}
+        )}
+
+        {displayError !== undefined && <ErrorBox error={displayError} />}
       </OnboardingContent>
 
       <OnboardingActions>
-        <View style={styles.buttonContainer}>
-          <Button onPress={onGoBack} variant="ghost">
-            <ButtonText>Back</ButtonText>
+        <Button disabled={loading} onPress={onGoBack} variant="ghost">
+          <ButtonText>Back</ButtonText>
+        </Button>
+        <View style={styles.continueButtonContainer}>
+          <Button
+            disabled={loading}
+            onPress={async () => {
+              await saveSettings(false);
+            }}
+            variant="ghost">
+            <ButtonText>Skip Biometrics</ButtonText>
           </Button>
-          <View style={styles.continueButtonContainer}>
-            <Button onPress={onSkipBiometrics} variant="ghost">
-              <ButtonText>Skip Biometrics</ButtonText>
-            </Button>
-            <Button
-              disabled={enrolled !== 'enrolled'}
-              onPress={onEnableBiometrics}
-              variant="solid">
-              <ButtonText>Enable Biometrics</ButtonText>
-            </Button>
-          </View>
+          <Button
+            disabled={loading || enrolledStatus !== 'enrolled'}
+            onPress={async () => {
+              await saveSettings(true);
+            }}
+            variant="solid">
+            <ButtonText>Enable Biometrics</ButtonText>
+          </Button>
         </View>
       </OnboardingActions>
     </OnboardingShell>
@@ -101,12 +178,6 @@ const OnboardingBiometricsScreen: FunctionComponent<
 };
 
 const stylesheet = createStyleSheet(() => ({
-  buttonContainer: {
-    alignItems: 'flex-end',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
   continueButtonContainer: {
     alignItems: 'flex-end',
     flexDirection: 'column',

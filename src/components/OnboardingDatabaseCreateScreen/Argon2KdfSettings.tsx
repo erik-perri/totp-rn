@@ -1,3 +1,4 @@
+import {Argon2Type, Argon2Version, benchmarkArgon2KdfKey} from 'kdbx-ts';
 import React, {
   FunctionComponent,
   useCallback,
@@ -26,13 +27,14 @@ type Argon2KdfSettingsProps = {
 
 export const Argon2KdfSettings: FunctionComponent<Argon2KdfSettingsProps> = ({
   onChange,
+  type,
 }) => {
   const {styles} = useStyles(stylesheet);
+
   const [loading, setLoading] = useSharedLoading(
     'OnboardingDatabaseCreateScreen',
     Argon2KdfSettings.name,
   );
-
   const [iterations, setIterations] = useState<string>('20');
   const [memoryUsage, setMemoryUsage] = useState<string>('64');
   const [parallelism, setParallelism] = useState<string>('2');
@@ -40,20 +42,27 @@ export const Argon2KdfSettings: FunctionComponent<Argon2KdfSettingsProps> = ({
   const onCalculateIterations = useCallback(() => {
     setLoading(true);
 
-    setTimeout(() => {
-      void (async () => {
-        // TODO Benchmark
-        setIterations('22');
+    void (async () => {
+      try {
+        const calculatedIterations = await benchmarkArgon2KdfKey(
+          1000,
+          BigInt(memoryUsage) * BigInt(1024 * 1024),
+          BigInt(parallelism),
+          type === 'argon2d' ? Argon2Type.Argon2d : Argon2Type.Argon2id,
+          Argon2Version.V13,
+        );
+
+        setIterations(calculatedIterations.toString());
+      } finally {
         setLoading(false);
-        return Promise.resolve();
-      })();
-    }, 10);
-  }, [setLoading]);
+      }
+    })();
+  }, [memoryUsage, parallelism, setLoading, type]);
 
   useEffect(() => {
     onChange({
       iterations: safeInputToNumber(iterations),
-      memoryUsage: safeInputToNumber(memoryUsage),
+      memoryUsage: safeInputToNumber(memoryUsage) * 1024 * 1024,
       parallelism: safeInputToNumber(parallelism),
     });
   }, [iterations, memoryUsage, onChange, parallelism]);

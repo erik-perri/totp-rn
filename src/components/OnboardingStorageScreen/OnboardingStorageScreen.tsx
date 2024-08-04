@@ -3,12 +3,24 @@ import {
   faSdCard,
 } from '@fortawesome/free-solid-svg-icons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {FunctionComponent, useCallback, useState} from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import {View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
+import {
+  createDocumentFile,
+  getInternalFile,
+  writeFile,
+} from '../../modules/filesystemModule';
+import useOnboardingStore from '../../stores/useOnboardingStore';
 import Button from '../Button/Button';
 import ButtonText from '../Button/ButtonText';
+import ErrorBox from '../ErrorBox';
 import Heading from '../Heading';
 import {MainStackParamList} from '../MainStack';
 import OnboardingActions from '../OnboardingActions';
@@ -25,20 +37,61 @@ const OnboardingStorageScreen: FunctionComponent<
   NativeStackScreenProps<MainStackParamList, 'OnboardingStorage'>
 > = ({navigation}) => {
   const {styles} = useStyles(stylesheet);
+
+  const [generalError, setGeneralError] = useState<unknown>();
+  const [loading, setLoading] = useState(false);
   const [storageLocation, setStorageLocation] = useState<
     'internal' | 'external'
   >();
+
+  const newDatabase = useOnboardingStore(state => state.newDatabase);
+  const storeFile = useOnboardingStore(state => state.storeFile);
 
   const onGoBack = useCallback(() => {
     navigation.goBack();
   }, [navigation]);
 
-  const onSaveDatabase = useCallback(() => {
-    // TODO If internal, save database to internal storage
-    //      If external, display document picker and save to selected file
-    //      Forward transformed key and master password on
-    navigation.navigate('OnboardingBiometrics');
-  }, [navigation]);
+  const onSaveDatabase = useCallback(async () => {
+    if (!newDatabase || !storageLocation) {
+      setGeneralError(new Error('Invalid options.'));
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      if (storageLocation === 'internal') {
+        const file = await getInternalFile('authenticators.kdbx');
+
+        await writeFile(file.uri, newDatabase);
+
+        storeFile('internal', file);
+      } else {
+        const file = await createDocumentFile(
+          'authenticators.kdbx',
+          'application/kdbx',
+        );
+
+        if (file === null) {
+          return;
+        }
+
+        await writeFile(file.uri, newDatabase);
+
+        storeFile('external', file);
+      }
+
+      navigation.navigate('OnboardingBiometrics');
+    } catch (error) {
+      setGeneralError(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [navigation, newDatabase, setLoading, storageLocation, storeFile]);
+
+  useEffect(() => {
+    setGeneralError(undefined);
+  }, [storageLocation]);
 
   return (
     <OnboardingShell>
@@ -60,6 +113,8 @@ const OnboardingStorageScreen: FunctionComponent<
           </Paragraph>
         </ParagraphGroup>
 
+        {generalError !== undefined && <ErrorBox error={generalError} />}
+
         <View style={styles.radioContainer}>
           <RadioGroup onChange={setStorageLocation} value={storageLocation}>
             <Radio value="internal">
@@ -75,11 +130,11 @@ const OnboardingStorageScreen: FunctionComponent<
       </OnboardingContent>
 
       <OnboardingActions>
-        <Button onPress={onGoBack} variant="ghost">
+        <Button disabled={loading} onPress={onGoBack} variant="ghost">
           <ButtonText>Back</ButtonText>
         </Button>
         <Button
-          disabled={storageLocation === undefined}
+          disabled={loading || storageLocation === undefined}
           onPress={onSaveDatabase}
           variant="solid">
           <ButtonText>Save Database</ButtonText>

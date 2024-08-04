@@ -1,3 +1,4 @@
+import {benchmarkAes256KdfKey} from 'kdbx-ts';
 import React, {
   FunctionComponent,
   useCallback,
@@ -25,6 +26,7 @@ export const AesKdfSettings: FunctionComponent<AesKdfSettingsProps> = ({
   onChange,
 }) => {
   const {styles} = useStyles(stylesheet);
+
   const [loading, setLoading] = useSharedLoading(
     'OnboardingDatabaseCreateScreen',
     AesKdfSettings.name,
@@ -34,14 +36,19 @@ export const AesKdfSettings: FunctionComponent<AesKdfSettingsProps> = ({
   const onCalculateIterations = useCallback(() => {
     setLoading(true);
 
-    setTimeout(() => {
-      void (async () => {
-        // TODO Benchmark
-        setIterations('122000');
+    void (async () => {
+      try {
+        const calculatedIterations = await benchmarkAes256KdfKey(1000);
+        const roundedIterations =
+          calculatedIterations > 1000
+            ? Math.round(calculatedIterations / 1000) * 1000
+            : calculatedIterations;
+
+        setIterations(roundedIterations.toString());
+      } finally {
         setLoading(false);
-        return Promise.resolve();
-      })();
-    }, 10);
+      }
+    })();
   }, [setLoading]);
 
   useEffect(() => {

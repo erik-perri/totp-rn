@@ -2,45 +2,42 @@ import React, {FunctionComponent, useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
+import {
+  EncryptionAlgorithm,
+  KdfParameters,
+} from '../../utilities/kdbx/createKdbxDatabase';
 import FormGroup from '../FormGroup';
 import FormSelect from '../Select/FormSelect';
 import AesKdfSettings, {AesKdfSettingsData} from './AesKdfSettings';
 import Argon2KdfSettings, {Argon2KdfSettingsData} from './Argon2KdfSettings';
 
-type AdvancedDatabaseOptionsProps = {
-  onChange: (data: AdvancedDatabaseOptionsData) => void;
+type DatabaseOptionsAdvancedProps = {
+  onChange: (
+    encryptionAlgorithm: EncryptionAlgorithm,
+    kdfParameters: KdfParameters,
+  ) => void;
 };
-
-export type AdvancedDatabaseOptionsData =
-  | {
-      type: 'argon2d' | 'argon2id';
-      iterations: number;
-      memoryUsage: number;
-      parallelism: number;
-    }
-  | {
-      type: 'aes';
-      iterations: number;
-    };
 
 const encryptionAlgorithmOptions = [
   {label: 'AES 256-bit', value: 'aes256'},
-  {label: 'Twofish 256-bit', value: 'twofish'},
   {label: 'ChaCha20 256-bit', value: 'chacha20'},
-];
+  // TODO Add Twofish implementation?
+  // {label: 'Twofish 256-bit', value: 'twofish'},
+] as const;
 
 const kdfOptions = [
   {label: 'Argon2d', value: 'argon2d'},
   {label: 'Argon2id', value: 'argon2id'},
   {label: 'AES-KDF', value: 'aes'},
-];
+] as const;
 
-export const AdvancedDatabaseOptions: FunctionComponent<
-  AdvancedDatabaseOptionsProps
+export const DatabaseOptionsAdvanced: FunctionComponent<
+  DatabaseOptionsAdvancedProps
 > = ({onChange}) => {
   const {styles} = useStyles(stylesheet);
+
   const [encryptionAlgorithm, setEncryptionAlgorithm] =
-    useState<string>('aes256');
+    useState<EncryptionAlgorithm>('chacha20');
   const [kdf, setKdf] = useState<string>('argon2d');
 
   const setArgonKdfSettings = useCallback(
@@ -51,14 +48,14 @@ export const AdvancedDatabaseOptions: FunctionComponent<
         );
       }
 
-      onChange({
+      onChange(encryptionAlgorithm, {
         type: kdf,
         iterations: params.iterations,
         memoryUsage: params.memoryUsage,
         parallelism: params.parallelism,
       });
     },
-    [kdf, onChange],
+    [encryptionAlgorithm, kdf, onChange],
   );
 
   const setAesKdfSettings = useCallback(
@@ -67,12 +64,12 @@ export const AdvancedDatabaseOptions: FunctionComponent<
         throw new Error(`Unexpected KDF type. Expected "aes", got "${kdf}"`);
       }
 
-      onChange({
+      onChange(encryptionAlgorithm, {
         type: kdf,
         iterations: params.iterations,
       });
     },
-    [kdf, onChange],
+    [encryptionAlgorithm, kdf, onChange],
   );
 
   return (
@@ -110,4 +107,4 @@ const stylesheet = createStyleSheet(() => ({
   },
 }));
 
-export default AdvancedDatabaseOptions;
+export default DatabaseOptionsAdvanced;

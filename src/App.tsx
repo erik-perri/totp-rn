@@ -2,8 +2,8 @@ import './theme';
 
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {NavigationContainer} from '@react-navigation/native';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import React from 'react';
+import {configureDependencies} from 'kdbx-ts';
+import React, {useEffect} from 'react';
 import {StatusBar, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -11,45 +11,45 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import FatalErrorBoundary from './components/FatalErrorBoundary';
 import MainStack from './components/MainStack';
 import useCurrentTimeUpdater from './hooks/useCurrentTimeUpdater';
+import {
+  transformAes256KdfKey,
+  transformArgon2KdfKey,
+} from './modules/kdbxModule';
+import usePublicSettingsStore from './stores/usePublicSettingsStore';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-      retry: false,
-      retryOnMount: false,
-      staleTime: Infinity,
-    },
-  },
+configureDependencies({
+  transformAes256KdfKey,
+  transformArgon2KdfKey,
 });
 
 function App(): React.JSX.Element {
   const scheme = useColorScheme();
+  const load = usePublicSettingsStore(state => state.load);
 
   useCurrentTimeUpdater();
 
+  useEffect(() => {
+    void load();
+  }, [load]);
+
   return (
-    <QueryClientProvider client={queryClient}>
+    <SafeAreaProvider>
       <StatusBar
         animated
         backgroundColor="transparent"
         barStyle={scheme === 'dark' ? 'light-content' : 'dark-content'}
         translucent
       />
-      <SafeAreaProvider>
-        <GestureHandlerRootView>
-          <NavigationContainer>
-            <FatalErrorBoundary>
-              <BottomSheetModalProvider>
-                <MainStack />
-              </BottomSheetModalProvider>
-            </FatalErrorBoundary>
-          </NavigationContainer>
-        </GestureHandlerRootView>
-      </SafeAreaProvider>
-    </QueryClientProvider>
+      <GestureHandlerRootView>
+        <NavigationContainer>
+          <FatalErrorBoundary>
+            <BottomSheetModalProvider>
+              <MainStack />
+            </BottomSheetModalProvider>
+          </FatalErrorBoundary>
+        </NavigationContainer>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }
 

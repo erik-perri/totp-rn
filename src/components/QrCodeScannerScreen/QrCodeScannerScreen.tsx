@@ -18,7 +18,7 @@ import {
 } from 'react-native-vision-camera';
 
 import TotpAlgorithm from '../../enums/TotpAlgorithm';
-import useAuthenticatorsCreateMutation from '../../hooks/useAuthenticatorsCreateMutation';
+import useAuthenticatorCreate from '../../hooks/useAuthenticatorCreate';
 import {AuthenticatorWithoutId} from '../../parsers/authenticatorParser';
 import compareAuthenticator from '../../utilities/compareAuthenticator';
 import findAuthenticatorInCodes from '../../utilities/findAuthenticatorInCodes';
@@ -76,7 +76,7 @@ const QrCodeScannerScreen: FunctionComponent<
     setCodeScanningEnabled(true);
   }, []);
 
-  const {mutateAsync: createAuthenticators} = useAuthenticatorsCreateMutation();
+  const createAuthenticators = useAuthenticatorCreate();
   const handleSave = useCallback(
     async (enabledAuthenticators: AuthenticatorWithoutId[]) => {
       await createAuthenticators(enabledAuthenticators);

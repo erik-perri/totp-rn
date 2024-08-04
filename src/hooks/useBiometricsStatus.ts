@@ -2,17 +2,20 @@ import {useCallback, useEffect, useState} from 'react';
 import {AppState} from 'react-native';
 import * as Keychain from 'react-native-keychain';
 
-type EnrolledStatus = 'enrolled' | 'not_enrolled' | 'error';
+type EnrolledStatus = 'enrolled' | 'not_enrolled';
 
-export default function useBiometricsIsEnrolled(): EnrolledStatus {
-  const [status, setStatus] = useState<EnrolledStatus>('not_enrolled');
+export default function useBiometricsStatus() {
+  const [enrolledStatus, setEnrolledStatus] = useState<EnrolledStatus>();
+  const [enrolledError, setEnrolledError] = useState<unknown>();
 
   const refresh = useCallback(async () => {
     try {
       const biometryType = await Keychain.getSupportedBiometryType();
-      setStatus(biometryType === null ? 'not_enrolled' : 'enrolled');
+      setEnrolledError(undefined);
+      setEnrolledStatus(biometryType === null ? 'not_enrolled' : 'enrolled');
     } catch (error) {
-      setStatus('error');
+      setEnrolledError(error);
+      setEnrolledStatus(undefined);
     }
   }, []);
 
@@ -30,5 +33,8 @@ export default function useBiometricsIsEnrolled(): EnrolledStatus {
     };
   }, [refresh]);
 
-  return status;
+  return {
+    enrolledError,
+    enrolledStatus,
+  };
 }

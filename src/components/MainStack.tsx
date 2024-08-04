@@ -1,7 +1,8 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React, {FunctionComponent, useMemo} from 'react';
 
-import usePublicSettings from '../hooks/usePublicSettings';
+import usePublicSettingsStore from '../stores/usePublicSettingsStore';
+import useSecureSettingsStore from '../stores/useSecureSettingsStore';
 import AuthenticatorListScreen from './AuthenticatorListScreen/AuthenticatorListScreen';
 import FatalErrorScreen from './FatalErrorScreen';
 import OnboardingBiometricsScreen from './OnboardingBiometricsScreen/OnboardingBiometricsScreen';
@@ -9,6 +10,7 @@ import OnboardingDatabaseCreateScreen from './OnboardingDatabaseCreateScreen/Onb
 import OnboardingDatabaseOpenScreen from './OnboardingDatabaseOpenScreen/OnboardingDatabaseOpenScreen';
 import OnboardingStorageScreen from './OnboardingStorageScreen/OnboardingStorageScreen';
 import QrCodeScannerScreen from './QrCodeScannerScreen/QrCodeScannerScreen';
+import UnlockScreen from './UnlockScreen/UnlockScreen';
 
 export type MainStackParamList = {
   AuthenticatorList: undefined;
@@ -17,35 +19,44 @@ export type MainStackParamList = {
   OnboardingDatabaseOpen: undefined;
   OnboardingStorage: undefined;
   QrCodeScanner: undefined;
+  Unlock: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
 const MainStack: FunctionComponent = () => {
-  const {settingsError, settingsLoading, settings} = usePublicSettings();
+  const initialized = usePublicSettingsStore(state => state.initialized);
+  const error = usePublicSettingsStore(state => state.error);
+  const hasPublicSettings = usePublicSettingsStore(
+    state => state.settings !== undefined,
+  );
+  const unlocked = useSecureSettingsStore(
+    state => state.secureSettings !== undefined,
+  );
 
   const initialRouteName: keyof MainStackParamList = useMemo(() => {
-    if (!settings) {
+    if (!hasPublicSettings) {
       // TODO Detect existing database in internal storage and show a screen
       //      asking to open it or start fresh. Likely someone aborting
       //      onboarding?
-      // return 'OnboardingDatabaseCreate';
+      return 'OnboardingDatabaseCreate';
     }
 
-    // TODO Detect if composite key and master password are available
-    //      and show unlock screen if not
-
     return 'AuthenticatorList';
-  }, [settings]);
+  }, [hasPublicSettings]);
 
-  if (settingsLoading) {
+  if (!initialized) {
     return null;
   }
 
-  if (settingsError) {
+  if (error) {
     // TODO Add a way to retry or re-create the settings without needing the
     //      user to clear the app data.
-    return <FatalErrorScreen error={settingsError} />;
+    return <FatalErrorScreen error={error} />;
+  }
+
+  if (!unlocked && hasPublicSettings) {
+    return <UnlockScreen />;
   }
 
   return (
@@ -94,6 +105,13 @@ const MainStack: FunctionComponent = () => {
         name="QrCodeScanner"
         options={{
           title: 'Scan QR Code',
+        }}
+      />
+      <Stack.Screen
+        component={UnlockScreen}
+        name="Unlock"
+        options={{
+          title: 'Unlock',
         }}
       />
     </Stack.Navigator>

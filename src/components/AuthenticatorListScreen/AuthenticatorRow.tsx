@@ -3,7 +3,7 @@ import React, {Fragment, useMemo} from 'react';
 import {Alert, Pressable, Text, View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
-import useAuthenticatorDeleteMutation from '../../hooks/useAuthenticatorDeleteMutation';
+import useAuthenticatorDelete from '../../hooks/useAuthenticatorDelete';
 import {Authenticator} from '../../parsers/authenticatorParser';
 import useCurrentTimeStore from '../../stores/useCurrentTimeStore';
 import generateTotp from '../../utilities/generateTotp';
@@ -23,7 +23,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
 }) => {
   const {styles} = useStyles(stylesheet);
   const currentTime = useCurrentTimeStore(state => state.currentTime);
-  const {mutateAsync: deleteAuthenticator} = useAuthenticatorDeleteMutation();
+  const deleteAuthenticator = useAuthenticatorDelete();
 
   const totpChangeTime = useMemo(
     () => getNextTotpTime(currentTime, authenticator.timeStep),
@@ -73,7 +73,7 @@ const AuthenticatorRow: React.FunctionComponent<AuthenticatorRowProps> = ({
           text: 'Remove',
           style: 'destructive',
           onPress: () => {
-            void deleteAuthenticator(authenticator.id);
+            void deleteAuthenticator(authenticator);
           },
         },
       ],
