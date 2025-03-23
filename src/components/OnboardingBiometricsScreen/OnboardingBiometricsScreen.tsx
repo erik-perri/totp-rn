@@ -85,7 +85,10 @@ const OnboardingBiometricsScreen: FunctionComponent<
 
         await save(publicSettings);
 
-        navigation.replace('AuthenticatorList');
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'AuthenticatorList'}],
+        });
 
         clearDetails();
       } catch (error) {
