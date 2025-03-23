@@ -7,7 +7,7 @@ type FocusableElement = {
 };
 
 export default function useFormGroupLabelSelector(
-  elementRef: RefObject<FocusableElement>,
+  elementRef: RefObject<FocusableElement | null>,
 ) {
   const {addLabelPressEventListener} = useFormGroupContext();
 
