@@ -67,12 +67,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "overrides": {
-    "@react-native-clipboard/clipboard": {
-      "react-native": "0.78.0",
-      "react-native-macos": "0.78.0",
-      "react-native-windows": "0.78.0 "
-    }
   }
 }
