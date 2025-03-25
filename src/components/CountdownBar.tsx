@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useEffect, useState} from 'react';
+import React, {FunctionComponent, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import Animated, {
   Easing,
@@ -8,6 +8,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
+
+import useCurrentTimeStore from '../stores/useCurrentTimeStore';
 
 type CountdownBarProps = {
   duration: number;
@@ -21,15 +23,20 @@ const CountdownBar: FunctionComponent<CountdownBarProps> = ({
   const {styles} = useStyles(stylesheet);
   const progress = useSharedValue(0);
   const [containerWidth, setContainerWidth] = useState(0);
+  const currentTime = useCurrentTimeStore(state => state.currentTime);
+  const currentTimeRef = useRef<number>(currentTime);
 
   useEffect(() => {
-    // TODO Use a ref'd currentTime here instead of Date.now()
+    currentTimeRef.current = currentTime;
+  }, [currentTime]);
+
+  useEffect(() => {
     progress.value = withSequence(
-      withTiming((endTime - Date.now()) / duration, {
+      withTiming((endTime - currentTimeRef.current) / duration, {
         duration: 100,
       }),
       withTiming(0, {
-        duration: endTime - Date.now(),
+        duration: endTime - currentTimeRef.current,
         easing: Easing.linear,
       }),
     );
