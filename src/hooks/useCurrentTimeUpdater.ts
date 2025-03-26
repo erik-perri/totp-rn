@@ -1,15 +1,27 @@
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 
 import currentTimeUpdate from '../stores/CurrentTimeStore/currentTimeUpdate';
 
 export default function useCurrentTimeUpdater() {
+  const timeoutId = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      currentTimeUpdate();
-    }, 1000);
+    function update() {
+      const delay = 1000 - (Date.now() % 1000);
+
+      timeoutId.current = setTimeout(() => {
+        currentTimeUpdate();
+        update();
+      }, delay);
+    }
+
+    update();
 
     return () => {
-      clearInterval(interval);
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current);
+        timeoutId.current = null;
+      }
     };
   }, []);
 }
