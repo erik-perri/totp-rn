@@ -17,6 +17,7 @@ import {
   getInternalFile,
   writeFile,
 } from '../../modules/filesystemModule';
+import onboardingSetFile from '../../stores/OnboardingStore/onboardingSetFile';
 import useOnboardingStore from '../../stores/useOnboardingStore';
 import Button from '../Button/Button';
 import ButtonText from '../Button/ButtonText';
@@ -45,7 +46,6 @@ const OnboardingStorageScreen: FunctionComponent<
   >();
 
   const newDatabase = useOnboardingStore(state => state.newDatabase);
-  const storeFile = useOnboardingStore(state => state.storeFile);
 
   const onGoBack = useCallback(() => {
     navigation.goBack();
@@ -65,7 +65,7 @@ const OnboardingStorageScreen: FunctionComponent<
 
         await writeFile(file.uri, newDatabase);
 
-        storeFile('internal', file);
+        onboardingSetFile('internal', file);
       } else {
         const file = await createDocumentFile(
           'authenticators.kdbx',
@@ -78,7 +78,7 @@ const OnboardingStorageScreen: FunctionComponent<
 
         await writeFile(file.uri, newDatabase);
 
-        storeFile('external', file);
+        onboardingSetFile('external', file);
       }
 
       navigation.navigate('OnboardingBiometrics');
@@ -87,7 +87,7 @@ const OnboardingStorageScreen: FunctionComponent<
     } finally {
       setLoading(false);
     }
-  }, [navigation, newDatabase, setLoading, storageLocation, storeFile]);
+  }, [navigation, newDatabase, setLoading, storageLocation]);
 
   useEffect(() => {
     setGeneralError(undefined);

@@ -10,17 +10,16 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import FatalErrorBoundary from './components/FatalErrorBoundary';
 import MainStack from './components/MainStack';
 import useCurrentTimeUpdater from './hooks/useCurrentTimeUpdater';
-import usePublicSettingsStore from './stores/usePublicSettingsStore';
+import publicSettingsLoad from './stores/PublicSettingsStore/publicSettingsLoad';
 
 function App(): React.JSX.Element {
   const scheme = useColorScheme();
-  const load = usePublicSettingsStore(state => state.load);
 
   useCurrentTimeUpdater();
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    void publicSettingsLoad();
+  }, []);
 
   return (
     <SafeAreaProvider>

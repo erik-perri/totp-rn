@@ -9,7 +9,7 @@ import React, {
 import {View} from 'react-native';
 
 import usePublicSettings from '../../hooks/usePublicSettings';
-import useSecureSettingsStore from '../../stores/useSecureSettingsStore';
+import secureSettingsUnlock from '../../stores/SecureSettingsStore/secureSettingsUnlock';
 import openKdbxDatabase from '../../utilities/kdbx/openKdbxDatabase';
 import retrieveSecureSettings from '../../utilities/retrieveSecureSettings';
 import Button from '../Button/Button';
@@ -25,7 +25,6 @@ import Paragraph from '../Paragraph';
 
 const UnlockScreen: FunctionComponent = () => {
   const settings = usePublicSettings();
-  const unlock = useSecureSettingsStore(state => state.unlock);
 
   const [loading, setLoading] = useState(false);
   const [generalError, setGeneralError] = useState<unknown>();
@@ -55,14 +54,14 @@ const UnlockScreen: FunctionComponent = () => {
           Uint8Array.from(secureSettings.compositeKey),
         );
 
-        unlock(result.file, secureSettings);
+        secureSettingsUnlock(result.file, secureSettings);
       } else {
         const result = await openKdbxDatabase(
           settings.storage.file,
           masterPassword,
         );
 
-        unlock(result.file, {
+        secureSettingsUnlock(result.file, {
           compositeKey: Array.from(result.compositeKey),
           masterPassword,
           settingsVersion: 1,
@@ -77,7 +76,7 @@ const UnlockScreen: FunctionComponent = () => {
     } finally {
       setLoading(false);
     }
-  }, [masterPassword, settings, unlock, unlockMethod]);
+  }, [masterPassword, settings, unlockMethod]);
 
   const isUnlockDisabled = useMemo(() => {
     if (unlockMethod === 'password') {

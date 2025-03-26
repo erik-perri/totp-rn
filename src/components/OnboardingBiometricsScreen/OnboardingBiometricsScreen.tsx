@@ -6,9 +6,10 @@ import {createStyleSheet, useStyles} from 'react-native-unistyles';
 import useBiometricsStatus from '../../hooks/useBiometricsStatus';
 import {PublicSettings} from '../../parsers/publicSettingsParser';
 import {SecureSettings} from '../../parsers/secureSettingsParser';
+import onboardingClear from '../../stores/OnboardingStore/onboardingClear';
+import publicSettingsSave from '../../stores/PublicSettingsStore/publicSettingsSave';
+import secureSettingsUnlock from '../../stores/SecureSettingsStore/secureSettingsUnlock';
 import useOnboardingStore from '../../stores/useOnboardingStore';
-import usePublicSettingsStore from '../../stores/usePublicSettingsStore';
-import useSecureSettingsStore from '../../stores/useSecureSettingsStore';
 import isStorageSettingsValid from '../../utilities/isStorageSettingsValid';
 import openKdbxDatabase from '../../utilities/kdbx/openKdbxDatabase';
 import storeSecureSettings from '../../utilities/storeSecureSettings';
@@ -38,12 +39,9 @@ const OnboardingBiometricsScreen: FunctionComponent<
   const {styles} = useStyles(stylesheet);
 
   const {enrolledError, enrolledStatus} = useBiometricsStatus();
-  const clearDetails = useOnboardingStore(state => state.clearDetails);
   const compositeKey = useOnboardingStore(state => state.compositeKey);
   const masterPassword = useOnboardingStore(state => state.masterPassword);
   const storageSettings = useOnboardingStore(state => state.storage);
-  const unlock = useSecureSettingsStore(state => state.unlock);
-  const save = usePublicSettingsStore(state => state.save);
 
   const [generalError, setGeneralError] = useState<unknown>();
   const [loading, setLoading] = useState(false);
@@ -81,31 +79,23 @@ const OnboardingBiometricsScreen: FunctionComponent<
           await storeSecureSettings(secureSettings);
         }
 
-        unlock(result.file, secureSettings);
+        secureSettingsUnlock(result.file, secureSettings);
 
-        await save(publicSettings);
+        await publicSettingsSave(publicSettings);
 
         navigation.reset({
           index: 0,
           routes: [{name: 'AuthenticatorList'}],
         });
 
-        clearDetails();
+        onboardingClear();
       } catch (error) {
         setGeneralError(error);
       } finally {
         setLoading(false);
       }
     },
-    [
-      clearDetails,
-      compositeKey,
-      masterPassword,
-      navigation,
-      save,
-      storageSettings,
-      unlock,
-    ],
+    [compositeKey, masterPassword, navigation, storageSettings],
   );
 
   const onGoBack = useCallback(() => {

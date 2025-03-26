@@ -2,8 +2,6 @@ import {create} from 'zustand';
 
 type CurrentTimeStore = {
   currentTime: number;
-
-  updateCurrentTime: () => void;
 };
 
 /**
@@ -13,12 +11,8 @@ type CurrentTimeStore = {
  * It will also eventually allow us to detect out of sync clocks and apply an
  * offset to the time.
  */
-const useCurrentTimeStore = create<CurrentTimeStore>(set => ({
+const useCurrentTimeStore = create<CurrentTimeStore>()(() => ({
   currentTime: Date.now(),
-
-  updateCurrentTime: () => {
-    set({currentTime: Date.now()});
-  },
 }));
 
 export default useCurrentTimeStore;

@@ -11,7 +11,8 @@ import {View} from 'react-native';
 import {createStyleSheet, useStyles} from 'react-native-unistyles';
 
 import useSharedLoading from '../../hooks/useSharedLoading';
-import useOnboardingStore from '../../stores/useOnboardingStore';
+import onboardingClear from '../../stores/OnboardingStore/onboardingClear';
+import onboardingCreateDatabase from '../../stores/OnboardingStore/onboardingCreateDatabase';
 import isKdfParametersValid from '../../utilities/isKdfParametersValid';
 import createKdbxDatabase, {
   EncryptionAlgorithm,
@@ -45,9 +46,6 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
   const [kdfParameters, setKdfParameters] = useState<KdfParameters>();
   const [masterPassword, setMasterPassword] = useState('');
 
-  const clearDetails = useOnboardingStore(state => state.clearDetails);
-  const createDatabase = useOnboardingStore(state => state.createDatabase);
-
   const isCreateBlocked = useMemo(
     () =>
       !masterPassword ||
@@ -72,7 +70,11 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
         kdfParameters,
       );
 
-      createDatabase(result.bytes, result.compositeKey, masterPassword);
+      onboardingCreateDatabase(
+        result.bytes,
+        result.compositeKey,
+        masterPassword,
+      );
 
       navigation.navigate('OnboardingStorage');
     } catch (err) {
@@ -81,7 +83,6 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
       setLoading(false);
     }
   }, [
-    createDatabase,
     encryptionAlgorithm,
     kdfParameters,
     masterPassword,
@@ -108,13 +109,13 @@ const OnboardingDatabaseCreateScreen: FunctionComponent<
   useFocusEffect(
     useCallback(() => {
       // If we end up back on this screen, clear out the onboarding store.
-      clearDetails();
+      onboardingClear();
 
       return () => {
         setMasterPassword('');
         setGeneralError(undefined);
       };
-    }, [clearDetails]),
+    }, []),
   );
 
   return (

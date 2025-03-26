@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 
 import {NativeFile} from '../../modules/filesystemModule';
-import useOnboardingStore from '../../stores/useOnboardingStore';
+import onboardingOpenDatabase from '../../stores/OnboardingStore/onboardingOpenDatabase';
 import openKdbxDatabase from '../../utilities/kdbx/openKdbxDatabase';
 import validateKdbxFile from '../../utilities/kdbx/validateKdbxFile';
 import Button from '../Button/Button';
@@ -27,8 +27,6 @@ import Paragraph from '../Paragraph';
 const OnboardingDatabaseOpenScreen: FunctionComponent<
   NativeStackScreenProps<MainStackParamList, 'OnboardingDatabaseOpen'>
 > = ({navigation}) => {
-  const openDatabase = useOnboardingStore(state => state.openDatabase);
-
   const [file, setFile] = useState<NativeFile>();
   const [fileError, setFileError] = useState<string>();
   const [generalError, setGeneralError] = useState<unknown>();
@@ -83,7 +81,7 @@ const OnboardingDatabaseOpenScreen: FunctionComponent<
         return;
       }
 
-      openDatabase(file, result.compositeKey, masterPassword);
+      onboardingOpenDatabase(file, result.compositeKey, masterPassword);
 
       navigation.navigate('OnboardingBiometrics');
     } catch (error) {
@@ -95,7 +93,7 @@ const OnboardingDatabaseOpenScreen: FunctionComponent<
     } finally {
       setLoading(false);
     }
-  }, [file, isSubmitDisabled, masterPassword, navigation, openDatabase]);
+  }, [file, isSubmitDisabled, masterPassword, navigation]);
 
   useEffect(() => {
     setGeneralError(undefined);
